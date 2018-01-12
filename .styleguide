@@ -1,0 +1,22 @@
+cHeaderFileInclude {
+  \.h$
+}
+
+cppHeaderFileInclude {
+  \.hpp$
+  \.inl$
+}
+
+cppSrcFileInclude {
+  \.cpp$
+}
+
+modifiableFileExclude {
+  WPILib/
+}
+
+includeOtherLibs {
+  CtrlSys/
+  cscore\.h$
+  ctre/
+}

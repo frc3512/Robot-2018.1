@@ -1,0 +1,20 @@
+*.log
+*.a
+*.dll
+*.d
+*.o
+FRCUserProgram
+
+# CMake-generated files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+/Debug/
+/Release/
+.metadata/
+.settings/
+RemoteSystemsTempFiles/
+sysProps.xml
+*.swp
