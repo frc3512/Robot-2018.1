@@ -35,6 +35,22 @@ void Robot::TeleopPeriodic() {
         robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
                          driveStick2.GetRawButton(2));
     }
+    if (appendageStick.GetRawButtonPressed(3)) {
+        intake.ToggleOpen();
+    }
+    if (appendageStick.GetRawButtonPressed(5)) {
+        intake.ToggleDeploy();
+    }
+    if (appendageStick.GetRawButtonPressed(4)) {
+        intake.SetMotors(MotorState::k_intake);
+    }
+    if (appendageStick.GetRawButtonPressed(6)) {
+        intake.SetMotors(MotorState::k_outtake);
+    }
+    if (appendageStick.GetRawButtonReleased(4) ||
+        appendageStick.GetRawButtonReleased(6)) {
+        intake.SetMotors(MotorState::k_idle);
+    }
 }
 
 void Robot::DS_PrintOut() { robotDrive.Debug(); }

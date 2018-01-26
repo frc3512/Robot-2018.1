@@ -14,6 +14,7 @@
 #include "LiveGrapher/LiveGrapher.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 #include "Subsystems/DriveTrain.hpp"
+#include "Subsystems/Intake.hpp"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -36,8 +37,11 @@ private:
 
     DriveTrain robotDrive;
 
+    Intake intake;
+
     frc::Joystick driveStick1{k_driveStick1Port};
     frc::Joystick driveStick2{k_driveStick2Port};
+    frc::Joystick appendageStick{k_appendageStickPort};
 
     frc::Timer autoTimer;
 
