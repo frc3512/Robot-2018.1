@@ -15,6 +15,7 @@
 #include "Subsystems/CANTalonGroup.hpp"
 #include "Subsystems/DriveTrain.hpp"
 #include "Subsystems/Intake.hpp"
+#include "Subsystems/Elevator.hpp"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -38,6 +39,7 @@ private:
     DriveTrain robotDrive;
 
     Intake intake;
+    Elevator elevator;
 
     frc::Joystick driveStick1{k_driveStick1Port};
     frc::Joystick driveStick2{k_driveStick2Port};

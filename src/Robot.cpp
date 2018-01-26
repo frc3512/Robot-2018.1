@@ -35,6 +35,8 @@ void Robot::TeleopPeriodic() {
         robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
                          driveStick2.GetRawButton(2));
     }
+
+    // Intake Controls
     if (appendageStick.GetRawButtonPressed(3)) {
         intake.ToggleOpen();
     }
@@ -50,6 +52,22 @@ void Robot::TeleopPeriodic() {
     if (appendageStick.GetRawButtonReleased(4) ||
         appendageStick.GetRawButtonReleased(6)) {
         intake.SetMotors(MotorState::k_idle);
+    }
+
+    // Elevator Contols
+    elevator.SetVelocity(appendageStick.GetY());
+
+    if (appendageStick.GetRawButton(7)) {
+        elevator.SetHeightReference(k_groundHeight);
+    }
+    if (appendageStick.GetRawButton(8)) {
+        elevator.SetHeightReference(k_switchHeight);
+    }
+    if (appendageStick.GetRawButton(9)) {
+        elevator.SetHeightReference(k_scaleHeight);
+    }
+    if (appendageStick.GetRawButton(10)) {
+        elevator.SetHeightReference(k_climbHeight);
     }
 }
 

@@ -73,3 +73,26 @@ constexpr int k_intakeArmPort = 2;
 // Talon IDs
 constexpr int k_intakeLeftID = 1;
 constexpr int k_intakeRightID = 2;
+
+/*
+ * Elevator
+ */
+
+// Elevator GearBox ID
+constexpr int k_elevatorMasterID = 5;
+constexpr int k_elevatorSlaveID = 6;
+
+// Elevator PID
+constexpr double k_elevatorP = 0.0;
+constexpr double k_elevatorI = 0.0;
+constexpr double k_elevatorD = 0.0;
+constexpr double k_elevatorControllerPeriod = 1.0;
+
+// Elevator Setpoints
+constexpr double k_groundHeight = 0.0;
+constexpr double k_switchHeight = 12.0;
+constexpr double k_scaleHeight = 60.0;
+constexpr double k_climbHeight = 80.0;
+
+// Hall Effect Sensor Port
+constexpr int k_elevatorHallPort = 1;
