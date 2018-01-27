@@ -7,6 +7,13 @@
 Robot::Robot() {
     // Auton: does nothing
     dsDisplay.AddAutoMethod("No-op", [] {});
+    dsDisplay.AddAutoMethod("Autoline", std::bind(&Robot::AutoAutoLine, this));
+    dsDisplay.AddAutoMethod("Left Position",
+                            std::bind(&Robot::AutoLeftPos, this));
+    dsDisplay.AddAutoMethod("Center Position",
+                            std::bind(&Robot::AutoCenterPos, this));
+    dsDisplay.AddAutoMethod("Right Position",
+                            std::bind(&Robot::AutoRightPos, this));
 }
 
 void Robot::DisabledInit() { robotDrive.StopClosedLoop(); }
@@ -24,7 +31,10 @@ void Robot::RobotPeriodic() { DS_PrintOut(); }
 
 void Robot::DisabledPeriodic() {}
 
-void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomous(); }
+void Robot::AutonomousPeriodic() {
+    gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+    dsDisplay.ExecAutonomous();
+}
 
 void Robot::TeleopPeriodic() {
     // Drive Stick Controls

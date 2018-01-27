@@ -96,3 +96,6 @@ constexpr double k_climbHeight = 80.0;
 
 // Hall Effect Sensor Port
 constexpr int k_elevatorHallPort = 1;
+
+// Physical Robot Constants
+constexpr int k_robotLength = 0;
