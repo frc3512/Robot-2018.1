@@ -14,6 +14,14 @@ Robot::Robot() {
                             std::bind(&Robot::AutoCenterPos, this));
     dsDisplay.AddAutoMethod("Right Position",
                             std::bind(&Robot::AutoRightPos, this));
+
+    camera1.SetResolution(640, 480);
+    camera1.SetFPS(30);
+
+    camera2.SetResolution(640, 480);
+    camera2.SetFPS(30);
+
+    server.SetSource(camera1);
 }
 
 void Robot::DisabledInit() { robotDrive.StopClosedLoop(); }
@@ -27,7 +35,7 @@ void Robot::TeleopInit() { robotDrive.StopClosedLoop(); }
 
 void Robot::TestInit() {}
 
-void Robot::RobotPeriodic() { DS_PrintOut(); }
+void Robot::RobotPeriodic() {}
 
 void Robot::DisabledPeriodic() {}
 
@@ -39,11 +47,9 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopPeriodic() {
     // Drive Stick Controls
     if (driveStick1.GetRawButton(1)) {
-        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
-                         driveStick2.GetRawButton(2));
+        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5);
     } else {
-        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
-                         driveStick2.GetRawButton(2));
+        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX());
     }
 
     // Intake Controls
@@ -79,8 +85,14 @@ void Robot::TeleopPeriodic() {
     if (appendageStick.GetRawButton(10)) {
         elevator.SetHeightReference(k_climbHeight);
     }
-}
 
-void Robot::DS_PrintOut() { robotDrive.Debug(); }
+    if (appendageStick.GetRawButtonPressed(11)) {
+            if (server.GetSource() == camera1) {
+                server.SetSource(camera2);
+            } else {
+                server.SetSource(camera1);
+            }
+        }
+}
 
 START_ROBOT_CLASS(Robot)
