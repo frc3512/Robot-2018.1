@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <ADXRS450_Gyro.h>
 #include <CtrlSys/DiffDriveController.h>
 #include <CtrlSys/FuncNode.h>
 #include <CtrlSys/RefInput.h>
@@ -35,9 +36,35 @@ public:
     void SetLeftManual(double value);
     void SetRightManual(double value);
 
+    double GetLeftDisplacement() const;
+    double GetRightDisplacement() const;
+
+    double GetAngle();
+
     // Starts and stops PID loops
     void StartClosedLoop();
     void StopClosedLoop();
+
+    // Sets encoder PID setpoints
+    void SetPositionReference(double position);
+    void SetAngleReference(double angle);
+
+    // Returns encoder PID loop references
+    double GetPosReference() const;
+    double GetAngleReference() const;
+
+    // Returns whether or not robot has reached reference
+    bool PosAtReference() const;
+    bool AngleAtReference() const;
+
+    // Set encoder distances to 0
+    void ResetEncoders();
+
+    // Resets gyro
+    void ResetGyro();
+
+    // Calibrates gyro
+    void CalibrateGyro();
 
     // Sends print statements for debugging purposes
     void Debug();
@@ -54,4 +81,20 @@ private:
     CANTalonGroup m_rightGrbx{m_rightFront, m_rightRear};
 
     frc::DifferentialDrive m_drive{m_leftGrbx, m_rightGrbx};
+
+    // Gyro used for angle PID
+    ADXRS450_Gyro m_gyro;
+
+    // Control system references
+    frc::RefInput m_posRef{0.0};
+    frc::RefInput m_angleRef{0.0};
+
+    // Sensor adapters
+    frc::FuncNode m_leftEncoder{[this] { return m_leftGrbx.GetPosition(); }};
+    frc::FuncNode m_rightEncoder{[this] { return m_rightGrbx.GetPosition(); }};
+    frc::FuncNode m_angleSensor{[this] { return m_gyro.GetAngle(); }};
+
+    frc::DiffDriveController m_controller{
+        m_posRef,      m_angleRef, m_leftEncoder, m_rightEncoder,
+        m_angleSensor, true,       m_leftGrbx,    m_rightGrbx};
 };
