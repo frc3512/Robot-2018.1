@@ -2,14 +2,14 @@
 
 #pragma once
 
+#include <CtrlSys/FuncNode.h>
 #include <CtrlSys/PIDController.h>
 #include <CtrlSys/RefInput.h>
 #include <DigitalInput.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
-#include "CANTalonGroup.hpp"
 #include "Constants.hpp"
-#include "DriveTrain.hpp"
+#include "Subsystems/CANTalonGroup.hpp"
 
 class Elevator {
 public:
