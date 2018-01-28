@@ -19,3 +19,9 @@ void Intake::SetMotors(MotorState state) {
         m_intakeRight.Set(0.0);
     }
 }
+
+void Intake::HandleEvent(Event event) {
+    if (event.type == EventType::kClimberSetup) {
+        m_intakeArm.Set(false);
+    }
+}

@@ -55,6 +55,10 @@ constexpr double k_angleP = 0.75;  // 0.75
 constexpr double k_angleI = 0.00;  // 0.00
 constexpr double k_angleD = 0.05;  // 0.05
 
+// Climber Solenoid ports
+constexpr int k_alignmentArmsPort = 3;
+constexpr int k_setupSolenoidPort = 4;
+
 // CheesyDrive constants
 constexpr double k_lowGearSensitive = 0.75;
 constexpr double k_turnNonLinearity = 1.0;

@@ -2,7 +2,11 @@
 
 #include "Elevator.hpp"
 
-Elevator::Elevator() { m_elevatorGearbox.Set(0.0); }
+#include "Robot.hpp"
+
+Elevator::Elevator() : m_notifier([&] { Robot::elevator.HandleEvent({}); }) {
+    m_elevatorGearbox.Set(0.0);
+}
 
 void Elevator::SetVelocity(double velocity) { m_elevatorGearbox.Set(velocity); }
 
@@ -22,4 +26,39 @@ double Elevator::GetHeightReference() const {
 
 bool Elevator::HeightAtReference() const {
     return m_elevatorController.OnTarget();
+}
+
+void Elevator::HandleEvent(Event event) {
+    enum State { Idle, ClimberSetup, ClimberClimb };
+    static State state = State::Idle;
+    switch (state) {
+        case State::Idle:
+            if (event.type == EventType::kClimberSetup) {
+                StartClosedLoop();
+                SetHeightReference(k_climbHeight);
+                m_notifier.StartPeriodic(0.05);
+                state = State::ClimberSetup;
+            }
+            if (event.type == EventType::kClimberClimb) {
+                StartClosedLoop();
+                SetHeightReference(k_scaleHeight);
+                m_notifier.StartPeriodic(0.05);
+                state = State::ClimberClimb;
+            }
+            break;
+        case State::ClimberSetup:
+            if (HeightAtReference()) {
+                m_notifier.Stop();
+                Robot::climber.HandleEvent(EventType::kAtSetHeight);
+                state = State::Idle;
+            }
+            break;
+        case State::ClimberClimb:
+            if (HeightAtReference()) {
+                m_notifier.Stop();
+                Robot::climber.HandleEvent(EventType::kAtSetHeight);
+                state = State::Idle;
+            }
+            break;
+    }
 }

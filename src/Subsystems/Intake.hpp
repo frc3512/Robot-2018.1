@@ -6,10 +6,11 @@
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
+#include "Service.hpp"
 
 enum class MotorState { k_intake, k_outtake, k_idle };
 
-class Intake {
+class Intake : public Service {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -24,6 +25,8 @@ public:
     void ToggleDeploy();
 
     void SetMotors(MotorState state);
+
+    void HandleEvent(Event event) override;
 
 private:
     frc::Solenoid m_intakeClaw{k_intakeClawPort};

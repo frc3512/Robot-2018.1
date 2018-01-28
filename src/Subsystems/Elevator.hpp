@@ -6,12 +6,15 @@
 #include <CtrlSys/PIDController.h>
 #include <CtrlSys/RefInput.h>
 #include <DigitalInput.h>
+#include <Notifier.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
+#include "DriveTrain.hpp"
+#include "Service.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 
-class Elevator {
+class Elevator : public Service {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -35,12 +38,15 @@ public:
     // Returns whether or not elevator has reached reference
     bool HeightAtReference() const;
 
+    void HandleEvent(Event event) override;
+
 private:
     WPI_TalonSRX m_elevatorMasterMotor{k_elevatorMasterID};
     WPI_TalonSRX m_elevatorSlaveMotor{k_elevatorSlaveID};
     CANTalonGroup m_elevatorGearbox{m_elevatorMasterMotor,
                                     m_elevatorSlaveMotor};
 
+    Notifier m_notifier;
     // Reference
     frc::RefInput m_heightRef{0.0};
 
