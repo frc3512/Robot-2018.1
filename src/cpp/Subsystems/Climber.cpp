@@ -1,6 +1,6 @@
 // Copyright (c) 2017-2018 FRC Team 3512. All Rights Reserved.
 
-#include "Climber.hpp"
+#include "Subsystems/Climber.hpp"
 
 #include "Robot.hpp"
 

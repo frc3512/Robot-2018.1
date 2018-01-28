@@ -13,6 +13,7 @@ cppSrcFileInclude {
 
 modifiableFileExclude {
   WPILib/
+  gradle/
 }
 
 includeOtherLibs {

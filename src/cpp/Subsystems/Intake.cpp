@@ -1,6 +1,6 @@
 // Copyright (c) 2018 FRC Team 3512. All Rights Reserved.
 
-#include "Intake.hpp"
+#include "Subsystems/Intake.hpp"
 
 void Intake::ToggleOpen() { m_intakeClaw.Set(!m_intakeClaw.Get()); }
 
