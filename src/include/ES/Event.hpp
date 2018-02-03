@@ -9,9 +9,10 @@ enum EventType {
     kExit,
     kEntry,
     kButtonPressed,
-    kClimberSetup,
     kAtSetHeight,
-    kClimberClimb
+    kElevatorSetSwitch,
+    kElevatorSetScale,
+    kElevatorSetClimb,
 };
 
 struct Event {

@@ -14,7 +14,7 @@ void Robot::AutoAutoLine() {
 
             robotDrive.ResetEncoders();
             robotDrive.ResetGyro();
-            robotDrive.SetPositionReference(k_robotLength + 120);  // Estimate
+            robotDrive.SetPositionReference(kRobotLength + 120);  // Estimate
             robotDrive.SetAngleReference(0);
 
             state = State::kMoveForward;

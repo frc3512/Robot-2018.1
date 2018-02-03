@@ -55,21 +55,21 @@ private:
 
     DriveTrain robotDrive;
 
-    frc::Joystick driveStick1{k_driveStick1Port};
-    frc::Joystick driveStick2{k_driveStick2Port};
-    frc::Joystick appendageStick{k_appendageStickPort};
+    frc::Joystick driveStick1{kDriveStick1Port};
+    frc::Joystick driveStick2{kDriveStick2Port};
+    frc::Joystick appendageStick{kAppendageStickPort};
 
     frc::Timer autoTimer;
 
     // Used for sending data to the Driver Station
-    DSDisplay dsDisplay{k_dsPort};
+    DSDisplay dsDisplay{kDsPort};
 
     // Camera
     cs::UsbCamera camera1{"Camera 1", 0};
     cs::UsbCamera camera2{"Camera 2", 1};
 
-    cs::MjpegServer server{"Server", k_mjpegServerPort};
+    cs::MjpegServer server{"Server", kMjpegServerPort};
 
     // LiveGrapher host
-    // LiveGrapher liveGrapher{k_liveGrapherPort};
+    // LiveGrapher liveGrapher{kLiveGrapherPort};
 };

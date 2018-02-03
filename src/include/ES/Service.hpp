@@ -21,7 +21,7 @@ public:
     void PostEvent(Event event);
 
 private:
-    circular_buffer<Event, k_eventQueueSize> m_eventQueue;
+    circular_buffer<Event, kEventQueueSize> m_eventQueue;
     std::condition_variable m_ready;
     std::mutex m_mutex;
     std::thread m_thread;

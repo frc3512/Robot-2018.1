@@ -6,7 +6,7 @@
 
 Elevator::Elevator() : m_notifier([&] { Robot::elevator.PostEvent({}); }) {
     m_elevatorGearbox.Set(0.0);
-    m_elevatorGearbox.SetDistancePerPulse(k_elevatorDpP);
+    m_elevatorGearbox.SetDistancePerPulse(kElevatorDpP);
 }
 
 void Elevator::SetVelocity(double velocity) { m_elevatorGearbox.Set(velocity); }
@@ -34,50 +34,70 @@ bool Elevator::HeightAtReference() const {
 bool Elevator::GetHallEffect() { return m_elevatorHallEffect.Get(); }
 
 void Elevator::HandleEvent(Event event) {
-    enum State { Idle, ClimberSetup, ClimberClimb };
-    static State state = State::Idle;
+    enum State {
+        kIdle,
+        kElevatorClimb,
+        kElevatorScale,
+        kElevatorSwitch,
+    };
+    static State state = State::kIdle;
     bool makeTransition = false;
     State nextState;
     switch (state) {
-        case State::Idle:
-            if (event.type == EventType::kClimberSetup) {
-                nextState = State::ClimberSetup;
+        case State::kIdle:
+            if (event.type == EventType::kElevatorSetSwitch) {
+                nextState = State::kElevatorSwitch;
                 makeTransition = true;
-            } else if (event.type == EventType::kClimberClimb) {
-                nextState = State::ClimberClimb;
+            } else if (event.type == EventType::kElevatorSetScale) {
+                nextState = State::kElevatorScale;
+                makeTransition = true;
+            } else if (event.type == EventType::kElevatorSetClimb) {
+                nextState = State::kElevatorClimb;
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
                 m_notifier.StartPeriodic(0.05);
             }
             break;
-        case State::ClimberSetup:
+        case State::kElevatorSwitch:
             if (event.type == EventType::kEntry) {
                 StartClosedLoop();
-                SetHeightReference(k_climbHeight);
+                SetHeightReference(kSwitchHeight);
             } else if (HeightAtReference()) {
-                nextState = State::Idle;
+                nextState = State::kIdle;
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
                 m_notifier.Stop();
                 Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
             break;
-        case State::ClimberClimb:
+        case State::kElevatorScale:
             if (event.type == EventType::kEntry) {
                 StartClosedLoop();
-                SetHeightReference(k_scaleHeight);
+                SetHeightReference(kScaleHeight);
             } else if (HeightAtReference()) {
-                nextState = State::Idle;
+                nextState = State::kIdle;
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
                 m_notifier.Stop();
                 Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
             break;
-    }
-    if (makeTransition) {
-        PostEvent(EventType::kExit);
-        state = nextState;
-        PostEvent(EventType::kEntry);
+        case State::kElevatorClimb:
+            if (event.type == EventType::kEntry) {
+                StartClosedLoop();
+                SetHeightReference(kClimbHeight);
+            } else if (HeightAtReference()) {
+                nextState = State::kIdle;
+                makeTransition = true;
+            } else if (event.type == EventType::kExit) {
+                m_notifier.Stop();
+                Robot::climber.PostEvent(EventType::kAtSetHeight);
+            }
+            break;
+            if (makeTransition) {
+                PostEvent(EventType::kExit);
+                state = nextState;
+                PostEvent(EventType::kEntry);
+            }
     }
 }

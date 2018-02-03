@@ -33,6 +33,9 @@ void Robot::DisabledInit() { robotDrive.StopClosedLoop(); }
 void Robot::AutonomousInit() {
     autoTimer.Reset();
     autoTimer.Start();
+    if (!intake.GetDeploy()) {
+        intake.ToggleDeploy();
+    }
 }
 
 void Robot::TeleopInit() { robotDrive.StopClosedLoop(); }
@@ -81,30 +84,31 @@ void Robot::TeleopPeriodic() {
         intake.ToggleDeploy();
     }
     if (appendageStick.GetRawButtonPressed(4)) {
-        intake.SetMotors(MotorState::k_intake);
+        intake.SetMotors(MotorState::kIntake);
     }
     if (appendageStick.GetRawButtonPressed(6)) {
-        intake.SetMotors(MotorState::k_outtake);
+        intake.SetMotors(MotorState::kOuttake);
     }
     if (appendageStick.GetRawButtonReleased(4) ||
         appendageStick.GetRawButtonReleased(6)) {
-        intake.SetMotors(MotorState::k_idle);
+        intake.SetMotors(MotorState::kIdle);
     }
 
     // Elevator Controls
     elevator.SetVelocity(appendageStick.GetY());
 
     if (appendageStick.GetRawButton(7)) {
-        elevator.SetHeightReference(k_groundHeight);
+        elevator.SetHeightReference(kFloorHeight);
+        elevator.SetHeightReference(kFloorHeight);
     }
     if (appendageStick.GetRawButton(8)) {
-        elevator.SetHeightReference(k_switchHeight);
+        elevator.SetHeightReference(kSwitchHeight);
     }
     if (appendageStick.GetRawButton(9)) {
-        elevator.SetHeightReference(k_scaleHeight);
+        elevator.SetHeightReference(kScaleHeight);
     }
     if (appendageStick.GetRawButton(10)) {
-        elevator.SetHeightReference(k_climbHeight);
+        elevator.SetHeightReference(kClimbHeight);
     }
 
     if (appendageStick.GetRawButtonPressed(11)) {

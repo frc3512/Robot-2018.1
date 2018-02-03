@@ -16,8 +16,8 @@ public:
     void HandleEvent(Event event) override;
 
 private:
-    frc::Solenoid m_setupSolenoid{k_setupSolenoidPort};
-    frc::Solenoid m_alignmentArms{k_alignmentArmsPort};
+    frc::Solenoid m_setupSolenoid{kSetupSolenoidPort};
+    frc::Solenoid m_alignmentArms{kAlignmentArmsPort};
 
     Timer timer;
 };

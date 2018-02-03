@@ -13,103 +13,102 @@
  */
 
 // DS port
-constexpr int k_dsPort = 5800;
+constexpr int kDsPort = 5800;
 
 // LiveGrapher host port
-constexpr int k_liveGrapherPort = 3513;
+constexpr int kLiveGrapherPort = 3513;
 
 // MJPEG server port
-constexpr int k_mjpegServerPort = 1180;
+constexpr int kMjpegServerPort = 1180;
 
 /*
  * Joystick and buttons
  */
 
 // Joystick ports
-constexpr int k_driveStick1Port = 0;
-constexpr int k_driveStick2Port = 1;
-constexpr int k_appendageStickPort = 2;
+constexpr int kDriveStick1Port = 0;
+constexpr int kDriveStick2Port = 1;
+constexpr int kAppendageStickPort = 2;
 
 // Joystick axis deadband range
-constexpr double k_joystickDeadband = 0.02;
+constexpr double kJoystickDeadband = 0.02;
 
 /*
  * DriveTrain
  */
 
 // DriveTrain GearBox ID
-constexpr int k_leftDriveMasterID = 1;
-constexpr int k_leftDriveSlaveID = 2;
-constexpr int k_rightDriveMasterID = 3;
-constexpr int k_rightDriveSlaveID = 4;
-
+constexpr int kLeftDriveMasterID = 1;
+constexpr int kLeftDriveSlaveID = 2;
+constexpr int kRightDriveMasterID = 3;
+constexpr int kRightDriveSlaveID = 4;
 // Distance per Pulse
-constexpr double k_leftDpP = 169.0 / 11915.0;
-constexpr double k_rightDpP = 169.0 / 11839.3;
+constexpr double kLeftDpP = 169.0 / 11915.0;
+constexpr double kRightDpP = 169.0 / 11839.3;
 
 // DriveTrain position PID, Extra //'s mean practice PID values
-constexpr double k_driveMaxSpeed = 24000;  // in/sec
-constexpr double k_posP = 0.00;
-constexpr double k_posI = 0.00;
-constexpr double k_posD = 0.00;
+constexpr double kDriveMaxSpeed = 24000;  // in/sec
+constexpr double kPosP = 0.00;
+constexpr double kPosI = 0.00;
+constexpr double kPosD = 0.00;
 
 // DriveTrain angle PID
-constexpr double k_rotateMaxSpeed = 320;
-constexpr double k_angleP = 0.00;
-constexpr double k_angleI = 0.00;
-constexpr double k_angleD = 0.00;
+constexpr double kRotateMaxSpeed = 320;
+constexpr double kAngleP = 0.00;
+constexpr double kAngleI = 0.00;
+constexpr double kAngleD = 0.00;
 
 // Climber Solenoid ports
-constexpr int k_alignmentArmsPort = 3;
-constexpr int k_setupSolenoidPort = 4;
+constexpr int kAlignmentArmsPort = 3;
+constexpr int kSetupSolenoidPort = 4;
 
 // CheesyDrive constants
-constexpr double k_lowGearSensitive = 0.75;
-constexpr double k_turnNonLinearity = 1.0;
-constexpr double k_inertiaDampen = 2.5;
-constexpr double k_inertiaHighTurn = 3.0;
-constexpr double k_inertiaLowTurn = 3.0;
+constexpr double kLowGearSensitive = 0.75;
+constexpr double kTurnNonLinearity = 1.0;
+constexpr double kInertiaDampen = 2.5;
+constexpr double kInertiaHighTurn = 3.0;
+constexpr double kInertiaLowTurn = 3.0;
 
 /*
  * Intake
  */
 
 // Solenoid Ports
-constexpr int k_intakeClawPort = 1;
-constexpr int k_intakeArmPort = 2;
+constexpr int kIntakeClawPort = 1;
+constexpr int kIntakeArmPort = 2;
 
 // Talon IDs
-constexpr int k_intakeLeftID = 5;
-constexpr int k_intakeRightID = 6;
+constexpr int kIntakeLeftID = 5;
+constexpr int kIntakeRightID = 6;
 
 /*
  * Elevator
  */
 
 // Elevator GearBox ID
-constexpr int k_elevatorMasterID = 7;
-constexpr int k_elevatorSlaveID = 8;
+constexpr int kElevatorMasterID = 7;
+constexpr int kElevatorSlaveID = 8;
 
 // Distance per Pulse
-constexpr double k_elevatorDpP = 0.00142230843;
+constexpr double kElevatorDpP = 0.00142230843;
 
 // Elevator PID
-constexpr double k_elevatorP = 0.0;
-constexpr double k_elevatorI = 0.0;
-constexpr double k_elevatorD = 0.0;
-constexpr double k_elevatorControllerPeriod = 1.0;
+constexpr double kElevatorP = 0.0;
+constexpr double kElevatorI = 0.0;
+constexpr double kElevatorD = 0.0;
+constexpr double kElevatorControllerPeriod = 1.0;
 
 // Elevator Setpoints
-constexpr double k_groundHeight = 0.0;
-constexpr double k_switchHeight = 12.0;
-constexpr double k_scaleHeight = 60.0;
-constexpr double k_climbHeight = 80.0;
+constexpr double kFloorHeight = 0.0;
+constexpr double kSwitchHeight = 12.0;
+constexpr double kScaleHeight = 60.0;
+constexpr double kClimbHeight = 80.0;
 
 // Hall Effect Sensor Port
-constexpr int k_elevatorHallPort = 1;
+constexpr int kElevatorHallPort = 1;
 
 // Physical Robot Constants
-constexpr int k_robotLength = 0;
+constexpr int kRobotLength = 0;
 
 // Event Queue Size
-constexpr int k_eventQueueSize = 8;
+constexpr int kEventQueueSize = 8;

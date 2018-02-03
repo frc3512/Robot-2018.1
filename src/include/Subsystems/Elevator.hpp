@@ -48,8 +48,8 @@ public:
     void HandleEvent(Event event) override;
 
 private:
-    WPI_TalonSRX m_elevatorMasterMotor{k_elevatorMasterID};
-    WPI_TalonSRX m_elevatorSlaveMotor{k_elevatorSlaveID};
+    WPI_TalonSRX m_elevatorMasterMotor{kElevatorMasterID};
+    WPI_TalonSRX m_elevatorSlaveMotor{kElevatorSlaveID};
     CANTalonGroup m_elevatorGearbox{m_elevatorMasterMotor,
                                     m_elevatorSlaveMotor};
 
@@ -58,11 +58,11 @@ private:
     frc::RefInput m_heightRef{0.0};
 
     // Sensors
-    frc::DigitalInput m_elevatorHallEffect{k_elevatorHallPort};
+    frc::DigitalInput m_elevatorHallEffect{kElevatorHallPort};
     frc::FuncNode m_elevatorEncoder{
         [this] { return m_elevatorGearbox.GetPosition(); }};
 
     frc::PIDController m_elevatorController{
-        k_elevatorP,       k_elevatorI,       k_elevatorD,
-        m_elevatorEncoder, m_elevatorGearbox, k_elevatorControllerPeriod};
+        kElevatorP,        kElevatorI,        kElevatorD,
+        m_elevatorEncoder, m_elevatorGearbox, kElevatorControllerPeriod};
 };

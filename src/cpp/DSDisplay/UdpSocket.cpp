@@ -38,9 +38,9 @@ UdpSocket::Status UdpSocket::send(const void* data, size_t size,
     create();
 
     // Make sure that all the data will fit in one datagram
-    if (size > k_maxDatagramSize) {
+    if (size > kMaxDatagramSize) {
         std::cerr << "Cannot send data over the network (the number of bytes "
-                     "to send is greater than UdpSocket::k_maxDatagramSize)\n";
+                     "to send is greater than UdpSocket::kMaxDatagramSize)\n";
         return Error;
     }
 

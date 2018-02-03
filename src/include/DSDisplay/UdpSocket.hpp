@@ -22,10 +22,10 @@ public:
     };
 
     // Maximum number of bytes that can be sent in a single UDP datagram
-    static constexpr size_t k_maxDatagramSize = 65507;
+    static constexpr size_t kMaxDatagramSize = 65507;
 
     // Special value that tells the system to pick any available port
-    static constexpr uint32_t k_anyPort = 0;
+    static constexpr uint32_t kAnyPort = 0;
 
     UdpSocket() = default;
     ~UdpSocket();
@@ -37,7 +37,7 @@ public:
      * Bind the socket to a specific port
      *
      * Binding the socket to a port is necessary for being able to receive data
-     * on that port. You can use the special value UdpSocket::k_anyPort to tell
+     * on that port. You can use the special value UdpSocket::kAnyPort to tell
      * the system to automatically pick an available port.
      *
      * @param port Port to bind the socket to
