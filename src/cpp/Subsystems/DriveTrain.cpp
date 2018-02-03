@@ -11,8 +11,6 @@ using ctre::phoenix::motorcontrol::FeedbackDevice;
 DriveTrain::DriveTrain() {
     m_drive.SetDeadband(k_joystickDeadband);
 
-    m_rightGrbx.SetInverted(true);
-
     m_leftGrbx.SetSensorDirection(true);
 
     m_leftGrbx.SetFeedbackDevice(FeedbackDevice::QuadEncoder);

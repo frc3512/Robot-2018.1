@@ -15,29 +15,32 @@ void Climber::HandleEvent(Event event) {
     switch (state) {
         case State::kInit:
             if (event.type == EventType::kButtonPressed && event.param == 1) {
-                m_alignmentArms.Set(true);
-                Robot::intake.HandleEvent(EventType::kClimberSetup);
-                Robot::elevator.HandleEvent(EventType::kClimberSetup);
                 nextState = State::kSetup;
                 makeTransition = true;
             }
             break;
         case State::kSetup:
-            if (event.type == EventType::kAtSetHeight) {
-                m_setupSolenoid.Set(true);
+            if (event.type == EventType::kEntry) {
+                Robot::intake.HandleEvent(EventType::kClimberSetup);
+                Robot::elevator.HandleEvent(EventType::kClimberSetup);
+                m_alignmentArms.Set(true);
+            } else if (event.type == EventType::kAtSetHeight) {
                 nextState = State::kWaiting;
                 makeTransition = true;
+            } else if (event.type == EventType::kExit) {
+                m_setupSolenoid.Set(true);
             }
             break;
         case State::kWaiting:
             if (event.type == EventType::kButtonPressed && event.param == 1) {
-                Robot::elevator.HandleEvent(EventType::kClimberClimb);
                 nextState = State::kClimb;
                 makeTransition = true;
             }
             break;
         case State::kClimb:
-            if (event.type == EventType::kAtSetHeight) {
+            if (event.type == EventType::kEntry) {
+                Robot::elevator.HandleEvent(EventType::kClimberClimb);
+            } else if (event.type == EventType::kAtSetHeight) {
                 nextState = State::kIdle;
                 makeTransition = true;
             }
@@ -45,7 +48,7 @@ void Climber::HandleEvent(Event event) {
         case State::kIdle:
             break;
     }
-    if (makeTransition == true) {
+    if (makeTransition) {
         HandleEvent(EventType::kExit);
         state = nextState;
         HandleEvent(EventType::kEntry);
