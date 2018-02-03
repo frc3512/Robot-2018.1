@@ -6,19 +6,25 @@
 
 #include <ctre/phoenix/MotorControl/SensorCollection.h>
 
-using TalonSRX = ctre::phoenix::motorcontrol::can::TalonSRX;
+using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
 void CANTalonGroup::Set(double value) {
+    if (m_forwardLimit != nullptr && m_reverseLimit != nullptr) {
+        if (value > 0 && m_forwardLimit->Get() == m_limitPressedState) {
+            value = 0.0;
+        } else if (value < 0 && m_reverseLimit->Get() == m_limitPressedState) {
+            value = 0.0;
+        }
+    }
     m_canTalons[0].get().Set(ControlMode::PercentOutput, value);
 }
 
-double CANTalonGroup::Get() const {
-    return m_canTalons[0].get().GetSelectedSensorPosition(
-        m_canTalons[0].get().GetDeviceID());
-}
+double CANTalonGroup::Get() const { return m_canTalons[0].get().Get(); }
 
 void CANTalonGroup::SetInverted(bool isInverted) {
-    m_canTalons[0].get().SetInverted(isInverted);
+    for (auto& canTalon : m_canTalons) {
+        canTalon.get().SetInverted(isInverted);
+    }
 }
 
 bool CANTalonGroup::GetInverted() const {
@@ -31,20 +37,25 @@ void CANTalonGroup::Disable() {
 
 void CANTalonGroup::StopMotor() { Disable(); }
 
-void CANTalonGroup::PIDWrite(double output) {
-    m_canTalons[0].get().Set(ControlMode::PercentOutput, output);
+void CANTalonGroup::PIDWrite(double output) { Set(output); }
+
+void CANTalonGroup::EnableHardLimits(int forwardLimitPin, int reverseLimitPin) {
+    m_forwardLimit = std::make_unique<frc::DigitalInput>(forwardLimitPin);
+    m_reverseLimit = std::make_unique<frc::DigitalInput>(reverseLimitPin);
+}
+
+void CANTalonGroup::SetLimitPressedState(bool high) {
+    m_limitPressedState = high;
 }
 
 double CANTalonGroup::GetPosition() const {
-    return m_canTalons[0].get().GetSelectedSensorPosition(
-               m_canTalons[0].get().GetDeviceID()) *
+    return m_canTalons[0].get().GetSelectedSensorPosition(0) *
            m_distancePerPulse;
 }
 
 double CANTalonGroup::GetSpeed() const {
     // RPM * degrees/rev / (seconds/min)
-    return m_canTalons[0].get().GetSelectedSensorVelocity(
-               m_canTalons[0].get().GetDeviceID()) *
+    return m_canTalons[0].get().GetSelectedSensorVelocity(0) *
            m_distancePerPulse / 60.0;
 }
 
@@ -52,31 +63,12 @@ void CANTalonGroup::SetDistancePerPulse(double distancePerPulse) {
     m_distancePerPulse = distancePerPulse;
 }
 
-void CANTalonGroup::SetFeedbackDevice(FeedbackDevice device) {
-    m_feedbackDevice = device;
-    m_canTalons[0].get().ConfigSelectedFeedbackSensor(device, 0, 0);
-}
-
 void CANTalonGroup::ResetEncoder() {
     m_canTalons[0].get().GetSensorCollection().SetQuadraturePosition(0, 0);
 }
 
 void CANTalonGroup::SetSensorDirection(bool reverse) {
-    m_isEncoderReversed = reverse;
-    m_canTalons[0].get().SetSensorPhase(m_isEncoderReversed);
+    m_canTalons[0].get().SetSensorPhase(reverse);
 }
-
-bool CANTalonGroup::IsEncoderReversed() const { return m_isEncoderReversed; }
-
-void CANTalonGroup::SetLimitOnHigh(bool limitOnHigh) {
-    m_limitOnHigh = limitOnHigh;
-}
-
-void CANTalonGroup::SetSoftPositionLimits(double min, double max) {
-    m_min = min;
-    m_max = max;
-}
-
-TalonSRX& CANTalonGroup::GetMaster() { return m_canTalons[0].get(); }
 
 double CANTalonGroup::GetOutput() { return GetPosition(); }

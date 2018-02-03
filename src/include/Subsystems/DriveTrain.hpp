@@ -7,7 +7,8 @@
 #include <CtrlSys/FuncNode.h>
 #include <CtrlSys/RefInput.h>
 #include <Drive/DifferentialDrive.h>
-#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
+#include <Encoder.h>
+#include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
@@ -19,7 +20,7 @@ class CANTalonGroup;
  */
 class DriveTrain {
 public:
-    using TalonSRX = ctre::phoenix::motorcontrol::can::TalonSRX;
+    using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
     DriveTrain();
     virtual ~DriveTrain() = default;
@@ -32,14 +33,29 @@ public:
      */
     void Drive(double throttle, double turn, bool isQuickTurn = false);
 
+    // Set encoder distances to 0
+    void ResetEncoders();
+
     // Directly set wheel speeds [0..1] (see GearBox::SetManual(double))
     void SetLeftManual(double value);
     void SetRightManual(double value);
 
+    // Returns encoder distances
     double GetLeftDisplacement() const;
     double GetRightDisplacement() const;
 
+    // Returns encoder rates
+    double GetLeftRate() const;
+    double GetRightRate() const;
+
+    // Returns robot's current position
+    double GetPosition();
+
+    // Return gyro's angle
     double GetAngle();
+
+    // Return gyro's rate
+    double GetAngularRate() const;
 
     // Starts and stops PID loops
     void StartClosedLoop();
@@ -57,9 +73,6 @@ public:
     bool PosAtReference() const;
     bool AngleAtReference() const;
 
-    // Set encoder distances to 0
-    void ResetEncoders();
-
     // Resets gyro
     void ResetGyro();
 
@@ -71,13 +84,13 @@ public:
 
 private:
     // Left gearbox used in position PID
-    TalonSRX m_leftFront{k_leftDriveMasterID};
-    TalonSRX m_leftRear{k_leftDriveSlaveID};
+    WPI_TalonSRX m_leftFront{k_leftDriveMasterID};
+    WPI_TalonSRX m_leftRear{k_leftDriveSlaveID};
     CANTalonGroup m_leftGrbx{m_leftFront, m_leftRear};
 
     // Right gearbox used in position PID
-    TalonSRX m_rightFront{k_rightDriveMasterID};
-    TalonSRX m_rightRear{k_rightDriveSlaveID};
+    WPI_TalonSRX m_rightFront{k_rightDriveMasterID};
+    WPI_TalonSRX m_rightRear{k_rightDriveSlaveID};
     CANTalonGroup m_rightGrbx{m_rightFront, m_rightRear};
 
     frc::DifferentialDrive m_drive{m_leftGrbx, m_rightGrbx};

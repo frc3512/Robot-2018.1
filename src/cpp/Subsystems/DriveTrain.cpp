@@ -6,15 +6,10 @@
 #include <iostream>
 #include <limits>
 
-using ctre::phoenix::motorcontrol::FeedbackDevice;
-
 DriveTrain::DriveTrain() {
     m_drive.SetDeadband(k_joystickDeadband);
 
     m_leftGrbx.SetSensorDirection(true);
-
-    m_leftGrbx.SetFeedbackDevice(FeedbackDevice::QuadEncoder);
-    m_rightGrbx.SetFeedbackDevice(FeedbackDevice::QuadEncoder);
 
     m_leftGrbx.Set(0.0);
     m_rightGrbx.Set(0.0);
@@ -36,7 +31,12 @@ int32_t DriveTrain::GetLeftRaw() const { return m_leftGrbx.Get(); }
 int32_t DriveTrain::GetRightRaw() const { return m_rightGrbx.Get(); }
 
 void DriveTrain::Drive(double throttle, double turn, bool isQuickTurn) {
-    m_drive.CurvatureDrive(throttle, turn, isQuickTurn);
+    m_drive.CurvatureDrive(throttle, -turn, isQuickTurn);
+}
+
+void DriveTrain::ResetEncoders() {
+    m_leftGrbx.ResetEncoder();
+    m_rightGrbx.ResetEncoder();
 }
 
 void DriveTrain::SetLeftManual(double value) { m_leftGrbx.Set(value); }
@@ -51,7 +51,15 @@ double DriveTrain::GetRightDisplacement() const {
     return m_rightGrbx.GetPosition();
 }
 
-double DriveTrain::GetAngle() { return m_gyro.GetAngle(); }
+double DriveTrain::GetLeftRate() const { return m_leftGrbx.GetSpeed(); }
+
+double DriveTrain::GetRightRate() const { return m_rightGrbx.GetSpeed(); }
+
+double DriveTrain::GetPosition() { return m_controller.GetPosition(); }
+
+double DriveTrain::GetAngle() { return m_controller.GetAngle(); }
+
+double DriveTrain::GetAngularRate() const { return m_gyro.GetRate(); }
 
 void DriveTrain::StartClosedLoop() { m_controller.Enable(); }
 
@@ -70,11 +78,6 @@ double DriveTrain::GetAngleReference() const { return m_angleRef.GetOutput(); }
 bool DriveTrain::PosAtReference() const { return m_controller.AtPosition(); }
 
 bool DriveTrain::AngleAtReference() const { return m_controller.AtAngle(); }
-
-void DriveTrain::ResetEncoders() {
-    m_leftGrbx.ResetEncoder();
-    m_rightGrbx.ResetEncoder();
-}
 
 void DriveTrain::ResetGyro() { m_gyro.Reset(); }
 

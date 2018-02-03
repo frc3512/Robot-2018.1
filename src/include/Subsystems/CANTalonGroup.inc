@@ -3,35 +3,22 @@
 #pragma once
 
 #include <ctre/phoenix/MotorControl/ControlMode.h>
-
-using ctre::phoenix::motorcontrol::ControlMode;
-
-template <class... CANTalons>
-CANTalonGroup::CANTalonGroup(TalonSRX& canTalon, CANTalons&... canTalons)
-    : CANTalonGroup(-1, -1, canTalon, canTalons...) {}
+#include <ctre/phoenix/MotorControl/FeedbackDevice.h>
 
 template <class... CANTalons>
-CANTalonGroup::CANTalonGroup(int forwardLimitPin, int reverseLimitPin,
-    TalonSRX& canTalon, CANTalons&... canTalons)
+CANTalonGroup::CANTalonGroup(WPI_TalonSRX& canTalon, CANTalons&... canTalons)
     : m_canTalons{canTalon, canTalons...} {
-    if (forwardLimitPin != -1) {
-        m_forwardLimit = std::make_unique<frc::DigitalInput>(forwardLimitPin);
-    }
-
-    if (reverseLimitPin != -1) {
-        m_reverseLimit = std::make_unique<frc::DigitalInput>(reverseLimitPin);
-    }
-
+    using ctre::phoenix::motorcontrol::ControlMode;
     for (size_t i = 0; i < m_canTalons.size(); i++) {
         if (i == 0) {
+            using FeedbackDevice = ctre::phoenix::motorcontrol::FeedbackDevice;
             m_canTalons[i].get().Set(ControlMode::PercentOutput, 0.0);
-            m_canTalons[i].get().ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 50);
-            m_canTalons[i].get().SetSensorPhase(m_isEncoderReversed);
+            m_canTalons[i].get().ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 0);
+            m_canTalons[i].get().SetSensorPhase(false);
             ResetEncoder();
         } else {
             // Set first CANTalon as master and all others as slaves
-            m_canTalons[i].get().Set(ControlMode::Follower,
-                                     m_canTalons[0].get().GetDeviceID());
+            m_canTalons[i].get().Follow(m_canTalons[0]);
         }
     }
 }
