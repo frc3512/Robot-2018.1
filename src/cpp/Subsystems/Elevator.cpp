@@ -4,7 +4,7 @@
 
 #include "Robot.hpp"
 
-Elevator::Elevator() : m_notifier([&] { Robot::elevator.HandleEvent({}); }) {
+Elevator::Elevator() : m_notifier([&] { Robot::elevator.PostEvent({}); }) {
     m_elevatorGearbox.Set(0.0);
 }
 
@@ -54,7 +54,7 @@ void Elevator::HandleEvent(Event event) {
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
                 m_notifier.Stop();
-                Robot::climber.HandleEvent(EventType::kAtSetHeight);
+                Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
             break;
         case State::ClimberClimb:
@@ -66,13 +66,13 @@ void Elevator::HandleEvent(Event event) {
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
                 m_notifier.Stop();
-                Robot::climber.HandleEvent(EventType::kAtSetHeight);
+                Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
             break;
     }
     if (makeTransition) {
-        HandleEvent(EventType::kExit);
+        PostEvent(EventType::kExit);
         state = nextState;
-        HandleEvent(EventType::kEntry);
+        PostEvent(EventType::kEntry);
     }
 }

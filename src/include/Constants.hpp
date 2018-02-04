@@ -103,3 +103,6 @@ constexpr int k_elevatorHallPort = 1;
 
 // Physical Robot Constants
 constexpr int k_robotLength = 0;
+
+// Event Queue Size
+constexpr int k_eventQueueSize = 8;

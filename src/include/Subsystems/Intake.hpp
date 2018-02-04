@@ -6,7 +6,7 @@
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
-#include "Service.hpp"
+#include "ES/Service.hpp"
 
 enum class MotorState { k_intake, k_outtake, k_idle };
 
