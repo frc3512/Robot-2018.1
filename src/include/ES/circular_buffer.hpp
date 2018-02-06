@@ -5,6 +5,9 @@
 #include <array>
 #include <cstddef>
 
+/**
+ * Makes a bounded queue with a fixed memory size
+ */
 template <class T, size_t N>
 class circular_buffer {
 public:

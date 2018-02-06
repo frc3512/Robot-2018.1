@@ -4,6 +4,9 @@
 
 #include <stdint.h>
 
+/**
+ * Event names to be polled and handled
+ */
 enum EventType {
     kNoEvent,
     kExit,
