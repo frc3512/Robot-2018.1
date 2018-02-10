@@ -30,14 +30,8 @@ Hall effect limit switch (TBD)
 |No |Full switch autonomous|
 |No |Full scale autonomous|
 
-## 2017 Roster
+## 2018 Roster
 
-Mentors:
-Tyler Veness
-William Ward
+Mentors: Tyler Veness, William Ward
 
-Students:
-Luke Rowe (Lead)
-Charlie Parkinson
-William Jin
-Kyle Quinlan
+Students: Luke Rowe (Lead), Charlie Parkinson, William Jin, Kyle Quinlan
