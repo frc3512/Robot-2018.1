@@ -31,7 +31,7 @@ void Robot::AutoCenterPos() {
             state = State::kInitialRotate;
             break;
         case State::kInitialRotate:
-            if (robotDrive.PosAtReference()) {
+            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
                 if (gameData[0] == 'R') {
                     robotDrive.SetAngleReference(90);  // Estimate
                 } else {
@@ -42,13 +42,13 @@ void Robot::AutoCenterPos() {
 
             break;
         case State::kSecondForward:
-            if (robotDrive.AngleAtReference()) {
+            if (robotDrive.AngleAtReference() && autoTimer.HasPeriodPassed(1)) {
                 robotDrive.SetPositionReference(100);  // Estimate
                 state = State::kFinalRotate;
             }
             break;
         case State::kFinalRotate:
-            if (robotDrive.PosAtReference()) {
+            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
                 robotDrive.ResetEncoders();  // For Simplicity
 
                 if (gameData[0] == 'R') {
@@ -60,7 +60,7 @@ void Robot::AutoCenterPos() {
             }
             break;
         case State::kFinalForward:
-            if (robotDrive.AngleAtReference()) {
+            if (robotDrive.AngleAtReference() && autoTimer.HasPeriodPassed(1)) {
                 robotDrive.SetPositionReference(30);  // Estimate
                 state = State::kIdle;
             }

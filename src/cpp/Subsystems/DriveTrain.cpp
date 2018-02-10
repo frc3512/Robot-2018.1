@@ -11,6 +11,9 @@ DriveTrain::DriveTrain() {
 
     m_leftGrbx.SetSensorDirection(true);
 
+    m_leftGrbx.SetDistancePerPulse(k_leftDpP);
+    m_rightGrbx.SetDistancePerPulse(k_rightDpP);
+
     m_leftGrbx.Set(0.0);
     m_rightGrbx.Set(0.0);
 

@@ -20,7 +20,7 @@ void Robot::AutoAutoLine() {
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (robotDrive.PosAtReference()) {
+            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
                 robotDrive.StopClosedLoop();
 
                 state = State::kIdle;

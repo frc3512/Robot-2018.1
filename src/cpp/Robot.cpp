@@ -41,12 +41,17 @@ void Robot::TestInit() {}
 
 void Robot::RobotPeriodic() {
     DS_PrintOut();
+
+    if (elevator.GetHallEffect()) {
+        elevator.ResetEncoder();
+    }
+
     for (int i = 1; i < 12; i++) {
         if (appendageStick.GetRawButtonPressed(i)) {
             Event event{EventType::kButtonPressed, i};
-            climber.HandleEvent(event);
-            elevator.HandleEvent(event);
-            intake.HandleEvent(event);
+            climber.PostEvent(event);
+            elevator.PostEvent(event);
+            intake.PostEvent(event);
         }
     }
 }
@@ -61,9 +66,11 @@ void Robot::AutonomousPeriodic() {
 void Robot::TeleopPeriodic() {
     // Drive Stick Controls
     if (driveStick1.GetRawButton(1)) {
-        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5);
+        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
+                         driveStick2.GetRawButton(2));
     } else {
-        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX());
+        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
+                         driveStick2.GetRawButton(2));
     }
 
     // Intake Controls

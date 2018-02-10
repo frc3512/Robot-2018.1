@@ -7,7 +7,7 @@
 enum class State { kInit, kSetup, kWaiting, kClimb, kIdle };
 
 void Climber::HandleEvent(Event event) {
-    static State state = State::kIdle;
+    static State state = State::kInit;
 
     bool makeTransition = false;
     State nextState;

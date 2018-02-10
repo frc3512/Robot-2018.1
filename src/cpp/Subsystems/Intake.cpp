@@ -9,11 +9,11 @@ void Intake::ToggleDeploy() { m_intakeArm.Set(!m_intakeArm.Get()); }
 void Intake::SetMotors(MotorState state) {
     // IntakeLeft is Inverted, IntakeRight is not
     if (state == MotorState::k_intake) {
-        m_intakeLeft.Set(0.5);
-        m_intakeRight.Set(-0.5);
+        m_intakeLeft.Set(-1.0);
+        m_intakeRight.Set(1.0);
     } else if (state == MotorState::k_outtake) {
-        m_intakeLeft.Set(-0.5);
-        m_intakeRight.Set(0.5);
+        m_intakeLeft.Set(1.0);
+        m_intakeRight.Set(-1.0);
     } else if (state == MotorState::k_idle) {
         m_intakeLeft.Set(0.0);
         m_intakeRight.Set(0.0);

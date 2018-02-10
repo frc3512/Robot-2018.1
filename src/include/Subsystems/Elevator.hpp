@@ -20,6 +20,7 @@ public:
 
     Elevator();
 
+    // Sets the voltage of the motors
     void SetVelocity(double velocity);
 
     // Set encoder distance to 0
@@ -29,6 +30,9 @@ public:
     void StartClosedLoop();
     void StopClosedLoop();
 
+    // Gets encoder values
+    double GetHeight();
+
     // Sets encoder PID setpoints
     void SetHeightReference(double height);
 
@@ -37,6 +41,9 @@ public:
 
     // Returns whether or not elevator has reached reference
     bool HeightAtReference() const;
+
+    // Gets whether the Hall Effect sensor has triggered
+    bool GetHallEffect();
 
     void HandleEvent(Event event) override;
 
