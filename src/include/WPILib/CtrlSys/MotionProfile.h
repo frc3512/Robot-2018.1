@@ -11,6 +11,7 @@
 #include <mutex>
 #include <tuple>
 
+#include "CtrlSys/FuncNode.h"
 #include "CtrlSys/INode.h"
 #include "Timer.h"
 
@@ -19,12 +20,14 @@ namespace frc {
 /**
  * Base class for all types of motion profile controllers.
  */
-class MotionProfile : public INode {
+class MotionProfile {
  public:
   MotionProfile();
   virtual ~MotionProfile() = default;
 
-  double GetOutput() override;
+  INode& GetPositionNode();
+  INode& GetVelocityNode();
+  INode& GetAccelerationNode();
 
   virtual void SetGoal(double goal, double currentSource) = 0;
   double GetGoal() const;
@@ -46,6 +49,22 @@ class MotionProfile : public INode {
 
   // Current reference (displacement, velocity, acceleration)
   State m_ref = std::make_tuple(0.0, 0.0, 0.0);
+
+  frc::FuncNode m_positionNode{[this] {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_ref = UpdateSetpoint(m_timer.Get());
+    return std::get<0>(m_ref);
+  }};
+
+  frc::FuncNode m_velocityNode{[this] {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return std::get<1>(m_ref);
+  }};
+
+  frc::FuncNode m_accelerationNode{[this] {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return std::get<2>(m_ref);
+  }};
 
   double m_lastTime = 0.0;
   double m_timeTotal = std::numeric_limits<double>::infinity();

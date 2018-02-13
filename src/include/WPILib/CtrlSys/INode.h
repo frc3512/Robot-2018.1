@@ -15,8 +15,8 @@ class Output;
  * Interface for control system diagram node.
  *
  * Common interface for control system diagram nodes. Nodes consist of some
- * operation upon an input such as integration, differentiation, multipling by a
- * constant, or summing multiple inputs togeether.
+ * operation upon an input such as integration, differentiation, multiplying by a
+ * constant, or summing multiple inputs together.
  *
  * Subclasses should take at least one input node in their constructor to be
  * used in GetOutput().

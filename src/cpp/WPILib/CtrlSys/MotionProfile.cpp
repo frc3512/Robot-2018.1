@@ -13,11 +13,20 @@ using namespace frc;
 
 MotionProfile::MotionProfile() { m_timer.Start(); }
 
-double MotionProfile::GetOutput() {
-  std::lock_guard<std::mutex> lock(m_mutex);
-  m_ref = UpdateSetpoint(m_timer.Get());
-  return std::get<0>(m_ref);
-}
+/**
+ * Returns node for profile's current position.
+ */
+INode& MotionProfile::GetPositionNode() { return m_positionNode; }
+
+/**
+ * Returns node for profile's current velocity.
+ */
+INode& MotionProfile::GetVelocityNode() { return m_velocityNode; }
+
+/**
+ * Returns node for profile's current acceleration.
+ */
+INode& MotionProfile::GetAccelerationNode() { return m_accelerationNode; }
 
 /**
  * Returns profile's goal state.
@@ -32,7 +41,7 @@ double MotionProfile::GetGoal() const {
  */
 bool MotionProfile::AtGoal() const {
   std::lock_guard<std::mutex> lock(m_mutex);
-  return m_lastTime >= m_timeTotal ||
+  return m_timer.Get() >= m_timeTotal ||
          std::abs(m_goal - std::get<0>(m_ref)) < 0.001;
 }
 

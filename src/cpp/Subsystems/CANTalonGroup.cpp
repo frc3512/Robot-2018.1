@@ -67,9 +67,10 @@ double CANTalonGroup::GetPosition() const {
 }
 
 double CANTalonGroup::GetSpeed() const {
-    // RPM * degrees/rev / (seconds/min)
+    // Ticks per hundred millisecond * distance per pulse * 10 hundred
+    // milliseconds per second to get inches per second
     return m_canTalons[0].get().GetSelectedSensorVelocity(0) *
-           m_distancePerPulse / 60.0;
+           m_distancePerPulse * 10;
 }
 
 void CANTalonGroup::SetDistancePerPulse(double distancePerPulse) {

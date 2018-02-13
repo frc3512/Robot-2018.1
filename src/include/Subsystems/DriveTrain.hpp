@@ -3,14 +3,14 @@
 #pragma once
 
 #include <ADXRS450_Gyro.h>
-#include <CtrlSys/DiffDriveController.h>
 #include <CtrlSys/FuncNode.h>
-#include <CtrlSys/RefInput.h>
+#include <CtrlSys/TrapezoidProfile.h>
 #include <Drive/DifferentialDrive.h>
 #include <Encoder.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
+#include "DiffDriveController.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 
 class CANTalonGroup;
@@ -62,16 +62,20 @@ public:
     void StopClosedLoop();
 
     // Sets encoder PID setpoints
-    void SetPositionReference(double position);
-    void SetAngleReference(double angle);
+    void SetPositionGoal(double position);
+    void SetAngleGoal(double angle);
 
     // Returns encoder PID loop references
-    double GetPosReference() const;
-    double GetAngleReference() const;
+    double GetPosReference();
+    double GetAngleReference();
 
-    // Returns whether or not robot has reached reference
-    bool PosAtReference() const;
-    bool AngleAtReference() const;
+    // Returns final goals for PID loops
+    double GetPositionGoal() const;
+    double GetAngleGoal() const;
+
+    // Returns whether or not robot has reached its final goal
+    bool AtPositionGoal() const;
+    bool AtAngleGoal() const;
 
     // Resets gyro
     void ResetGyro();
@@ -99,8 +103,9 @@ private:
     ADXRS450_Gyro m_gyro;
 
     // Control system references
-    frc::RefInput m_posRef{0.0};
-    frc::RefInput m_angleRef{0.0};
+    frc::TrapezoidProfile m_posRef{kRobotMaxV, kRobotTimeToMaxV};
+    frc::TrapezoidProfile m_angleRef{kRobotMaxRotateRate,
+                                     kRobotTimeToMaxRotateRate};
 
     // Sensor adapters
     frc::FuncNode m_leftEncoder{[this] { return m_leftGrbx.GetPosition(); }};

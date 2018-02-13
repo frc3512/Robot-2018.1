@@ -1,5 +1,7 @@
 // Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
 
+#include <iostream>
+
 #include "Robot.hpp"
 
 enum class State { kInit, kMoveForward, kIdle };
@@ -12,16 +14,17 @@ void Robot::AutoAutoLinePeriodic() {
 
     switch (state) {
         case State::kInit:
-            robotDrive.SetPositionReference(kRobotLength + 120.0);  // Estimate
-            robotDrive.SetAngleReference(0.0);
+            robotDrive.SetPositionGoal(kRobotLength + 120.0);  // Estimate
+            robotDrive.SetAngleGoal(0.0);
             robotDrive.StartClosedLoop();
 
             state = State::kMoveForward;
+            std::cout << "Move Forward" << std::endl;
             break;
         case State::kMoveForward:
-            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtPositionGoal()) {
                 robotDrive.StopClosedLoop();
-
+                std::cout << "Idle" << std::endl;
                 state = State::kIdle;
             }
             break;

@@ -40,17 +40,29 @@ constexpr double kLeftDpP = 108.0 / 8142.66;
 constexpr double kRightDpP = 108.0 / 8187.66;
 
 // DriveTrain position PID
-constexpr double kPosP = 0.05;
-constexpr double kPosI = 0.00;
-constexpr double kPosD = 0.024;
+constexpr double kPosP = 0.06;  // .055
+constexpr double kPosI = 0.002;
+constexpr double kPosD = 0.024;  // .024
+
+// Drive trapezoid profile constants
+constexpr double kRobotMaxV = 150.0;               // in/sec 227.2
+constexpr double kRobotTimeToMaxV = 3.0;           // sec
+constexpr double kRobotMaxRotateRate = 180.0;      // deg/sec
+constexpr double kRobotTimeToMaxRotateRate = 1.0;  // sec
+
+// Drive motor feedforwards
+constexpr double kV = 1.0 / 227.2;  // 1 / max velocity
+constexpr double kA = 0.005;        // (V - (kV * v + Vmin)) / a, 0.1, .00075
 
 // DriveTrain angle PID
-constexpr double kAngleP = 0.05;
+constexpr double kAngleP = 0.14;  // .13
 constexpr double kAngleI = 0.00;
-constexpr double kAngleD = 0.012;
+constexpr double kAngleD = 0.09;  // .10
 
 // Physical Robot Constants
 constexpr int kRobotLength = 31.5;
+constexpr double kWheelbaseWidth = 24.0;
+constexpr double kDegreesToRadians = 3.1415926535897932 / 180.0;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
@@ -101,7 +113,7 @@ constexpr double kFloorHeight = 73.0;  // Makes sure it hits bottom
 constexpr double kSecondBlockHeight = -10.0;
 constexpr double kSwitchHeight = -36.0;
 constexpr double kScaleHeight = -60.0;
-constexpr double kClimbHeight = -72.0;
+constexpr double kClimbHeight = -75.0;
 
 /*
  * Climber

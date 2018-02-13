@@ -43,7 +43,7 @@ model {
                 // Define my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX) and NavX.
                 lib library: "wpilib"
                 lib library: "ctre"
-                lib library: "navx"
+                lib library: "pathfinder"
             }
         }
     }

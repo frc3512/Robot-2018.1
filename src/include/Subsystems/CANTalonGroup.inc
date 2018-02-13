@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2017 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
 
 #pragma once
 
@@ -13,7 +13,8 @@ CANTalonGroup::CANTalonGroup(WPI_TalonSRX& canTalon, CANTalons&... canTalons)
         if (i == 0) {
             using FeedbackDevice = ctre::phoenix::motorcontrol::FeedbackDevice;
             m_canTalons[i].get().Set(ControlMode::PercentOutput, 0.0);
-            m_canTalons[i].get().ConfigSelectedFeedbackSensor(FeedbackDevice::QuadEncoder, 0, 0);
+            m_canTalons[i].get().ConfigSelectedFeedbackSensor(
+                FeedbackDevice::QuadEncoder, 0, 0);
             m_canTalons[i].get().SetSensorPhase(false);
             ResetEncoder();
         } else {

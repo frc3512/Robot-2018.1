@@ -28,13 +28,13 @@ void Robot::AutoLeftSwitchPeriodic() {
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
             if (platePosition[kFriendlySwitch] == 'L') {
-                robotDrive.SetPositionReference(
+                robotDrive.SetPositionGoal(
                     168.0 -
                     kRobotLength / 2.0);  // Back bumper to middle of robot
             } else {
-                robotDrive.SetPositionReference(228.0 - kRobotLength / 2.0);
+                robotDrive.SetPositionGoal(228.0 - kRobotLength / 2.0);
             }
-            robotDrive.SetAngleReference(0.0);
+            robotDrive.SetAngleGoal(0.0);
             robotDrive.StartClosedLoop();
 
             elevator.SetHeightReference(kSwitchHeight);
@@ -44,43 +44,41 @@ void Robot::AutoLeftSwitchPeriodic() {
             break;
 
         case State::kInitialForward:
-            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtPositionGoal() && autoTimer.HasPeriodPassed(1.0)) {
                 if (platePosition[kFriendlySwitch] == 'L') {
-                    robotDrive.SetAngleReference(90.0);
+                    robotDrive.SetAngleGoal(90.0);
                     state = State::kFinalRotate;
                 } else {
                     robotDrive.ResetGyro();
-                    robotDrive.SetAngleReference(90.0);
+                    robotDrive.SetAngleGoal(90.0);
                     state = State::kLeftRotate;
                 }
             }
             break;
         case State::kLeftRotate:
-            if (robotDrive.AngleAtReference() &&
-                autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtAngleGoal() && autoTimer.HasPeriodPassed(1.0)) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionReference(137.0);  // Estimate
+                robotDrive.SetPositionGoal(137.0);  // Estimate
                 state = State::kLeftForward;
             }
             break;
         case State::kLeftForward:
-            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtPositionGoal() && autoTimer.HasPeriodPassed(1.0)) {
                 robotDrive.ResetGyro();
-                robotDrive.SetAngleReference(90.0);
+                robotDrive.SetAngleGoal(90.0);
 
                 state = State::kFinalRotate;
             }
             break;
         case State::kFinalRotate:
-            if (robotDrive.AngleAtReference() &&
-                autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtAngleGoal() && autoTimer.HasPeriodPassed(1.0)) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionReference(10.0);  // Estimate
+                robotDrive.SetPositionGoal(27.0);  // Estimate
                 state = State::kFinalForward;
             }
             break;
         case State::kFinalForward:
-            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
+            if (robotDrive.AtPositionGoal() && autoTimer.HasPeriodPassed(1.0)) {
                 intake.Open();
 
                 robotDrive.StopClosedLoop();
