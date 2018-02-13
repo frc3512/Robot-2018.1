@@ -45,7 +45,7 @@ void Robot::TestInit() {}
 void Robot::RobotPeriodic() {
     DS_PrintOut();
 
-    if (elevator.GetHallEffect()) {
+    if (!elevator.GetHallEffect()) {
         elevator.ResetEncoder();
     }
 
