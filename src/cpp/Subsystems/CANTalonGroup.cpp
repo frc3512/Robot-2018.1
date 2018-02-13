@@ -2,7 +2,6 @@
 
 #include "Subsystems/CANTalonGroup.hpp"
 
-#include <iostream>
 #include <memory>
 
 #include <ctre/phoenix/MotorControl/SensorCollection.h>

@@ -95,16 +95,16 @@ constexpr int kElevatorSlaveID = 8;
 constexpr double kElevatorDpP = 0.00142230843;
 
 // Elevator PID
-constexpr double kElevatorP = 0.0;
-constexpr double kElevatorI = 0.0;
+constexpr double kElevatorP = 0.06;
+constexpr double kElevatorI = 0.00415;
 constexpr double kElevatorD = 0.0;
-constexpr double kElevatorControllerPeriod = 1.0;
+constexpr double kElevatorControllerPeriod = 0.02;
 
 // Elevator Setpoints
 constexpr double kFloorHeight = 0.0;
-constexpr double kSwitchHeight = 12.0;
-constexpr double kScaleHeight = 60.0;
-constexpr double kClimbHeight = 80.0;
+constexpr double kSwitchHeight = -12.0;
+constexpr double kScaleHeight = -60.0;
+constexpr double kClimbHeight = -80.0;
 
 // Hall Effect Sensor Port
 constexpr int kElevatorForwardHallPort = 1;

@@ -16,7 +16,7 @@ void Elevator::SetVelocity(double velocity) { m_elevatorGearbox.Set(velocity); }
 
 void Elevator::ResetEncoder() { m_elevatorGearbox.ResetEncoder(); }
 
-double Elevator::GetHeight() { m_elevatorGearbox.GetPosition(); }
+double Elevator::GetHeight() { return m_elevatorGearbox.GetPosition(); }
 
 void Elevator::StartClosedLoop() { m_elevatorController.Enable(); }
 

@@ -34,6 +34,9 @@ void Robot::DisabledInit() {
     robotDrive.StopClosedLoop();
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
+    elevator.StopClosedLoop();
+    elevator.SetHeightReference(elevator.GetHeight());
+    elevatorMode = ElevatorMode::kPosition;
 }
 
 void Robot::AutonomousInit() {
@@ -46,18 +49,14 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::TeleopInit() {
-    // robotDrive.StopClosedLoop();
-    robotDrive.StartClosedLoop();
+    robotDrive.StopClosedLoop();
+    elevator.StartClosedLoop();
 }
 
 void Robot::TestInit() {}
 
 void Robot::RobotPeriodic() {
     DS_PrintOut();
-
-    if (!elevator.GetForwardHallEffect()) {
-        elevator.ResetEncoder();
-    }
 
     for (int i = 1; i < 12; i++) {
         if (appendageStick.GetRawButtonPressed(i)) {
@@ -119,20 +118,43 @@ if (driveStick1.GetRawButton(1)) {
     }
 
     // Elevator Controls
-    elevator.SetVelocity(appendageStick.GetY());
 
-    if (appendageStick.GetRawButton(7)) {
-        elevator.SetHeightReference(kFloorHeight);
-        elevator.SetHeightReference(kFloorHeight);
-    }
-    if (appendageStick.GetRawButton(8)) {
-        elevator.SetHeightReference(kSwitchHeight);
-    }
-    if (appendageStick.GetRawButton(9)) {
-        elevator.SetHeightReference(kScaleHeight);
-    }
-    if (appendageStick.GetRawButton(10)) {
-        elevator.SetHeightReference(kClimbHeight);
+    switch (elevatorMode) {
+        case ElevatorMode::kPosition:  // TODO: change the Height
+                                       // References back to constants when
+                                       // we know the correct heights
+            if (!elevator.GetForwardHallEffect()) {
+                elevator.ResetEncoder();
+            }
+            if (appendageStick.GetRawButton(7)) {
+                elevator.SetHeightReference(kFloorHeight);
+            }
+
+            if (appendageStick.GetRawButton(8)) {
+                elevator.SetHeightReference(/*kSwitchHeight*/ -8.0);
+            }
+            if (appendageStick.GetRawButton(9)) {
+                elevator.SetHeightReference(/*kScaleHeight*/ -20.0);
+            }
+            if (appendageStick.GetRawButton(10)) {
+                elevator.SetHeightReference(/*kClimbHeight*/ -80.0);
+            }
+            if (appendageStick.GetRawButtonPressed(12)) {
+                elevator.SetHeightReference(elevator.GetHeight());
+                elevator.StopClosedLoop();
+                elevatorMode = ElevatorMode::kVelocity;
+            }
+            break;
+        case ElevatorMode::kVelocity:
+            elevator.SetVelocity(appendageStick.GetY());
+            if (!elevator.GetForwardHallEffect()) {
+                elevator.ResetEncoder();
+            }
+            if (appendageStick.GetRawButtonPressed(12)) {
+                elevator.SetHeightReference(elevator.GetHeight());
+                elevator.StartClosedLoop();
+                elevatorMode = ElevatorMode::kPosition;
+            }
     }
 
     if (appendageStick.GetRawButtonPressed(11)) {
@@ -155,6 +177,11 @@ void Robot::DS_PrintOut() {
         // "Position");
         liveGrapher.ResetInterval();
     }
+    /*if (liveGrapher.HasIntervalPassed()){
+            liveGrapher.GraphData(elevator.GetHeight(), "Elevator Height");
+            liveGrapher.GraphData(elevator.GetHeightReference(), "Elevator
+    Reference"); liveGrapher.ResetInterval();
+    }*/
 }
 
 START_ROBOT_CLASS(Robot)
