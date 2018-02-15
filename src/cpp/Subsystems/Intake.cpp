@@ -2,11 +2,17 @@
 
 #include "Subsystems/Intake.hpp"
 
-void Intake::ToggleOpen() { m_intakeClaw.Set(!m_intakeClaw.Get()); }
+void Intake::Open() { m_intakeClaw.Set(true); }
 
-void Intake::ToggleDeploy() { m_intakeArm.Set(!m_intakeArm.Get()); }
+void Intake::Close() { m_intakeClaw.Set(false); }
 
-bool Intake::GetDeploy() { return m_intakeArm.Get(); }
+bool Intake::IsOpen() const { return m_intakeClaw.Get(); }
+
+void Intake::Deploy() { m_intakeArm.Set(true); }
+
+void Intake::Stow() { m_intakeArm.Set(false); }
+
+bool Intake::IsDeployed() const { return m_intakeArm.Get(); }
 
 void Intake::SetMotors(MotorState state) {
     // IntakeLeft is Inverted, IntakeRight is not

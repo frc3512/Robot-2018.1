@@ -17,17 +17,20 @@ void Robot::AutoLeftPos() {
 
     switch (state) {
         case State::kInit:
-            robotDrive.StartClosedLoop();
-            elevator.ResetEncoder();
             robotDrive.ResetEncoders();
             robotDrive.ResetGyro();
-            elevator.SetHeightReference(kSwitchHeight);
+            elevator.ResetEncoder();
             if (gameData[0] == 'L') {
                 robotDrive.SetPositionReference(
                     168 - kRobotLength / 2);  // Back bumper to middle of robot
             } else {
                 robotDrive.SetPositionReference(228 - kRobotLength / 2);
             }
+            robotDrive.SetAngleReference(0);
+            elevator.SetHeightReference(kSwitchHeight);
+            robotDrive.StartClosedLoop();
+            elevator.StartClosedLoop();
+            intake.Deploy();
 
             state = State::kInitialForward;
             break;
@@ -52,8 +55,6 @@ void Robot::AutoLeftPos() {
             break;
         case State::kLeftForward:
             if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
-                robotDrive.ResetEncoders();  // For Simplicity
-
                 robotDrive.ResetGyro();
                 robotDrive.SetAngleReference(90);
 
@@ -69,7 +70,10 @@ void Robot::AutoLeftPos() {
             break;
         case State::kFinalForward:
             if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
+                intake.Open();
+
                 robotDrive.StopClosedLoop();
+                elevator.StopClosedLoop();
                 state = State::kIdle;
             }
             break;

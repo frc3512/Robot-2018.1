@@ -38,6 +38,7 @@ public:
     void TeleopPeriodic() override;
 
     void AutoAutoLine();
+    void AutoAutoLineTimed();
     void AutoLeftPos();
     void AutoCenterPos();
     void AutoRightPos();

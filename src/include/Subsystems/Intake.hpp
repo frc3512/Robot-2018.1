@@ -15,16 +15,23 @@ public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
     /**
-     * Opens and closes the claw of the Intake
+     * Opens and closes the claw of the Intake, also gets the current state of
+     * the Intake
      */
-    void ToggleOpen();
+    void Open();
 
+    void Close();
+
+    bool IsOpen() const;
     /**
-     * Stows and Deploys the Intake back into the frame of the elevator
+     * Stows and Deploys the Intake back into the frame of the elevator, also
+     * gets the current state of the Intake
      */
-    void ToggleDeploy();
+    void Deploy();
 
-    bool GetDeploy();
+    void Stow();
+
+    bool IsDeployed() const;
 
     void SetMotors(MotorState state);
 

@@ -11,6 +11,8 @@ Climber Robot::climber;
 Robot::Robot() {
     // Auton: does nothing
     dsDisplay.AddAutoMethod("No-op", [] {});
+    dsDisplay.AddAutoMethod("Autoline Timed",
+                            std::bind(&Robot::AutoAutoLineTimed, this));
     dsDisplay.AddAutoMethod("Autoline", std::bind(&Robot::AutoAutoLine, this));
     dsDisplay.AddAutoMethod("Left Position",
                             std::bind(&Robot::AutoLeftPos, this));
@@ -33,9 +35,10 @@ void Robot::DisabledInit() { robotDrive.StopClosedLoop(); }
 void Robot::AutonomousInit() {
     autoTimer.Reset();
     autoTimer.Start();
-    if (!intake.GetDeploy()) {
-        intake.ToggleDeploy();
-    }
+    robotDrive.ResetEncoders();
+    robotDrive.ResetGyro();
+    elevator.ResetEncoder();
+    intake.Deploy();
 }
 
 void Robot::TeleopInit() { robotDrive.StopClosedLoop(); }
@@ -78,10 +81,18 @@ void Robot::TeleopPeriodic() {
 
     // Intake Controls
     if (appendageStick.GetRawButtonPressed(3)) {
-        intake.ToggleOpen();
+        if (intake.IsOpen()) {
+            intake.Close();
+        } else {
+            intake.Open();
+        }
     }
     if (appendageStick.GetRawButtonPressed(5)) {
-        intake.ToggleDeploy();
+        if (intake.IsDeployed()) {
+            intake.Stow();
+        } else {
+            intake.Deploy();
+        }
     }
     if (appendageStick.GetRawButtonPressed(4)) {
         intake.SetMotors(MotorState::kIntake);
