@@ -7,6 +7,9 @@
 Elevator::Elevator() : m_notifier([&] { Robot::elevator.PostEvent({}); }) {
     m_elevatorGearbox.Set(0.0);
     m_elevatorGearbox.SetDistancePerPulse(kElevatorDpP);
+    m_elevatorGearbox.EnableHardLimits(&m_elevatorForwardHall,
+                                       &m_elevatorReverseHall);
+    m_elevatorGearbox.SetLimitPressedState(false);
 }
 
 void Elevator::SetVelocity(double velocity) { m_elevatorGearbox.Set(velocity); }
@@ -31,7 +34,7 @@ bool Elevator::HeightAtReference() const {
     return m_elevatorController.OnTarget();
 }
 
-bool Elevator::GetHallEffect() { return m_elevatorHallEffect.Get(); }
+bool Elevator::GetForwardHallEffect() { return m_elevatorForwardHall.Get(); }
 
 void Elevator::HandleEvent(Event event) {
     enum State {

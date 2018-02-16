@@ -32,7 +32,8 @@ public:
     void StopMotor() override;
     void PIDWrite(double output) override;
 
-    void EnableHardLimits(int forwardLimitPin, int reverseLimitPin);
+    void EnableHardLimits(frc::DigitalInput* forwardLimitSwitch,
+                          frc::DigitalInput* reverseLimitSwitch);
     void SetLimitPressedState(bool high);
 
     // Returns current position of master CANTalon
@@ -57,10 +58,10 @@ private:
     double m_distancePerPulse = 1.0;
 
     // Prevents motor from rotating forward when switch is pressed
-    std::unique_ptr<frc::DigitalInput> m_forwardLimit;
+    frc::DigitalInput* m_forwardLimit;
 
     // Prevents motor from rotating in reverse when switch is pressed
-    std::unique_ptr<frc::DigitalInput> m_reverseLimit;
+    frc::DigitalInput* m_reverseLimit;
 
     bool m_limitPressedState = true;
 

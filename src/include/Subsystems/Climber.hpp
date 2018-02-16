@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <DoubleSolenoid.h>
 #include <Joystick.h>
 #include <Solenoid.h>
 #include <Timer.h>
@@ -16,7 +17,7 @@ public:
     void HandleEvent(Event event) override;
 
 private:
-    frc::Solenoid m_setupSolenoid{kSetupSolenoidPort};
+    frc::DoubleSolenoid m_setupSolenoid{kSetupForwardPort, kSetupReversePort};
     frc::Solenoid m_alignmentArms{kAlignmentArmsPort};
 
     Timer timer;

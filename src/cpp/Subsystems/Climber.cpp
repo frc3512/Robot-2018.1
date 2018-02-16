@@ -28,7 +28,7 @@ void Climber::HandleEvent(Event event) {
                 nextState = State::kWaiting;
                 makeTransition = true;
             } else if (event.type == EventType::kExit) {
-                m_setupSolenoid.Set(true);
+                m_setupSolenoid.Set(DoubleSolenoid::kForward);
             }
             break;
         case State::kWaiting:

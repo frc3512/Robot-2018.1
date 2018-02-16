@@ -60,7 +60,8 @@ constexpr double kAngleD = 0.00;
 
 // Climber Solenoid ports
 constexpr int kAlignmentArmsPort = 3;
-constexpr int kSetupSolenoidPort = 4;
+constexpr int kSetupForwardPort = 4;
+constexpr int kSetupReversePort = 5;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
@@ -105,7 +106,8 @@ constexpr double kScaleHeight = 60.0;
 constexpr double kClimbHeight = 80.0;
 
 // Hall Effect Sensor Port
-constexpr int kElevatorHallPort = 1;
+constexpr int kElevatorForwardHallPort = 1;
+constexpr int kElevatorReverseHallPort = 0;
 
 // Physical Robot Constants
 constexpr int kRobotLength = 0;
