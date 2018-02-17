@@ -18,21 +18,15 @@ void Elevator::ResetEncoder() { m_elevatorGearbox.ResetEncoder(); }
 
 double Elevator::GetHeight() { return m_elevatorGearbox.GetPosition(); }
 
-void Elevator::StartClosedLoop() { m_elevatorController.Enable(); }
+void Elevator::StartClosedLoop() { m_output.Enable(); }
 
-void Elevator::StopClosedLoop() { m_elevatorController.Disable(); }
+void Elevator::StopClosedLoop() { m_output.Disable(); }
 
-void Elevator::SetHeightReference(double height) {
-    m_elevatorController.SetSetpoint(height);
-}
+void Elevator::SetHeightReference(double height) { m_heightRef.Set(height); }
 
-double Elevator::GetHeightReference() const {
-    return m_elevatorController.GetSetpoint();
-}
+double Elevator::GetHeightReference() const { return m_heightRef.GetOutput(); }
 
-bool Elevator::HeightAtReference() const {
-    return m_elevatorController.OnTarget();
-}
+bool Elevator::HeightAtReference() const { return m_errorSum.InTolerance(); }
 
 bool Elevator::GetForwardHallEffect() { return m_elevatorForwardHall.Get(); }
 

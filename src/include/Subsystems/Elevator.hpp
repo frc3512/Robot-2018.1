@@ -3,8 +3,10 @@
 #pragma once
 
 #include <CtrlSys/FuncNode.h>
-#include <CtrlSys/PIDController.h>
+#include <CtrlSys/Output.h>
+#include <CtrlSys/PIDNode.h>
 #include <CtrlSys/RefInput.h>
+#include <CtrlSys/SumNode.h>
 #include <DigitalInput.h>
 #include <Notifier.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
@@ -65,7 +67,9 @@ private:
     frc::FuncNode m_elevatorEncoder{
         [this] { return m_elevatorGearbox.GetPosition(); }};
 
-    frc::PIDController m_elevatorController{
-        kElevatorP,        kElevatorI,        kElevatorD,
-        m_elevatorEncoder, m_elevatorGearbox, kElevatorControllerPeriod};
+    frc::RefInput m_feedForward{kGravityFeedForward};
+    frc::SumNode m_errorSum{m_heightRef, true, m_elevatorEncoder, false};
+    frc::PIDNode m_pid{kElevatorP,    kElevatorI, kElevatorD,
+                       m_feedForward, m_errorSum, kElevatorControllerPeriod};
+    frc::Output m_output{m_pid, m_elevatorGearbox, kElevatorControllerPeriod};
 };
