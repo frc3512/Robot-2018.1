@@ -30,7 +30,11 @@ Robot::Robot() {
     server.SetSource(camera1);
 }
 
-void Robot::DisabledInit() { robotDrive.StopClosedLoop(); }
+void Robot::DisabledInit() {
+    robotDrive.StopClosedLoop();
+    robotDrive.ResetGyro();
+    robotDrive.ResetEncoders();
+}
 
 void Robot::AutonomousInit() {
     autoTimer.Reset();
@@ -41,7 +45,10 @@ void Robot::AutonomousInit() {
     intake.Deploy();
 }
 
-void Robot::TeleopInit() { robotDrive.StopClosedLoop(); }
+void Robot::TeleopInit() {
+    // robotDrive.StopClosedLoop();
+    robotDrive.StartClosedLoop();
+}
 
 void Robot::TestInit() {}
 
@@ -62,7 +69,11 @@ void Robot::RobotPeriodic() {
     }
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+    if (driveStick1.GetRawButtonPressed(12)) {
+        robotDrive.ResetEncoders();
+    }
+}
 
 void Robot::AutonomousPeriodic() {
     gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
@@ -70,14 +81,16 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopPeriodic() {
-    // Drive Stick Controls
-    if (driveStick1.GetRawButton(1)) {
-        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
-                         driveStick2.GetRawButton(2));
-    } else {
-        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
-                         driveStick2.GetRawButton(2));
-    }
+    robotDrive.SetPositionReference(driveStick1.GetY() * -50.0);
+    robotDrive.SetAngleReference(driveStick1.GetX() * 0.0);
+    /*    // Drive Stick Controls
+if (driveStick1.GetRawButton(1)) {
+    robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
+                     driveStick2.GetRawButton(2));
+} else {
+    robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
+                     driveStick2.GetRawButton(2));
+}*/
 
     // Intake Controls
     if (appendageStick.GetRawButtonPressed(3)) {
@@ -131,6 +144,17 @@ void Robot::TeleopPeriodic() {
     }
 }
 
-void Robot::DS_PrintOut() { robotDrive.Debug(); }
+void Robot::DS_PrintOut() {
+    robotDrive.Debug();
+    if (liveGrapher.HasIntervalPassed()) {
+        liveGrapher.GraphData(robotDrive.GetAngleReference(),
+                              "Angle Reference");
+        liveGrapher.GraphData(robotDrive.GetAngle(), "Angle");
+        // liveGrapher.GraphData(robotDrive.GetPosReference(), "Position
+        // Reference");  liveGrapher.GraphData(robotDrive.GetPosition(),
+        // "Position");
+        liveGrapher.ResetInterval();
+    }
+}
 
 START_ROBOT_CLASS(Robot)

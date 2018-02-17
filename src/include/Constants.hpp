@@ -42,19 +42,20 @@ constexpr int kLeftDriveMasterID = 1;
 constexpr int kLeftDriveSlaveID = 2;
 constexpr int kRightDriveMasterID = 3;
 constexpr int kRightDriveSlaveID = 4;
+
 // Distance per Pulse
-constexpr double kLeftDpP = 169.0 / 11915.0;
-constexpr double kRightDpP = 169.0 / 11839.3;
+constexpr double kLeftDpP = 169.0 / ((10926.0 + 10910.0) / 2.0);
+constexpr double kRightDpP = 169.0 / ((10913.0 + 10802.0) / 2.0);
 
 // DriveTrain position PID, Extra //'s mean practice PID values
 constexpr double kDriveMaxSpeed = 24000;  // in/sec
-constexpr double kPosP = 0.00;
+constexpr double kPosP = 0.05;
 constexpr double kPosI = 0.00;
 constexpr double kPosD = 0.00;
 
 // DriveTrain angle PID
 constexpr double kRotateMaxSpeed = 320;
-constexpr double kAngleP = 0.00;
+constexpr double kAngleP = 0.00;  // 0.05
 constexpr double kAngleI = 0.00;
 constexpr double kAngleD = 0.00;
 

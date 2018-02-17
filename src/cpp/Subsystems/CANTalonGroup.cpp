@@ -13,14 +13,9 @@ void CANTalonGroup::Set(double value) {
     if (m_forwardLimit != nullptr && m_reverseLimit != nullptr) {
         if (value > 0 && m_forwardLimit->Get() == m_limitPressedState) {
             value = 0.0;
-            std::cout << "ForwardLimit Triggered" << std::endl;
         } else if (value < 0 && m_reverseLimit->Get() == m_limitPressedState) {
             value = 0.0;
-            std::cout << "ReverseLimit Triggered" << std::endl;
         }
-        std::cout << "Value: " << value
-                  << " ForwardLimit: " << m_forwardLimit->Get()
-                  << " ReverseLimit: " << m_reverseLimit->Get() << std::endl;
     }
     m_canTalons[0].get().Set(ControlMode::PercentOutput, value);
 }

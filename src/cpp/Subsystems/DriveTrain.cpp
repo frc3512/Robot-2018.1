@@ -9,8 +9,6 @@
 DriveTrain::DriveTrain() {
     m_drive.SetDeadband(kJoystickDeadband);
 
-    m_leftGrbx.SetSensorDirection(true);
-
     m_leftGrbx.SetDistancePerPulse(kLeftDpP);
     m_rightGrbx.SetDistancePerPulse(kRightDpP);
 
@@ -64,9 +62,15 @@ double DriveTrain::GetAngle() { return m_controller.GetAngle(); }
 
 double DriveTrain::GetAngularRate() const { return m_gyro.GetRate(); }
 
-void DriveTrain::StartClosedLoop() { m_controller.Enable(); }
+void DriveTrain::StartClosedLoop() {
+    m_controller.Enable();
+    m_drive.SetSafetyEnabled(false);
+}
 
-void DriveTrain::StopClosedLoop() { m_controller.Disable(); }
+void DriveTrain::StopClosedLoop() {
+    m_controller.Disable();
+    m_drive.SetSafetyEnabled(true);
+}
 
 void DriveTrain::SetPositionReference(double position) {
     m_posRef.Set(position);
@@ -86,4 +90,7 @@ void DriveTrain::ResetGyro() { m_gyro.Reset(); }
 
 void DriveTrain::CalibrateGyro() { m_gyro.Calibrate(); }
 
-void DriveTrain::Debug() {}
+void DriveTrain::Debug() {
+    std::cout << "Right Grbx Pos: " << m_rightGrbx.GetPosition()
+              << " Left Grbx Pos: " << m_leftGrbx.GetPosition() << std::endl;
+}

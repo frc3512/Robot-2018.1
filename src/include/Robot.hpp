@@ -72,5 +72,5 @@ private:
     cs::MjpegServer server{"Server", kMjpegServerPort};
 
     // LiveGrapher host
-    // LiveGrapher liveGrapher{kLiveGrapherPort};
+    LiveGrapher liveGrapher{kLiveGrapherPort};
 };
