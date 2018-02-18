@@ -49,15 +49,15 @@ constexpr double kRightDpP = 169.0 / ((10913.0 + 10802.0) / 2.0);
 
 // DriveTrain position PID, Extra //'s mean practice PID values
 constexpr double kDriveMaxSpeed = 24000;  // in/sec
-constexpr double kPosP = 0.05;
+constexpr double kPosP = 0.05;            // 0.01
 constexpr double kPosI = 0.00;
-constexpr double kPosD = 0.00;
+constexpr double kPosD = 0.024;  // 0.02
 
 // DriveTrain angle PID
 constexpr double kRotateMaxSpeed = 320;
-constexpr double kAngleP = 0.00;  // 0.05
+constexpr double kAngleP = 0.05;
 constexpr double kAngleI = 0.00;
-constexpr double kAngleD = 0.00;
+constexpr double kAngleD = 0.012;
 
 // Climber Solenoid ports
 constexpr int kAlignmentArmsPort = 3;
@@ -95,11 +95,11 @@ constexpr int kElevatorSlaveID = 8;
 constexpr double kElevatorDpP = 0.00142230843;
 
 // Elevator PID
-constexpr double kElevatorP = 0.06;
-constexpr double kElevatorI = 0.00415;
+constexpr double kElevatorP = 0.09;
+constexpr double kElevatorI = 0.004;
 constexpr double kElevatorD = 0.0;
 constexpr double kElevatorControllerPeriod = 0.02;
-constexpr double kGravityFeedForward = 0.0;
+constexpr double kGravityFeedForward = -0.01;
 
 // Elevator Setpoints
 constexpr double kFloorHeight = 0.0;
