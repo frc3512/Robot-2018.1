@@ -4,7 +4,7 @@
 
 // Includes definition for Talons and etc that connect to the RoboRIO
 
-/* Order of subsystem constants:
+/* Order of constants:
  * > Motor IDs
  * > Solenoid Ports
  * > Limit switches
@@ -12,18 +12,6 @@
  * > PID
  * > Other (i.e. miscellaneous constants)
  */
-
-// DS port
-constexpr int kDsPort = 5800;
-
-// LiveGrapher host port
-constexpr int kLiveGrapherPort = 3513;
-
-// MJPEG server port
-constexpr int kMjpegServerPort = 1180;
-
-// Event Queue Size
-constexpr int kEventQueueSize = 8;
 
 /*
  * Joystick and buttons
@@ -120,3 +108,23 @@ constexpr int kAlignmentArmsPort = 3;
 constexpr int kSetupForwardPort = 4;
 constexpr int kSetupReversePort = 5;
 
+/*
+ * Miscellaneous
+ */
+
+// Game Data Constants
+constexpr int kFriendlySwitch = 0;
+constexpr int kScale = 1;
+constexpr int kEnemySwitch = 2;
+
+// Event Queue Size
+constexpr int kEventQueueSize = 8;
+
+// DS port
+constexpr int kDsPort = 5800;
+
+// LiveGrapher host port
+constexpr int kLiveGrapherPort = 3513;
+
+// MJPEG server port
+constexpr int kMjpegServerPort = 1180;

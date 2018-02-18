@@ -12,20 +12,25 @@ Robot::Robot() {
     dsDisplay.AddAutoMethod("Autoline Timed",
                             std::bind(&Robot::AutoAutoLineTimed, this));
     dsDisplay.AddAutoMethod("Autoline", std::bind(&Robot::AutoAutoLine, this));
-    dsDisplay.AddAutoMethod("Left Position",
-                            std::bind(&Robot::AutoLeftPos, this));
-    dsDisplay.AddAutoMethod("Center Position",
-                            std::bind(&Robot::AutoCenterPos, this));
-    dsDisplay.AddAutoMethod("Right Position",
-                            std::bind(&Robot::AutoRightPos, this));
+    dsDisplay.AddAutoMethod("Left Position Switch",
+                            std::bind(&Robot::AutoLeftSwitch, this));
+    dsDisplay.AddAutoMethod("Center Position Switch",
+                            std::bind(&Robot::AutoCenterSwitch, this));
+    dsDisplay.AddAutoMethod("Right Position Switch",
+                            std::bind(&Robot::AutoRightSwitch, this));
+    dsDisplay.AddAutoMethod("Left Position Scale",
+                            std::bind(&Robot::AutoLeftScale, this));
+    dsDisplay.AddAutoMethod("Center Position Scale",
+                            std::bind(&Robot::AutoCenterScale, this));
+    dsDisplay.AddAutoMethod("Right Position Scale",
+                            std::bind(&Robot::AutoRightScale, this));
+    server.SetSource(camera1);
 
     camera1.SetResolution(640, 480);
     camera1.SetFPS(30);
 
-    camera2.SetResolution(640, 480);
-    camera2.SetFPS(30);
-
-    server.SetSource(camera1);
+    // camera2.SetResolution(640, 480);
+    // camera2.SetFPS(30);
 }
 
 void Robot::DisabledInit() {
@@ -85,6 +90,10 @@ void Robot::TeleopPeriodic() {
     }
 
     // Intake Controls
+    if (appendageStick.GetRawButtonPressed(2)) {
+        climber.Shift();
+    }
+
     if (appendageStick.GetRawButtonPressed(3)) {
         if (intake.IsOpen()) {
             intake.Close();
@@ -150,17 +159,17 @@ void Robot::TeleopPeriodic() {
             }
     }
 
-    if (appendageStick.GetRawButtonPressed(11)) {
+    /*if (appendageStick.GetRawButtonPressed(11)) {
         if (server.GetSource() == camera1) {
             server.SetSource(camera2);
         } else {
             server.SetSource(camera1);
         }
-    }
+    }*/
 }
 
 void Robot::DS_PrintOut() {
-    robotDrive.Debug();
+    // robotDrive.Debug();
     /*if (liveGrapher.HasIntervalPassed()) {
         liveGrapher.GraphData(robotDrive.GetAngleReference(),
                               "Angle Reference");

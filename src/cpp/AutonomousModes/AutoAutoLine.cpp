@@ -10,14 +10,14 @@ void Robot::AutoAutoLine() {
 
     switch (state) {
         case State::kInit:
-            robotDrive.SetPositionReference(kRobotLength + 120);  // Estimate
-            robotDrive.SetAngleReference(0);
+            robotDrive.SetPositionReference(kRobotLength + 120.0);  // Estimate
+            robotDrive.SetAngleReference(0.0);
             robotDrive.StartClosedLoop();
 
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1)) {
+            if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
                 robotDrive.StopClosedLoop();
 
                 state = State::kIdle;
