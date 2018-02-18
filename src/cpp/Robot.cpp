@@ -74,10 +74,7 @@ void Robot::DisabledPeriodic() {
     }
 }
 
-void Robot::AutonomousPeriodic() {
-    gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-    dsDisplay.ExecAutonomous();
-}
+void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomous(); }
 
 void Robot::TeleopPeriodic() {
     robotDrive.SetPositionReference(driveStick1.GetY() * -50.0);

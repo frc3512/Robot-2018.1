@@ -10,12 +10,9 @@ void Robot::AutoAutoLine() {
 
     switch (state) {
         case State::kInit:
-            robotDrive.StartClosedLoop();
-
-            robotDrive.ResetEncoders();
-            robotDrive.ResetGyro();
             robotDrive.SetPositionReference(kRobotLength + 120);  // Estimate
             robotDrive.SetAngleReference(0);
+            robotDrive.StartClosedLoop();
 
             state = State::kMoveForward;
             break;

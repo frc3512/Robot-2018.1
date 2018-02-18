@@ -1,5 +1,9 @@
 // Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
 
+#include <string>
+
+#include <DriverStation.h>
+
 #include "Robot.hpp"
 
 enum class State {
@@ -14,13 +18,18 @@ enum class State {
 
 void Robot::AutoCenterPos() {
     static State state = State::kInit;
+    static std::string gameData;
 
     switch (state) {
         case State::kInit:
+            gameData =
+                frc::DriverStation::GetInstance().GetGameSpecificMessage();
+
             robotDrive.SetPositionReference(50);  // Estimate
             robotDrive.SetAngleReference(0);
-            elevator.SetHeightReference(kSwitchHeight);
             robotDrive.StartClosedLoop();
+
+            elevator.SetHeightReference(kSwitchHeight);
             elevator.StartClosedLoop();
 
             state = State::kInitialForward;

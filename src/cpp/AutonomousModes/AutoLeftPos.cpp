@@ -1,5 +1,9 @@
 // Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
 
+#include <string>
+
+#include <DriverStation.h>
+
 #include "Robot.hpp"
 
 enum class State {
@@ -14,12 +18,13 @@ enum class State {
 
 void Robot::AutoLeftPos() {
     static State state = State::kInit;
+    static std::string gameData;
 
     switch (state) {
         case State::kInit:
-            robotDrive.ResetEncoders();
-            robotDrive.ResetGyro();
-            elevator.ResetEncoder();
+            gameData =
+                frc::DriverStation::GetInstance().GetGameSpecificMessage();
+
             if (gameData[0] == 'L') {
                 robotDrive.SetPositionReference(
                     168 - kRobotLength / 2);  // Back bumper to middle of robot
@@ -27,10 +32,10 @@ void Robot::AutoLeftPos() {
                 robotDrive.SetPositionReference(228 - kRobotLength / 2);
             }
             robotDrive.SetAngleReference(0);
-            elevator.SetHeightReference(kSwitchHeight);
             robotDrive.StartClosedLoop();
+
+            elevator.SetHeightReference(kSwitchHeight);
             elevator.StartClosedLoop();
-            intake.Deploy();
 
             state = State::kInitialForward;
             break;

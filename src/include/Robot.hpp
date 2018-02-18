@@ -2,17 +2,12 @@
 
 #pragma once
 
-#include <string>
-
 #include <CameraServer.h>
-#include <DriverStation.h>
 #include <Joystick.h>
 #include <TimedRobot.h>
 #include <Timer.h>
 #include <XboxController.h>
 #include <cscore.h>
-#include <ctre/phoenix/MotorControl/CAN/TalonSRX.h>
-#include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
 #include "DSDisplay/DSDisplay.hpp"
@@ -50,11 +45,7 @@ public:
     static Climber climber;
 
 private:
-    std::string gameData;
-
     ElevatorMode elevatorMode = ElevatorMode::kPosition;
-
-    using TalonSRX = ctre::phoenix::motorcontrol::can::TalonSRX;
 
     DriveTrain robotDrive;
 
