@@ -6,6 +6,7 @@
 
 /* Order of subsystem constants:
  * > Motor IDs
+ * > Solenoid Ports
  * > Limit switches
  * > Distance per pulse
  * > PID
@@ -20,6 +21,9 @@ constexpr int kLiveGrapherPort = 3513;
 
 // MJPEG server port
 constexpr int kMjpegServerPort = 1180;
+
+// Event Queue Size
+constexpr int kEventQueueSize = 8;
 
 /*
  * Joystick and buttons
@@ -47,22 +51,18 @@ constexpr int kRightDriveSlaveID = 4;
 constexpr double kLeftDpP = 169.0 / ((10926.0 + 10910.0) / 2.0);
 constexpr double kRightDpP = 169.0 / ((10913.0 + 10802.0) / 2.0);
 
-// DriveTrain position PID, Extra //'s mean practice PID values
-constexpr double kDriveMaxSpeed = 24000;  // in/sec
-constexpr double kPosP = 0.05;            // 0.01
+// DriveTrain position PID
+constexpr double kPosP = 0.05;
 constexpr double kPosI = 0.00;
-constexpr double kPosD = 0.024;  // 0.02
+constexpr double kPosD = 0.024;
 
 // DriveTrain angle PID
-constexpr double kRotateMaxSpeed = 320;
 constexpr double kAngleP = 0.05;
 constexpr double kAngleI = 0.00;
 constexpr double kAngleD = 0.012;
 
-// Climber Solenoid ports
-constexpr int kAlignmentArmsPort = 3;
-constexpr int kSetupForwardPort = 4;
-constexpr int kSetupReversePort = 5;
+// Physical Robot Constants
+constexpr int kRobotLength = 0;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
@@ -75,13 +75,13 @@ constexpr double kInertiaLowTurn = 3.0;
  * Intake
  */
 
-// Solenoid Ports
-constexpr int kIntakeClawPort = 1;
-constexpr int kIntakeArmPort = 2;
-
 // Talon IDs
 constexpr int kIntakeLeftID = 5;
 constexpr int kIntakeRightID = 6;
+
+// Solenoid Ports
+constexpr int kIntakeClawPort = 1;
+constexpr int kIntakeArmPort = 2;
 
 /*
  * Elevator
@@ -90,6 +90,10 @@ constexpr int kIntakeRightID = 6;
 // Elevator GearBox ID
 constexpr int kElevatorMasterID = 7;
 constexpr int kElevatorSlaveID = 8;
+
+// Hall Effect Sensor Port
+constexpr int kElevatorForwardHallPort = 1;
+constexpr int kElevatorReverseHallPort = 0;
 
 // Distance per Pulse
 constexpr double kElevatorDpP = 0.00142230843;
@@ -107,12 +111,12 @@ constexpr double kSwitchHeight = -12.0;
 constexpr double kScaleHeight = -60.0;
 constexpr double kClimbHeight = -80.0;
 
-// Hall Effect Sensor Port
-constexpr int kElevatorForwardHallPort = 1;
-constexpr int kElevatorReverseHallPort = 0;
+/*
+ * Climber
+ */
 
-// Physical Robot Constants
-constexpr int kRobotLength = 0;
+// Climber Solenoid ports
+constexpr int kAlignmentArmsPort = 3;
+constexpr int kSetupForwardPort = 4;
+constexpr int kSetupReversePort = 5;
 
-// Event Queue Size
-constexpr int kEventQueueSize = 8;
