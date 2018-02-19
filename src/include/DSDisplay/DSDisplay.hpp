@@ -10,7 +10,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
-#include <utility>
+#include <tuple>
 #include <vector>
 
 #include "DSDisplay/Packet.hpp"
@@ -57,8 +57,8 @@ public:
     /**
      * Add an autonomous function.
      */
-    void AddAutoMethod(const std::string& methodName,
-                       std::function<void()> func);
+    void AddAutoMethod(std::string methodName, std::function<void()> initFunc,
+                       std::function<void()> periodicFunc);
 
     /**
      * Remove all autonomous functions.
@@ -66,9 +66,14 @@ public:
     void DeleteAllMethods();
 
     /**
-     * Runs autonomous function currently selected.
+     * Runs autonomous init function currently selected.
      */
-    void ExecAutonomous();
+    void ExecAutonomousInit();
+
+    /**
+     * Runs autonomous periodic function currently selected.
+     */
+    void ExecAutonomousPeriodic();
 
 private:
     using steady_clock = std::chrono::steady_clock;
@@ -94,7 +99,9 @@ private:
     // Holds number of bytes received from Driver Station
     size_t m_recvAmount = 0;
 
-    std::vector<std::pair<std::string, std::function<void()>>> m_autonModes;
+    std::vector<
+        std::tuple<std::string, std::function<void()>, std::function<void()>>>
+        m_autonModes;
     char m_curAutonMode;
 
     std::thread m_recvThread;

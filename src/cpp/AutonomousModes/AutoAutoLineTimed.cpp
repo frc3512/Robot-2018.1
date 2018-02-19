@@ -2,9 +2,11 @@
 
 #include "Robot.hpp"
 
+void Robot::AutoAutoLineTimedInit() {}
+
 // Incase nothing is working and we want to attempt a ranking point by getting
 // past the autoline
-void Robot::AutoAutoLineTimed() {
+void Robot::AutoAutoLineTimedPeriodic() {
     if (autoTimer.Get() < 7.0) {  // Estimate
         robotDrive.Drive(0.5, 0.0, false);
     } else {

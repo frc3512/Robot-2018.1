@@ -16,7 +16,9 @@ enum class State {
     kIdle
 };
 
-void Robot::AutoRightSwitch() {
+void Robot::AutoRightSwitchInit() {}
+
+void Robot::AutoRightSwitchPeriodic() {
     static State state = State::kInit;
     static std::string platePosition;
 

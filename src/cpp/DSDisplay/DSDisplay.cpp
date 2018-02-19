@@ -139,16 +139,22 @@ void DSDisplay::SendToDS() {
     }
 }
 
-void DSDisplay::AddAutoMethod(const std::string& methodName,
-                              std::function<void()> func) {
-    m_autonModes.emplace_back(methodName, func);
+void DSDisplay::AddAutoMethod(std::string methodName,
+                              std::function<void()> initFunc,
+                              std::function<void()> periodicFunc) {
+    m_autonModes.emplace_back(methodName, initFunc, periodicFunc);
 }
 
 void DSDisplay::DeleteAllMethods() { m_autonModes.clear(); }
 
-void DSDisplay::ExecAutonomous() {
+void DSDisplay::ExecAutonomousInit() {
     // Retrieves correct autonomous routine and runs it
-    (m_autonModes[m_curAutonMode].second)();
+    std::get<1>(m_autonModes[m_curAutonMode])();
+}
+
+void DSDisplay::ExecAutonomousPeriodic() {
+    // Retrieves correct autonomous routine and runs it
+    std::get<2>(m_autonModes[m_curAutonMode])();
 }
 
 void DSDisplay::SendToDS(Packet& packet) {
@@ -221,7 +227,7 @@ void DSDisplay::ReceiveFromDS() {
             packet << static_cast<std::string>("autonList\r\n");
 
             for (unsigned int i = 0; i < m_autonModes.size(); i++) {
-                packet << m_autonModes[i].first;
+                packet << std::get<0>(m_autonModes[i]);
             }
 
             SendToDS(packet);
@@ -230,7 +236,7 @@ void DSDisplay::ReceiveFromDS() {
             packet.clear();
 
             packet << static_cast<std::string>("autonConfirmed\r\n");
-            packet << m_autonModes[m_curAutonMode].first;
+            packet << std::get<0>(m_autonModes[m_curAutonMode]);
 
             SendToDS(packet);
         } else if (std::strncmp(m_recvBuffer, "autonSelect\r\n", 13) == 0) {
@@ -240,7 +246,7 @@ void DSDisplay::ReceiveFromDS() {
             Packet packet;
 
             packet << static_cast<std::string>("autonConfirmed\r\n");
-            packet << m_autonModes[m_curAutonMode].first;
+            packet << std::get<0>(m_autonModes[m_curAutonMode]);
 
             // Store newest autonomous choice to file for persistent storage
 #ifdef __FRC_ROBORIO__

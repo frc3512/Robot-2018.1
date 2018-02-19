@@ -8,22 +8,31 @@ Climber Robot::climber;
 
 Robot::Robot() {
     // Auton: does nothing
-    dsDisplay.AddAutoMethod("No-op", [] {});
+    dsDisplay.AddAutoMethod("No-op", [] {}, [] {});
     dsDisplay.AddAutoMethod("Autoline Timed",
-                            std::bind(&Robot::AutoAutoLineTimed, this));
-    dsDisplay.AddAutoMethod("Autoline", std::bind(&Robot::AutoAutoLine, this));
+                            std::bind(&Robot::AutoAutoLineTimedInit, this),
+                            std::bind(&Robot::AutoAutoLineTimedPeriodic, this));
+    dsDisplay.AddAutoMethod("Autoline",
+                            std::bind(&Robot::AutoAutoLineInit, this),
+                            std::bind(&Robot::AutoAutoLinePeriodic, this));
     dsDisplay.AddAutoMethod("Left Position Switch",
-                            std::bind(&Robot::AutoLeftSwitch, this));
+                            std::bind(&Robot::AutoLeftSwitchInit, this),
+                            std::bind(&Robot::AutoLeftSwitchPeriodic, this));
     dsDisplay.AddAutoMethod("Center Position Switch",
-                            std::bind(&Robot::AutoCenterSwitch, this));
+                            std::bind(&Robot::AutoCenterSwitchInit, this),
+                            std::bind(&Robot::AutoCenterSwitchPeriodic, this));
     dsDisplay.AddAutoMethod("Right Position Switch",
-                            std::bind(&Robot::AutoRightSwitch, this));
+                            std::bind(&Robot::AutoRightSwitchInit, this),
+                            std::bind(&Robot::AutoRightSwitchPeriodic, this));
     dsDisplay.AddAutoMethod("Left Position Scale",
-                            std::bind(&Robot::AutoLeftScale, this));
+                            std::bind(&Robot::AutoLeftScaleInit, this),
+                            std::bind(&Robot::AutoLeftScalePeriodic, this));
     dsDisplay.AddAutoMethod("Center Position Scale",
-                            std::bind(&Robot::AutoCenterScale, this));
+                            std::bind(&Robot::AutoCenterScaleInit, this),
+                            std::bind(&Robot::AutoCenterScalePeriodic, this));
     dsDisplay.AddAutoMethod("Right Position Scale",
-                            std::bind(&Robot::AutoRightScale, this));
+                            std::bind(&Robot::AutoRightScaleInit, this),
+                            std::bind(&Robot::AutoRightScalePeriodic, this));
     server.SetSource(camera1);
 
     camera1.SetResolution(640, 480);
@@ -49,6 +58,8 @@ void Robot::AutonomousInit() {
     robotDrive.ResetGyro();
     elevator.ResetEncoder();
     intake.Deploy();
+
+    dsDisplay.ExecAutonomousInit();
 }
 
 void Robot::TeleopInit() {
@@ -77,7 +88,7 @@ void Robot::DisabledPeriodic() {
     }
 }
 
-void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomous(); }
+void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomousPeriodic(); }
 
 void Robot::TeleopPeriodic() {
     // Drive Stick Controls

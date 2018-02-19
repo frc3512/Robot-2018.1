@@ -32,14 +32,29 @@ public:
     void AutonomousPeriodic() override;
     void TeleopPeriodic() override;
 
-    void AutoAutoLine();
-    void AutoAutoLineTimed();
-    void AutoLeftSwitch();
-    void AutoCenterSwitch();
-    void AutoRightSwitch();
-    void AutoLeftScale();
-    void AutoCenterScale();
-    void AutoRightScale();
+    void AutoAutoLineInit();
+    void AutoAutoLinePeriodic();
+
+    void AutoAutoLineTimedInit();
+    void AutoAutoLineTimedPeriodic();
+
+    void AutoLeftSwitchInit();
+    void AutoLeftSwitchPeriodic();
+
+    void AutoCenterSwitchInit();
+    void AutoCenterSwitchPeriodic();
+
+    void AutoRightSwitchInit();
+    void AutoRightSwitchPeriodic();
+
+    void AutoLeftScaleInit();
+    void AutoLeftScalePeriodic();
+
+    void AutoCenterScaleInit();
+    void AutoCenterScalePeriodic();
+
+    void AutoRightScaleInit();
+    void AutoRightScalePeriodic();
 
     void DS_PrintOut();
 
