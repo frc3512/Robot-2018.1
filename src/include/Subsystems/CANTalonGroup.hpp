@@ -32,9 +32,23 @@ public:
     void StopMotor() override;
     void PIDWrite(double output) override;
 
+    /**
+     * Uses limit switches to create boundaries for the motors
+     *
+     * Passing a nullptr as a limit switch causes it not to be used.
+     */
     void EnableHardLimits(frc::DigitalInput* forwardLimitSwitch,
                           frc::DigitalInput* reverseLimitSwitch);
-    void SetLimitPressedState(bool high);
+
+    void SetHardLimitPressedState(bool high);
+
+    /**
+     * Uses encoders to create boundaries for the motors
+     *
+     * Passing positive infinity as the forward limit or negative infinity as
+     * the reverse limit will cause the limit to do nothing.
+     */
+    void EnableSoftLimits(double forwardLimit, double reverseLimit);
 
     // Returns current position of master CANTalon
     double GetPosition() const;
@@ -58,10 +72,14 @@ private:
     double m_distancePerPulse = 1.0;
 
     // Prevents motor from rotating forward when switch is pressed
-    frc::DigitalInput* m_forwardLimit;
+    frc::DigitalInput* m_forwardLimitSwitch;
 
     // Prevents motor from rotating in reverse when switch is pressed
-    frc::DigitalInput* m_reverseLimit;
+    frc::DigitalInput* m_reverseLimitSwitch;
+
+    // Prevents motor from rotating past these encoder values
+    double m_forwardLimit = std::numeric_limits<double>::infinity();
+    double m_reverseLimit = -std::numeric_limits<double>::infinity();
 
     bool m_limitPressedState = true;
 

@@ -47,7 +47,7 @@ public:
     bool HeightAtReference() const;
 
     // Gets whether the Hall Effect sensor has triggered
-    bool GetForwardHallEffect();
+    bool GetBottomHallEffect();
 
     void HandleEvent(Event event) override;
 
@@ -62,8 +62,7 @@ private:
     frc::RefInput m_heightRef{0.0};
 
     // Sensors
-    frc::DigitalInput m_elevatorForwardHall{kElevatorForwardHallPort};
-    frc::DigitalInput m_elevatorReverseHall{kElevatorReverseHallPort};
+    frc::DigitalInput m_elevatorBottomHall{kElevatorBottomHallPort};
     frc::FuncNode m_elevatorEncoder{
         [this] { return m_elevatorGearbox.GetPosition(); }};
 

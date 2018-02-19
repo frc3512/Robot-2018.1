@@ -9,15 +9,19 @@
 using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
 void CANTalonGroup::Set(double value) {
-    if (m_forwardLimit != nullptr) {
-        if (value > 0 && m_forwardLimit->Get() == m_limitPressedState) {
+    if (m_forwardLimitSwitch != nullptr) {
+        if (value > 0 && m_forwardLimitSwitch->Get() == m_limitPressedState) {
             value = 0.0;
         }
     }
-    if (m_reverseLimit != nullptr) {
-        if (value < 0 && m_reverseLimit->Get() == m_limitPressedState) {
+    if (m_reverseLimitSwitch != nullptr) {
+        if (value < 0 && m_reverseLimitSwitch->Get() == m_limitPressedState) {
             value = 0.0;
         }
+    }
+    if (value > 0 && GetPosition() > m_forwardLimit ||
+        value < 0 && GetPosition() < m_reverseLimit) {
+        value = 0.0;
     }
     m_canTalons[0].get().Set(ControlMode::PercentOutput, value);
 }
@@ -44,12 +48,17 @@ void CANTalonGroup::PIDWrite(double output) { Set(output); }
 
 void CANTalonGroup::EnableHardLimits(frc::DigitalInput* forwardLimitSwitch,
                                      frc::DigitalInput* reverseLimitSwitch) {
-    m_forwardLimit = forwardLimitSwitch;
-    m_reverseLimit = reverseLimitSwitch;
+    m_forwardLimitSwitch = forwardLimitSwitch;
+    m_reverseLimitSwitch = reverseLimitSwitch;
 }
 
-void CANTalonGroup::SetLimitPressedState(bool high) {
+void CANTalonGroup::SetHardLimitPressedState(bool high) {
     m_limitPressedState = high;
+}
+
+void CANTalonGroup::EnableSoftLimits(double forwardLimit, double reverseLimit) {
+    m_forwardLimit = forwardLimit;
+    m_reverseLimit = reverseLimit;
 }
 
 double CANTalonGroup::GetPosition() const {
