@@ -43,7 +43,7 @@ void Robot::AutoLeftSwitch() {
 
         case State::kInitialForward:
             if (robotDrive.PosAtReference() && autoTimer.HasPeriodPassed(1.0)) {
-                if (platePosition[kFriendlySwitch] == 'R') {
+                if (platePosition[kFriendlySwitch] == 'L') {
                     robotDrive.SetAngleReference(90.0);
                     state = State::kFinalRotate;
                 } else {
@@ -73,7 +73,7 @@ void Robot::AutoLeftSwitch() {
             if (robotDrive.AngleAtReference() &&
                 autoTimer.HasPeriodPassed(1.0)) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionReference(20.0);  // Estimate
+                robotDrive.SetPositionReference(10.0);  // Estimate
                 state = State::kFinalForward;
             }
             break;

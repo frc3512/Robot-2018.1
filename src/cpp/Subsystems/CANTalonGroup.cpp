@@ -9,10 +9,13 @@
 using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
 void CANTalonGroup::Set(double value) {
-    if (m_forwardLimit != nullptr && m_reverseLimit != nullptr) {
+    if (m_forwardLimit != nullptr) {
         if (value > 0 && m_forwardLimit->Get() == m_limitPressedState) {
             value = 0.0;
-        } else if (value < 0 && m_reverseLimit->Get() == m_limitPressedState) {
+        }
+    }
+    if (m_reverseLimit != nullptr) {
+        if (value < 0 && m_reverseLimit->Get() == m_limitPressedState) {
             value = 0.0;
         }
     }

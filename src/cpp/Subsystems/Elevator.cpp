@@ -7,8 +7,7 @@
 Elevator::Elevator() : m_notifier([&] { Robot::elevator.PostEvent({}); }) {
     m_elevatorGearbox.Set(0.0);
     m_elevatorGearbox.SetDistancePerPulse(kElevatorDpP);
-    m_elevatorGearbox.EnableHardLimits(&m_elevatorForwardHall,
-                                       &m_elevatorReverseHall);
+    m_elevatorGearbox.EnableHardLimits(&m_elevatorForwardHall, nullptr);
     m_elevatorGearbox.SetLimitPressedState(false);
 }
 

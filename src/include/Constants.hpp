@@ -36,8 +36,8 @@ constexpr int kRightDriveMasterID = 3;
 constexpr int kRightDriveSlaveID = 4;
 
 // Distance per Pulse
-constexpr double kLeftDpP = 169.0 / ((10926.0 + 10910.0) / 2.0);
-constexpr double kRightDpP = 169.0 / ((10913.0 + 10802.0) / 2.0);
+constexpr double kLeftDpP = 108.0 / 8142.66;
+constexpr double kRightDpP = 108.0 / 8187.66;
 
 // DriveTrain position PID
 constexpr double kPosP = 0.05;
@@ -50,7 +50,7 @@ constexpr double kAngleI = 0.00;
 constexpr double kAngleD = 0.012;
 
 // Physical Robot Constants
-constexpr int kRobotLength = 0;
+constexpr int kRobotLength = 31.5;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
@@ -94,10 +94,12 @@ constexpr double kElevatorControllerPeriod = 0.02;
 constexpr double kGravityFeedForward = -0.01;
 
 // Elevator Setpoints
-constexpr double kFloorHeight = 0.0;
-constexpr double kSwitchHeight = -12.0;
-constexpr double kScaleHeight = -60.0;
-constexpr double kClimbHeight = -80.0;
+constexpr double kFloorHeight = 73.0;  // Makes sure it hits bottom
+constexpr double kSecondBlockHeight = -10.0;
+constexpr double kSwitchHeight = -36.0;
+constexpr double kScaleHeight =
+    -50.0;  // Makes it so it doesn't hit absolute max everytime
+constexpr double kClimbHeight = -60.0;  // Ensures max height
 
 /*
  * Climber
