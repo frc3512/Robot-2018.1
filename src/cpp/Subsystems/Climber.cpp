@@ -14,10 +14,6 @@ void Climber::Shift() {
     }
 }
 
-void Climber::AlignmentArmToggle() {
-    m_alignmentArms.Set(!m_alignmentArms.Get());
-}
-
 void Climber::HandleEvent(Event event) {
     static State state = State::kInit;
 

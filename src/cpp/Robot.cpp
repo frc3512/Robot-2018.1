@@ -120,12 +120,6 @@ void Robot::TeleopPeriodic() {
         intake.SetMotors(MotorState::kIdle);
     }
 
-    // Climb Controls
-
-    if (driveStick1.GetRawButtonPressed(2)) {
-        climber.Align();
-    }
-
     // Elevator Controls
 
     switch (elevatorMode) {
