@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 
+#include <atomic>
 #include <chrono>
 #include <functional>
 #include <mutex>
@@ -31,6 +32,7 @@ public:
     enum StatusLight : int8_t { active, standby, inactive };
 
     explicit DSDisplay(int port);
+    ~DSDisplay();
 
     DSDisplay(const DSDisplay&) = delete;
     DSDisplay& operator=(const DSDisplay&) = delete;
@@ -97,6 +99,7 @@ private:
 
     std::thread m_recvThread;
     std::mutex m_ipMutex;
+    std::atomic<bool> m_recvRunning{false};
 
     /**
      * Calls clear() on the packet automatically after sending it.

@@ -13,7 +13,7 @@ DSDisplay::DSDisplay(int port) : m_dsPort(port) {
     m_socket.bind(port);
     m_socket.setBlocking(false);
 
-// Retrieve stored autonomous index
+    // Retrieve stored autonomous index
 #ifdef __FRC_ROBORIO__
     std::ifstream autonModeFile("/home/lvuser/autonMode.txt");
 #else
@@ -34,12 +34,18 @@ DSDisplay::DSDisplay(int port) : m_dsPort(port) {
         m_curAutonMode = 0;
     }
 
+    m_recvRunning = true;
     m_recvThread = std::thread([this] {
-        while (true) {
+        while (m_recvRunning) {
             ReceiveFromDS();
             std::this_thread::sleep_for(10ms);
         }
     });
+}
+
+DSDisplay::~DSDisplay() {
+    m_recvRunning = false;
+    m_recvThread.join();
 }
 
 void DSDisplay::Clear() { m_packet.clear(); }
@@ -180,7 +186,7 @@ void DSDisplay::ReceiveFromDS() {
             Packet packet;
             packet << static_cast<std::string>("guiCreate\r\n");
 
-// Open the file
+            // Open the file
 #ifdef __FRC_ROBORIO__
             std::ifstream guiFile("/home/lvuser/GUISettings.txt",
                                   std::ifstream::binary);
@@ -236,7 +242,7 @@ void DSDisplay::ReceiveFromDS() {
             packet << static_cast<std::string>("autonConfirmed\r\n");
             packet << m_autonModes[m_curAutonMode].first;
 
-// Store newest autonomous choice to file for persistent storage
+            // Store newest autonomous choice to file for persistent storage
 #ifdef __FRC_ROBORIO__
             std::ofstream autonModeFile("/home/lvuser/autonMode.txt",
                                         std::fstream::trunc);
