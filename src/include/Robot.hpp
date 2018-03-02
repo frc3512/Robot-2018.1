@@ -67,6 +67,12 @@ public:
     void AutoRightScaleInit();
     void AutoRightScalePeriodic();
 
+    void AutoLeftDoubleInit();
+    void AutoLeftDoublePeriodic();
+
+    void AutoRightDoubleInit();
+    void AutoRightDoublePeriodic();
+
     void DS_PrintOut();
 
     /**

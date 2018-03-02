@@ -39,6 +39,12 @@ Robot::Robot() {
     dsDisplay.AddAutoMethod("Right Position Scale",
                             std::bind(&Robot::AutoRightScaleInit, this),
                             std::bind(&Robot::AutoRightScalePeriodic, this));
+    dsDisplay.AddAutoMethod("Left Position Double",
+                            std::bind(&Robot::AutoLeftDoubleInit, this),
+                            std::bind(&Robot::AutoLeftDoublePeriodic, this));
+    dsDisplay.AddAutoMethod("Right Position Double",
+                            std::bind(&Robot::AutoRightDoubleInit, this),
+                            std::bind(&Robot::AutoRightDoublePeriodic, this));
     server.SetSource(camera1);
 
     std::array<Waypoint, 3> waypoints;
@@ -60,6 +66,7 @@ void Robot::DisabledInit() {
     robotDrive.StopClosedLoop();
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
+    intake.SetMotors(MotorState::kIdle);
     elevator.StopClosedLoop();
     elevator.SetHeightReference(elevator.GetHeight());
     elevatorMode = ElevatorMode::kPosition;
@@ -80,6 +87,7 @@ void Robot::TeleopInit() {
     robotDrive.StopClosedLoop();
     elevator.StartClosedLoop();
     intake.Deploy();
+    intake.Close();
 }
 
 void Robot::TestInit() {}
@@ -153,13 +161,14 @@ void Robot::HandleEvent(Event event) {
     if (event == Event{kButtonPressed, 3}) {
         if (intake.IsOpen()) {
             intake.Close();
-        } else {
+        } else if (intake.IsDeployed()) {
             intake.Open();
         }
     }
     if (event == Event{kButtonPressed, 5} && !elevator.GetBottomHallEffect()) {
         if (intake.IsDeployed()) {
             intake.Stow();
+            intake.Close();
         } else {
             intake.Deploy();
         }

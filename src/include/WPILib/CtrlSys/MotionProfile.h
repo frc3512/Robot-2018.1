@@ -32,6 +32,7 @@ class MotionProfile {
   virtual void SetGoal(double goal, double currentSource) = 0;
   double GetGoal() const;
   bool AtGoal() const;
+  double ProfileTimeTotal() const;
 
   void Reset();
 

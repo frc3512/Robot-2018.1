@@ -49,3 +49,7 @@ void MotionProfile::Reset() {
   m_lastTime = 0.0;
   m_timer.Reset();
 }
+
+double MotionProfile::ProfileTimeTotal() const {
+    return m_timeTotal;
+}

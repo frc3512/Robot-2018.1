@@ -77,6 +77,9 @@ public:
     bool AtPositionGoal() const;
     bool AtAngleGoal() const;
 
+    double PositionProfileTimeTotal() const;
+    double AngleProfileTimeTotal() const;
+
     // Resets gyro
     void ResetGyro();
 

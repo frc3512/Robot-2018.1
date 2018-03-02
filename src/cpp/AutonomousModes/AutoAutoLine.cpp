@@ -14,17 +14,18 @@ void Robot::AutoAutoLineInit() { state = State::kInit; }
 void Robot::AutoAutoLinePeriodic() {
     switch (state) {
         case State::kInit:
-            robotDrive.SetPositionGoal(kRobotLength + 120.0);  // Estimate
+            robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
             robotDrive.SetAngleGoal(0.0);
             robotDrive.StartClosedLoop();
+            autoTimer.Reset();
 
             state = State::kMoveForward;
-            std::cout << "Move Forward" << std::endl;
             break;
         case State::kMoveForward:
-            if (robotDrive.AtPositionGoal()) {
+            if (robotDrive.AtPositionGoal() ||
+                autoTimer.Get() > robotDrive.PositionProfileTimeTotal() + 1.0) {
                 robotDrive.StopClosedLoop();
-                std::cout << "Idle" << std::endl;
+
                 state = State::kIdle;
             }
             break;
