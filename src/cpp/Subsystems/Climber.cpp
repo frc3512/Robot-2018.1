@@ -22,7 +22,7 @@ void Climber::HandleEvent(Event event) {
 
     switch (state) {
         case State::kInit:
-            if (event.type == EventType::kButtonPressed && event.param == 1) {
+            if (event == Event{kButtonPressed, 1}) {
                 nextState = State::kSetup;
                 makeTransition = true;
             }
@@ -40,7 +40,7 @@ void Climber::HandleEvent(Event event) {
             }
             break;
         case State::kWaiting:
-            if (event.type == EventType::kButtonPressed && event.param == 1) {
+            if (event == Event{kButtonPressed, 1}) {
                 nextState = State::kClimb;
                 makeTransition = true;
             }

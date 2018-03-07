@@ -11,6 +11,7 @@
 
 #include "Constants.hpp"
 #include "DSDisplay/DSDisplay.hpp"
+#include "ES/Service.hpp"
 #include "LiveGrapher/LiveGrapher.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 #include "Subsystems/Climber.hpp"
@@ -18,7 +19,7 @@
 #include "Subsystems/Elevator.hpp"
 #include "Subsystems/Intake.hpp"
 
-class Robot : public frc::TimedRobot {
+class Robot : public frc::TimedRobot, public Service {
 public:
     Robot();
 
@@ -31,6 +32,8 @@ public:
     void DisabledPeriodic() override;
     void AutonomousPeriodic() override;
     void TeleopPeriodic() override;
+
+    void HandleEvent(Event event) override;
 
     void AutoAutoLineInit();
     void AutoAutoLinePeriodic();

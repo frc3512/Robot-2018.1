@@ -12,6 +12,7 @@ enum EventType {
     kExit,
     kEntry,
     kButtonPressed,
+    kButtonReleased,
     kAtSetHeight,
     kElevatorSetSwitch,
     kElevatorSetScale,
@@ -21,6 +22,8 @@ enum EventType {
 struct Event {
     Event() = default;
     Event(EventType type, int32_t param = 0);  // NOLINT(runtime/explicit)
+
+    bool operator==(const Event& rhs) const;
 
     EventType type = kNoEvent;
     int32_t param = 0;
