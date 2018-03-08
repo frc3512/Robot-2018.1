@@ -120,7 +120,6 @@ constexpr double kClimbHeight = -75.0;
  */
 
 // Climber Solenoid ports
-constexpr int kAlignmentArmsPort = 3;
 constexpr int kSetupForwardPort = 4;
 constexpr int kSetupReversePort = 5;
 

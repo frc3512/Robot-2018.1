@@ -31,7 +31,6 @@ void Climber::HandleEvent(Event event) {
             if (event.type == EventType::kEntry) {
                 Robot::intake.PostEvent(EventType::kElevatorSetClimb);
                 Robot::elevator.PostEvent(EventType::kElevatorSetClimb);
-                m_alignmentArms.Set(true);
             } else if (event.type == EventType::kAtSetHeight) {
                 nextState = State::kWaiting;
                 makeTransition = true;
