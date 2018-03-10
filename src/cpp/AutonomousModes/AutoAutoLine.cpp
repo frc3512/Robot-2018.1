@@ -6,12 +6,12 @@
 
 enum class State { kInit, kMoveForward, kIdle };
 
-void Robot::AutoAutoLineInit() {}
+static State state;
+
+void Robot::AutoAutoLineInit() { state = State::kInit; }
 
 // Drives forward until passing white line 120 inches away from start
 void Robot::AutoAutoLinePeriodic() {
-    static State state = State::kInit;
-
     switch (state) {
         case State::kInit:
             robotDrive.SetPositionGoal(kRobotLength + 120.0);  // Estimate
