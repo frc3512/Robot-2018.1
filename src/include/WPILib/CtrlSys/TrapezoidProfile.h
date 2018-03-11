@@ -39,7 +39,6 @@ class TrapezoidProfile : public MotionProfile {
   double m_profileMaxVelocity;
   double m_timeFromMaxVelocity;
   double m_timeToMaxVelocity;
-  double m_sign;
 };
 
 }  // namespace frc

@@ -228,6 +228,11 @@ void Robot::DS_PrintOut() {
             (robotDrive.GetLeftRate() + robotDrive.GetRightRate()) / 2,
             "Average Velocity");
         liveGrapher.GraphData(robotDrive.GetAngularRate(), "Angle Rate");
+        static double prevVel = 0.0;
+        static double curVel = 0.0;
+        curVel = robotDrive.GetAngularRate();
+        liveGrapher.GraphData((curVel - prevVel) / .005, "Angle Accel");
+        prevVel = curVel;
         robotDrive.Debug();
         liveGrapher.ResetInterval();
     }

@@ -18,10 +18,8 @@ DriveTrain::DriveTrain() {
     m_controller.GetPositionPID().SetPID(kPosP, kPosI, kPosD);
     m_controller.GetAnglePID().SetPID(kAngleP, kAngleI, kAngleD);
 
-    m_controller.SetPositionTolerance(1.5,
-                                      std::numeric_limits<double>::infinity());
-    m_controller.SetAngleTolerance(1.5,
-                                   std::numeric_limits<double>::infinity());
+    m_controller.SetPositionTolerance(1.5, 0.5);
+    m_controller.SetAngleTolerance(1.0, 1.75);
 }
 
 int32_t DriveTrain::GetLeftRaw() const { return m_leftGrbx.Get(); }

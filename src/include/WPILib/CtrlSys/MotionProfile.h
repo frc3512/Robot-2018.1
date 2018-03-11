@@ -48,6 +48,8 @@ class MotionProfile {
 
   double m_goal = 0.0;
 
+  double m_sign;
+
   // Current reference (displacement, velocity, acceleration)
   State m_ref = std::make_tuple(0.0, 0.0, 0.0);
 
@@ -59,12 +61,12 @@ class MotionProfile {
 
   frc::FuncNode m_velocityNode{[this] {
     std::lock_guard<std::mutex> lock(m_mutex);
-    return std::get<1>(m_ref);
+    return std::get<1>(m_ref) * m_sign;
   }};
 
   frc::FuncNode m_accelerationNode{[this] {
     std::lock_guard<std::mutex> lock(m_mutex);
-    return std::get<2>(m_ref);
+    return std::get<2>(m_ref) * m_sign;
   }};
 
   double m_lastTime = 0.0;

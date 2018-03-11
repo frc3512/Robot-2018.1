@@ -89,13 +89,18 @@ void DiffDriveController::Debug() {
                                  "Left Motor Input");
     Robot::liveGrapher.GraphData(m_rightMotorInput.GetOutput(),
                                  "Right Motor Input");
-    Robot::liveGrapher.GraphData(m_positionError.GetOutput(), "Position Error");
+    // Robot::liveGrapher.GraphData(m_positionError.GetOutput(), "Position
+    // Error");
     // Robot::liveGrapher.GraphData(m_angleError.GetOutput(), "Angle Error");
-    std::cout << "InTolerance: " << m_positionError.InTolerance()
-              << " AtGoal: " << m_positionRef.AtGoal() << std::endl;
+    // std::cout << "InTolerance: " << m_positionError.InTolerance()
+    //          << " AtGoal: " << m_positionRef.AtGoal() << std::endl;
     Robot::liveGrapher.GraphData(m_angleSensor.GetOutput(), "Angle");
     Robot::liveGrapher.GraphData(m_positionRef.GetVelocityNode().GetOutput(),
                                  "Velocity Reference");
     Robot::liveGrapher.GraphData(m_angleRef.GetVelocityNode().GetOutput(),
                                  "Angle Rate Reference");
+    Robot::liveGrapher.GraphData(m_angleFeedForward.GetOutput(),
+                                 "Angle FeedForward");
+    Robot::liveGrapher.GraphData(m_angleRef.GetAccelerationNode().GetOutput(),
+                                 "Angle Acceleration Reference");
 }

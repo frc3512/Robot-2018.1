@@ -46,8 +46,6 @@ class SCurveProfile : public MotionProfile {
   double m_t5;
   double m_t6;
   double m_t7;
-
-  double m_sign;
 };
 
 }  // namespace frc
