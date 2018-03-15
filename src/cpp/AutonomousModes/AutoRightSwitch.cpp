@@ -31,7 +31,7 @@ void Robot::AutoRightSwitchPeriodic() {
             if (platePosition[kFriendlySwitch] == 'R') {
                 robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
             } else {
-                robotDrive.SetPositionGoal(236.5 - kRobotLength / 2.0);
+                robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0);
             }
             robotDrive.SetAngleGoal(0.0);
             robotDrive.StartClosedLoop();
@@ -61,7 +61,7 @@ void Robot::AutoRightSwitchPeriodic() {
             if (robotDrive.AtAngleGoal() ||
                 autoTimer.Get() > robotDrive.AngleProfileTimeTotal() + 1.0) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionGoal(236.5 - kRobotWidth / 2.0);
+                robotDrive.SetPositionGoal(190.0);
                 autoTimer.Reset();
 
                 state = State::kRightForward;
@@ -81,7 +81,12 @@ void Robot::AutoRightSwitchPeriodic() {
             if (robotDrive.AtAngleGoal() ||
                 autoTimer.Get() > robotDrive.AngleProfileTimeTotal() + 1.0) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionGoal(55 - kRobotLength / 2.0);
+                if (platePosition[kFriendlySwitch] == 'R') {
+                    robotDrive.SetPositionGoal(65.0 - kRobotLength / 2.0 -
+                                               kRobotWidth / 2.0);  // 55
+                } else {
+                    robotDrive.SetPositionGoal(36.0 - kRobotLength / 2.0);
+                }
                 autoTimer.Reset();
 
                 state = State::kFinalForward;
@@ -90,11 +95,7 @@ void Robot::AutoRightSwitchPeriodic() {
         case State::kFinalForward:
             if (robotDrive.AtPositionGoal() ||
                 autoTimer.Get() > robotDrive.PositionProfileTimeTotal() + 1.0) {
-                if (platePosition[kFriendlySwitch] == 'R') {
-                    intake.Open();
-                } else {
-                    intake.SetMotors(MotorState::kOuttake);
-                }
+                intake.AutoOuttake();
                 robotDrive.StopClosedLoop();
                 elevator.StopClosedLoop();
 

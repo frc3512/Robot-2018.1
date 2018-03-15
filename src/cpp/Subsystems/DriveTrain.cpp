@@ -15,6 +15,8 @@ DriveTrain::DriveTrain() {
     m_leftGrbx.Set(0.0);
     m_rightGrbx.Set(0.0);
 
+    m_leftGrbx.SetSensorDirection(true);
+
     m_controller.GetPositionPID().SetPID(kPosP, kPosI, kPosD);
     m_controller.GetAnglePID().SetPID(kAngleP, kAngleI, kAngleD);
 

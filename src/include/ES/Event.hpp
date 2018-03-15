@@ -13,6 +13,7 @@ enum EventType {
     kEntry,
     kButtonPressed,
     kButtonReleased,
+    kButton,
     kAtSetHeight,
     kElevatorSetSwitch,
     kElevatorSetScale,

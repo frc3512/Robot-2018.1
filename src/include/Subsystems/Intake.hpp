@@ -35,6 +35,8 @@ public:
 
     void SetMotors(MotorState state);
 
+    void AutoOuttake();
+
     void HandleEvent(Event event) override;
 
 private:

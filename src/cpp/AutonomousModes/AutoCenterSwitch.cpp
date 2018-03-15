@@ -59,9 +59,10 @@ void Robot::AutoCenterSwitchPeriodic() {
                 robotDrive.ResetEncoders();
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    robotDrive.SetPositionGoal(60.0);  // Estimate
+                    robotDrive.SetPositionGoal(66.0 -
+                                               kExchangeOffset);  // Estimate
                 } else {
-                    robotDrive.SetPositionGoal(60.0 +
+                    robotDrive.SetPositionGoal(70.0 +             // 60.0
                                                kExchangeOffset);  // Estimate
                 }
 
@@ -87,7 +88,7 @@ void Robot::AutoCenterSwitchPeriodic() {
             if (robotDrive.AtAngleGoal() ||
                 autoTimer.Get() > robotDrive.AngleProfileTimeTotal() + 1.0) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionGoal(73.0 - kRobotLength / 2.0);
+                robotDrive.SetPositionGoal(79.0 - kRobotLength / 2.0);  // 73.0
                 autoTimer.Reset();
 
                 state = State::kFinalForward;

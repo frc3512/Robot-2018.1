@@ -61,11 +61,10 @@ void Robot::AutoCenterScalePeriodic() {
                 robotDrive.ResetEncoders();
                 autoTimer.Reset();
                 if (platePosition[kScale] == 'R') {
-                    robotDrive.SetPositionGoal(132.0 + kRobotWidth -
+                    robotDrive.SetPositionGoal(132.0 - kExchangeOffset -
                                                kRobotLength / 2.0);
                 } else {
-                    robotDrive.SetPositionGoal(132.0 + kExchangeOffset +
-                                               kRobotWidth -
+                    robotDrive.SetPositionGoal(132.0 + kExchangeOffset -
                                                kRobotLength / 2.0);  // ESTIMATE
                 }
 
@@ -90,7 +89,7 @@ void Robot::AutoCenterScalePeriodic() {
             if (robotDrive.AtAngleGoal() ||
                 autoTimer.Get() > robotDrive.AngleProfileTimeTotal() + 1.0) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionGoal(257.0 - kRobotLength / 2.0);
+                robotDrive.SetPositionGoal(260.0);
                 autoTimer.Reset();
 
                 state = State::kThirdForward;
@@ -114,7 +113,7 @@ void Robot::AutoCenterScalePeriodic() {
             if (robotDrive.AtAngleGoal() ||
                 autoTimer.Get() > robotDrive.AngleProfileTimeTotal() + 1.0) {
                 robotDrive.ResetEncoders();
-                robotDrive.SetPositionGoal(48.0 - kRobotLength / 2.0);
+                robotDrive.SetPositionGoal(40.0 - kRobotLength / 2.0);
                 autoTimer.Reset();
 
                 state = State::kFinalForward;

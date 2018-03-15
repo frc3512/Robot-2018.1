@@ -5,6 +5,7 @@
 #include <pathfinder.h>
 
 #include <array>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -96,7 +97,7 @@ public:
     static LiveGrapher liveGrapher;
 
 private:
-    ElevatorMode elevatorMode = ElevatorMode::kPosition;
+    ElevatorMode elevatorMode = ElevatorMode::kVelocity;
 
     DriveTrain robotDrive;
 

@@ -2,6 +2,8 @@
 
 #include "Robot.hpp"
 
+#include <iostream>
+
 std::unique_ptr<Segment[]> Robot::trajectory;
 std::unique_ptr<Segment[]> Robot::leftTrajectory;
 std::unique_ptr<Segment[]> Robot::rightTrajectory;
@@ -85,9 +87,10 @@ void Robot::AutonomousInit() {
 
 void Robot::TeleopInit() {
     robotDrive.StopClosedLoop();
-    elevator.StartClosedLoop();
+    elevator.StopClosedLoop();
     intake.Deploy();
     intake.Close();
+    elevatorMode = ElevatorMode::kVelocity;
 }
 
 void Robot::TestInit() {}
@@ -95,7 +98,11 @@ void Robot::TestInit() {}
 void Robot::RobotPeriodic() {
     DS_PrintOut();
 
-    for (int i = 1; i <= 12; i++) {
+    if (!elevator.GetBottomHallEffect()) {
+        elevator.ResetEncoder();
+    }
+
+    for (int i = 2; i <= 12; i++) {
         if (appendageStick.GetRawButtonPressed(i)) {
             Event event{EventType::kButtonPressed, i};
             Robot::PostEvent(event);
@@ -129,7 +136,7 @@ void Robot::TeleopPeriodic() {
 
     // Elevator Controls
     switch (elevatorMode) {
-        case ElevatorMode::kPosition:
+        /*case ElevatorMode::kPosition:
             if (appendageStick.GetRawButton(7)) {
                 elevator.SetHeightReference(kFloorHeight);
             }
@@ -145,7 +152,7 @@ void Robot::TeleopPeriodic() {
             if (appendageStick.GetRawButton(11)) {
                 elevator.SetHeightReference(kClimbHeight);
             }
-            break;
+            break;*/
         case ElevatorMode::kVelocity:
             elevator.SetVelocity(appendageStick.GetY());
             break;
@@ -154,10 +161,6 @@ void Robot::TeleopPeriodic() {
 
 void Robot::HandleEvent(Event event) {
     // Intake Controls
-    if (event == Event{kButtonPressed, 2}) {
-        climber.Shift();
-    }
-
     if (event == Event{kButtonPressed, 3}) {
         if (intake.IsOpen()) {
             intake.Close();
@@ -185,7 +188,7 @@ void Robot::HandleEvent(Event event) {
     }
 
     // Elevator Controls
-    switch (elevatorMode) {
+    /* switch (elevatorMode) {
         case ElevatorMode::kPosition:
             if (event == Event{kButtonPressed, 5} &&
                 !elevator.GetBottomHallEffect()) {
@@ -202,15 +205,16 @@ void Robot::HandleEvent(Event event) {
             }
             break;
         case ElevatorMode::kVelocity:
-            if (!elevator.GetBottomHallEffect()) {
-                elevator.ResetEncoder();
-            }
             if (event == Event{kButtonPressed, 12}) {
                 elevator.SetHeightReference(elevator.GetHeight());
                 elevator.StartClosedLoop();
                 elevatorMode = ElevatorMode::kPosition;
             }
             break;
+    }*/
+
+    if (driveStick2.GetRawButton(7) && event == Event{kButtonPressed, 2}) {
+        climber.Shift();
     }
 
     /*if (event == Event{kButtonPressed, 11}) {
@@ -223,7 +227,7 @@ void Robot::HandleEvent(Event event) {
 }
 
 void Robot::DS_PrintOut() {
-    if (liveGrapher.HasIntervalPassed()) {
+    /*if (liveGrapher.HasIntervalPassed()) {
         liveGrapher.GraphData(
             (robotDrive.GetLeftRate() + robotDrive.GetRightRate()) / 2,
             "Average Velocity");
@@ -233,9 +237,15 @@ void Robot::DS_PrintOut() {
         curVel = robotDrive.GetAngularRate();
         liveGrapher.GraphData((curVel - prevVel) / .005, "Angle Accel");
         prevVel = curVel;
-        robotDrive.Debug();
         liveGrapher.ResetInterval();
-    }
+        */
+    robotDrive.Debug();
+    // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
+    // robotDrive.GetRightDisplacement() << std::endl;
+    std::cout << robotDrive.GetAngle() << std::endl;
+    std::cout << elevator.GetHeight() << std::endl;
+    // std::cout << "Version 1.5" << std::endl; // To ensure a
+    // successful(butchered) upload
 }
 
 START_ROBOT_CLASS(Robot)

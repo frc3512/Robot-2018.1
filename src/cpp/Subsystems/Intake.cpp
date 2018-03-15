@@ -28,6 +28,12 @@ void Intake::SetMotors(MotorState state) {
     }
 }
 
+void Intake::AutoOuttake() {
+    // IntakeLeft is Inverted, IntakeRight is not
+    m_intakeLeft.Set(0.75);
+    m_intakeRight.Set(-0.75);
+}
+
 void Intake::HandleEvent(Event event) {
     if (event.type == EventType::kElevatorSetClimb) {
         m_intakeArm.Set(false);
