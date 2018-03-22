@@ -20,14 +20,10 @@ private:
     enum class State {
         kInit,
         kInitialForward,
-        kLeftRotate,
-        kLeftForward,
+        kRightRotate,
+        kRightForward,
         kFinalRotate,
         kFinalForward,
-        kAutoLine,
-        kAutoSwitchRotate,
-        kAutoSwitchForward,
-        kAutoSwitch,
         kIdle
     };
 
