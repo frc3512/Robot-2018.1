@@ -11,7 +11,6 @@ enum EventType {
     kNoEvent,
     kExit,
     kEntry,
-    kTimeout,
     kButtonPressed,
     kButtonReleased,
     kButton,
@@ -19,6 +18,7 @@ enum EventType {
     kElevatorSetSwitch,
     kElevatorSetScale,
     kElevatorSetClimb,
+    kTimeout
 };
 
 struct Event {

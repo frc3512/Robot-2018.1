@@ -1,30 +1,31 @@
 // Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
 
-#include <iostream>
+#include "AutonomousModes/AutoAutoLine.hpp"
+
+#include <DriverStation.h>
 
 #include "Robot.hpp"
 
-enum class State { kInit, kMoveForward, kIdle };
+AutoAutoLine::AutoAutoLine() { autoTimer.Start(); }
 
-static State state;
-
-void Robot::AutoAutoLineInit() { state = State::kInit; }
+void AutoAutoLine::Reset() { state = State::kInit; }
 
 // Drives forward until passing white line 120 inches away from start
-void Robot::AutoAutoLinePeriodic() {
+void AutoAutoLine::HandleEvent(Event event) {
     switch (state) {
         case State::kInit:
-            robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
-            robotDrive.SetAngleGoal(0.0);
-            robotDrive.StartClosedLoop();
+            Robot::robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
+            Robot::robotDrive.SetAngleGoal(0.0);
+            Robot::robotDrive.StartClosedLoop();
             autoTimer.Reset();
 
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (robotDrive.AtPositionGoal() ||
-                autoTimer.Get() > robotDrive.PositionProfileTimeTotal() + 1.0) {
-                robotDrive.StopClosedLoop();
+            if (Robot::robotDrive.AtPositionGoal() ||
+                autoTimer.Get() >
+                    Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
+                Robot::robotDrive.StopClosedLoop();
 
                 state = State::kIdle;
             }

@@ -21,36 +21,37 @@ LiveGrapher Robot::liveGrapher{kLiveGrapherPort};
 Robot::Robot() {
     // Auton: does nothing
     dsDisplay.AddAutoMethod("No-op", [] {}, [] {});
-    dsDisplay.AddAutoMethod("Autoline Timed",
-                            std::bind(&Robot::AutoAutoLineTimedInit, this),
-                            std::bind(&Robot::AutoAutoLineTimedPeriodic, this));
-    dsDisplay.AddAutoMethod("Autoline",
-                            std::bind(&Robot::AutoAutoLineInit, this),
-                            std::bind(&Robot::AutoAutoLinePeriodic, this));
-    dsDisplay.AddAutoMethod("Left Position Switch",
-                            std::bind(&Robot::AutoLeftSwitchInit, this),
-                            std::bind(&Robot::AutoLeftSwitchPeriodic, this));
-    dsDisplay.AddAutoMethod("Center Position Switch",
-                            std::bind(&Robot::AutoCenterSwitchInit, this),
-                            std::bind(&Robot::AutoCenterSwitchPeriodic, this));
-    dsDisplay.AddAutoMethod("Right Position Switch",
-                            std::bind(&Robot::AutoRightSwitchInit, this),
-                            std::bind(&Robot::AutoRightSwitchPeriodic, this));
-    dsDisplay.AddAutoMethod("Left Position Scale",
-                            std::bind(&Robot::AutoLeftScaleInit, this),
-                            std::bind(&Robot::AutoLeftScalePeriodic, this));
-    dsDisplay.AddAutoMethod("Center Position Scale",
-                            std::bind(&Robot::AutoCenterScaleInit, this),
-                            std::bind(&Robot::AutoCenterScalePeriodic, this));
-    dsDisplay.AddAutoMethod("Right Position Scale",
-                            std::bind(&Robot::AutoRightScaleInit, this),
-                            std::bind(&Robot::AutoRightScalePeriodic, this));
-    dsDisplay.AddAutoMethod("Left Position Double",
-                            std::bind(&Robot::AutoLeftDoubleInit, this),
-                            std::bind(&Robot::AutoLeftDoublePeriodic, this));
-    dsDisplay.AddAutoMethod("Right Position Double",
-                            std::bind(&Robot::AutoRightDoubleInit, this),
-                            std::bind(&Robot::AutoRightDoublePeriodic, this));
+    dsDisplay.AddAutoMethod(
+        "Autoline", std::bind(&AutoAutoLine::Reset, &autoLine),
+        std::bind(&AutoAutoLine::PostEvent, &autoLine, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Left Position Switch", std::bind(&AutoLeftSwitch::Reset, &leftSwitch),
+        std::bind(&AutoLeftSwitch::PostEvent, &leftSwitch, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Center Position Switch",
+        std::bind(&AutoCenterSwitch::Reset, &centerSwitch),
+        std::bind(&AutoCenterSwitch::PostEvent, &centerSwitch, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Right Position Switch",
+        std::bind(&AutoRightSwitch::Reset, &rightSwitch),
+        std::bind(&AutoRightSwitch::PostEvent, &rightSwitch, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Left Position Scale", std::bind(&AutoLeftScale::Reset, &leftScale),
+        std::bind(&AutoLeftScale::PostEvent, &leftScale, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Center Position Scale",
+        std::bind(&AutoCenterScale::Reset, &centerScale),
+        std::bind(&AutoCenterScale::PostEvent, &centerScale, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Right Position Scale", std::bind(&AutoRightScale::Reset, &rightScale),
+        std::bind(&AutoRightScale::PostEvent, &rightScale, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Left Position Double", std::bind(&AutoLeftDouble::Reset, &leftDouble),
+        std::bind(&AutoLeftDouble::PostEvent, &leftDouble, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Right Position Double",
+        std::bind(&AutoRightDouble::Reset, &rightDouble),
+        std::bind(&AutoRightDouble::PostEvent, &rightDouble, kTimeout));
     server.SetSource(camera1);
 
     std::array<Waypoint, 3> waypoints;
@@ -78,8 +79,6 @@ void Robot::DisabledInit() {
 }
 
 void Robot::AutonomousInit() {
-    autoTimer.Reset();
-    autoTimer.Start();
     robotDrive.ResetEncoders();
     robotDrive.ResetGyro();
     elevator.ResetEncoder();
