@@ -6,6 +6,8 @@
 #include <iostream>
 #include <limits>
 
+#include "Robot.hpp"
+
 DriveTrain::DriveTrain() {
     m_drive.SetDeadband(kJoystickDeadband);
 
@@ -107,4 +109,14 @@ void DriveTrain::Debug() {
     std::cout << "Left Pos: " << m_leftGrbx.GetPosition()
               << " Right Pos: " << m_rightGrbx.GetPosition() << std::endl;
     m_controller.Debug();
+}
+
+void DriveTrain::HandleEvent(Event event) {
+    if (Robot::driveStick1.GetRawButton(1)) {
+        Drive(Robot::driveStick1.GetY() * 0.5, Robot::driveStick2.GetX() * 0.5,
+              Robot::driveStick2.GetRawButton(2));
+    } else {
+        Drive(Robot::driveStick1.GetY(), Robot::driveStick2.GetX(),
+              Robot::driveStick2.GetRawButton(2));
+    }
 }

@@ -8,9 +8,13 @@ std::unique_ptr<Segment[]> Robot::trajectory;
 std::unique_ptr<Segment[]> Robot::leftTrajectory;
 std::unique_ptr<Segment[]> Robot::rightTrajectory;
 
+DriveTrain Robot::robotDrive;
 Intake Robot::intake;
 Elevator Robot::elevator;
 Climber Robot::climber;
+frc::Joystick Robot::appendageStick{kAppendageStickPort};
+frc::Joystick Robot::driveStick1{kDriveStick1Port};
+frc::Joystick Robot::driveStick2{kDriveStick2Port};
 
 LiveGrapher Robot::liveGrapher{kLiveGrapherPort};
 
@@ -71,7 +75,6 @@ void Robot::DisabledInit() {
     intake.SetMotors(MotorState::kIdle);
     elevator.StopClosedLoop();
     elevator.SetHeightReference(elevator.GetHeight());
-    elevatorMode = ElevatorMode::kPosition;
 }
 
 void Robot::AutonomousInit() {
@@ -90,7 +93,6 @@ void Robot::TeleopInit() {
     elevator.StopClosedLoop();
     intake.Deploy();
     intake.Close();
-    elevatorMode = ElevatorMode::kVelocity;
 }
 
 void Robot::TestInit() {}
@@ -125,98 +127,11 @@ void Robot::DisabledPeriodic() {}
 void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomousPeriodic(); }
 
 void Robot::TeleopPeriodic() {
-    // Drive Stick Controls
-    if (driveStick1.GetRawButton(1)) {
-        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
-                         driveStick2.GetRawButton(2));
-    } else {
-        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
-                         driveStick2.GetRawButton(2));
-    }
-
-    // Elevator Controls
-    switch (elevatorMode) {
-        /*case ElevatorMode::kPosition:
-            if (appendageStick.GetRawButton(7)) {
-                elevator.SetHeightReference(kFloorHeight);
-            }
-            if (appendageStick.GetRawButton(9)) {
-                elevator.SetHeightReference(kSecondBlockHeight);
-            }
-            if (appendageStick.GetRawButton(8)) {
-                elevator.SetHeightReference(kSwitchHeight);
-            }
-            if (appendageStick.GetRawButton(10)) {
-                elevator.SetHeightReference(kScaleHeight);
-            }
-            if (appendageStick.GetRawButton(11)) {
-                elevator.SetHeightReference(kClimbHeight);
-            }
-            break;*/
-        case ElevatorMode::kVelocity:
-            elevator.SetVelocity(appendageStick.GetY());
-            break;
-    }
+    robotDrive.PostEvent(EventType::kTimeout);
+    elevator.PostEvent(EventType::kTimeout);
 }
 
 void Robot::HandleEvent(Event event) {
-    // Intake Controls
-    if (event == Event{kButtonPressed, 3}) {
-        if (intake.IsOpen()) {
-            intake.Close();
-        } else if (intake.IsDeployed()) {
-            intake.Open();
-        }
-    }
-    if (event == Event{kButtonPressed, 5} && !elevator.GetBottomHallEffect()) {
-        if (intake.IsDeployed()) {
-            intake.Stow();
-            intake.Close();
-        } else {
-            intake.Deploy();
-        }
-    }
-    if (event == Event{kButtonPressed, 4}) {
-        intake.SetMotors(MotorState::kIntake);
-    }
-    if (event == Event{kButtonPressed, 6}) {
-        intake.SetMotors(MotorState::kOuttake);
-    }
-    if (event == Event{kButtonReleased, 4} ||
-        event == Event{kButtonReleased, 6}) {
-        intake.SetMotors(MotorState::kIdle);
-    }
-
-    // Elevator Controls
-    /* switch (elevatorMode) {
-        case ElevatorMode::kPosition:
-            if (event == Event{kButtonPressed, 5} &&
-                !elevator.GetBottomHallEffect()) {
-                if (intake.IsDeployed()) {
-                    intake.Stow();
-                } else {
-                    intake.Deploy();
-                }
-            }
-            if (event == Event{kButtonPressed, 12}) {
-                elevator.SetHeightReference(elevator.GetHeight());
-                elevator.StopClosedLoop();
-                elevatorMode = ElevatorMode::kVelocity;
-            }
-            break;
-        case ElevatorMode::kVelocity:
-            if (event == Event{kButtonPressed, 12}) {
-                elevator.SetHeightReference(elevator.GetHeight());
-                elevator.StartClosedLoop();
-                elevatorMode = ElevatorMode::kPosition;
-            }
-            break;
-    }*/
-
-    if (driveStick2.GetRawButton(7) && event == Event{kButtonPressed, 2}) {
-        climber.Shift();
-    }
-
     /*if (event == Event{kButtonPressed, 11}) {
         if (server.GetSource() == camera1) {
             server.SetSource(camera2);

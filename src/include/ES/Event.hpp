@@ -11,6 +11,7 @@ enum EventType {
     kNoEvent,
     kExit,
     kEntry,
+    kTimeout,
     kButtonPressed,
     kButtonReleased,
     kButton,

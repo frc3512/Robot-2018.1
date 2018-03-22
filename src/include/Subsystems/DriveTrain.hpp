@@ -11,6 +11,7 @@
 
 #include "Constants.hpp"
 #include "DiffDriveController.hpp"
+#include "ES/Service.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 
 class CANTalonGroup;
@@ -18,7 +19,7 @@ class CANTalonGroup;
 /**
  * Provides an interface for this year's drive train
  */
-class DriveTrain {
+class DriveTrain : public Service {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -88,6 +89,8 @@ public:
 
     // Sends print statements for debugging purposes
     void Debug();
+
+    void HandleEvent(Event event) override;
 
 private:
     // Left gearbox used in position PID

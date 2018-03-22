@@ -34,70 +34,49 @@ bool Elevator::HeightAtReference() const { return m_errorSum.InTolerance(); }
 bool Elevator::GetBottomHallEffect() { return m_elevatorBottomHall.Get(); }
 
 void Elevator::HandleEvent(Event event) {
-    enum State {
-        kIdle,
-        kElevatorClimb,
-        kElevatorScale,
-        kElevatorSwitch,
-    };
-    static State state = State::kIdle;
+    enum State { kPosition, kVelocity };
+    static State state = State::kVelocity;
     bool makeTransition = false;
     State nextState;
     switch (state) {
-        case State::kIdle:
-            if (event.type == EventType::kElevatorSetSwitch) {
-                nextState = State::kElevatorSwitch;
-                makeTransition = true;
-            } else if (event.type == EventType::kElevatorSetScale) {
-                nextState = State::kElevatorScale;
-                makeTransition = true;
-            } else if (event.type == EventType::kElevatorSetClimb) {
-                nextState = State::kElevatorClimb;
-                makeTransition = true;
-            } else if (event.type == EventType::kExit) {
-                m_notifier.StartPeriodic(0.05);
-            }
-            break;
-        case State::kElevatorSwitch:
+        case State::kPosition:
             if (event.type == EventType::kEntry) {
                 StartClosedLoop();
+            }
+            if (event == Event{kButtonPressed, 7}) {
+                SetHeightReference(kFloorHeight);
+            }
+            if (event == Event{kButtonPressed, 8}) {
                 SetHeightReference(kSwitchHeight);
-            } else if (HeightAtReference()) {
-                nextState = State::kIdle;
-                makeTransition = true;
-            } else if (event.type == EventType::kExit) {
-                m_notifier.Stop();
-                Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
-            break;
-        case State::kElevatorScale:
-            if (event.type == EventType::kEntry) {
-                StartClosedLoop();
+            if (event == Event{kButtonPressed, 9}) {
+                SetHeightReference(kSecondBlockHeight);
+            }
+            if (event == Event{kButtonPressed, 10}) {
                 SetHeightReference(kScaleHeight);
-            } else if (HeightAtReference()) {
-                nextState = State::kIdle;
-                makeTransition = true;
-            } else if (event.type == EventType::kExit) {
-                m_notifier.Stop();
-                Robot::climber.PostEvent(EventType::kAtSetHeight);
             }
-            break;
-        case State::kElevatorClimb:
-            if (event.type == EventType::kEntry) {
-                StartClosedLoop();
+            if (event == Event{kButtonPressed, 11}) {
                 SetHeightReference(kClimbHeight);
-            } else if (HeightAtReference()) {
-                nextState = State::kIdle;
-                makeTransition = true;
-            } else if (event.type == EventType::kExit) {
-                m_notifier.Stop();
-                Robot::climber.PostEvent(EventType::kAtSetHeight);
+            }
+            if (event == Event{kButtonPressed, 12}) {
+                nextState = State::kVelocity;
+            }
+            if (event.type == EventType::kExit) {
+                SetHeightReference(GetHeight());
+                StopClosedLoop();
             }
             break;
-            if (makeTransition) {
-                PostEvent(EventType::kExit);
-                state = nextState;
-                PostEvent(EventType::kEntry);
+        case State::kVelocity:
+            SetVelocity(Robot::appendageStick.GetY());
+            if (event == Event{kButtonPressed, 12}) {
+                SetHeightReference(GetHeight());
+                nextState = State::kPosition;
             }
+            break;
+    }
+    if (makeTransition) {
+        HandleEvent(EventType::kExit);
+        state = nextState;
+        HandleEvent(EventType::kEntry);
     }
 }

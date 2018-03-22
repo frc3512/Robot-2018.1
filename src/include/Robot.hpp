@@ -89,22 +89,18 @@ public:
     static std::unique_ptr<Segment[]> leftTrajectory;
     static std::unique_ptr<Segment[]> rightTrajectory;
 
+    static DriveTrain robotDrive;
     static Intake intake;
     static Elevator elevator;
     static Climber climber;
+    static frc::Joystick appendageStick;
+    static frc::Joystick driveStick1;
+    static frc::Joystick driveStick2;
 
     // LiveGrapher host
     static LiveGrapher liveGrapher;
 
 private:
-    ElevatorMode elevatorMode = ElevatorMode::kVelocity;
-
-    DriveTrain robotDrive;
-
-    frc::Joystick driveStick1{kDriveStick1Port};
-    frc::Joystick driveStick2{kDriveStick2Port};
-    frc::Joystick appendageStick{kAppendageStickPort};
-
     frc::Timer autoTimer;
 
     // Used for sending data to the Driver Station
