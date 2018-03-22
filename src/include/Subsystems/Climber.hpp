@@ -16,7 +16,9 @@ class Climber : public Service {
 public:
     void EngagePawl();
     void LockPawl();
+    bool GetPawl() const;
     void Shift();
+    bool IsLowGear() const;
     void HandleEvent(Event event) override;
 
 private:
