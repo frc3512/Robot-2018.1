@@ -83,6 +83,7 @@ void Robot::AutonomousInit() {
     robotDrive.ResetGyro();
     elevator.ResetEncoder();
     intake.Deploy();
+    climber.LockPawl();
 
     dsDisplay.ExecAutonomousInit();
 }
@@ -92,6 +93,7 @@ void Robot::TeleopInit() {
     elevator.StopClosedLoop();
     intake.Deploy();
     intake.Close();
+    climber.LockPawl();
 }
 
 void Robot::TestInit() {}
@@ -128,6 +130,7 @@ void Robot::AutonomousPeriodic() { dsDisplay.ExecAutonomousPeriodic(); }
 void Robot::TeleopPeriodic() {
     robotDrive.PostEvent(EventType::kTimeout);
     elevator.PostEvent(EventType::kTimeout);
+    climber.PostEvent(EventType::kTimeout);
 }
 
 void Robot::HandleEvent(Event event) {

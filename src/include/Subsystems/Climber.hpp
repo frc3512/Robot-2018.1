@@ -14,10 +14,13 @@
 
 class Climber : public Service {
 public:
+    void EngagePawl();
+    void LockPawl();
     void Shift();
     void HandleEvent(Event event) override;
 
 private:
+    frc::Solenoid m_pawl{kPawlPort};
     frc::DoubleSolenoid m_setupSolenoid{kSetupForwardPort, kSetupReversePort};
 
     Timer timer;
