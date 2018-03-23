@@ -60,6 +60,7 @@ void Elevator::HandleEvent(Event event) {
             }
             if (event == Event{kButtonPressed, 12}) {
                 nextState = State::kVelocity;
+                makeTransition = true;
             }
             if (event.type == EventType::kExit) {
                 SetHeightReference(GetHeight());
@@ -71,6 +72,7 @@ void Elevator::HandleEvent(Event event) {
             if (event == Event{kButtonPressed, 12}) {
                 SetHeightReference(GetHeight());
                 nextState = State::kPosition;
+                makeTransition = true;
             }
             break;
     }
