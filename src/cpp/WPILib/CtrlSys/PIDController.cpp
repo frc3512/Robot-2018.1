@@ -17,12 +17,12 @@ using namespace frc;
 /**
  * Allocate a PID object with the given constants for Kp, Ki, and Kd.
  *
- * @param Kp     the proportional coefficient
- * @param Ki     the integral coefficient
- * @param Kd     the derivative coefficient
- * @param input  the node that is used to get values
- * @param output The PIDOutput object that is set to the output value
- * @param period the loop time for doing calculations. This particularly
+ * @param Kp     The proportional coefficient.
+ * @param Ki     The integral coefficient.
+ * @param Kd     The derivative coefficient.
+ * @param input  The node that is used to get values.
+ * @param output The PIDOutput object that is set to the output value.
+ * @param period The loop time for doing calculations. This particularly
  *               effects calculations of the integral and differential terms.
  */
 PIDController::PIDController(double Kp, double Ki, double Kd, INode& input,
@@ -37,15 +37,15 @@ PIDController::PIDController(double Kp, double Ki, double Kd, INode& input,
 }
 
 /**
- * Allocate a PID object with the given constants for Kp, Ki, and Kd.
+ * Allocate a PID object with the given constants for Kp, Ki, Kd, and Kff.
  *
- * @param Kp     the proportional coefficient
- * @param Ki     the integral coefficient
- * @param Kd     the derivative coefficient
- * @param Kff    the feedforward coefficient
- * @param input  the node that is used to get values
- * @param output The PIDOutput object that is set to the output value
- * @param period the loop time for doing calculations. This particularly
+ * @param Kp     The proportional coefficient.
+ * @param Ki     The integral coefficient.
+ * @param Kd     The derivative coefficient.
+ * @param Kff    The feedforward coefficient.
+ * @param input  The node that is used to get values.
+ * @param output The PIDOutput object that is set to the output value.
+ * @param period The loop time for doing calculations. This particularly
  *               effects calculations of the integral and differential terms.
  */
 PIDController::PIDController(double Kp, double Ki, double Kd, double Kff,

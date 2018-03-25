@@ -37,15 +37,18 @@ double SumNode::GetOutput() {
   m_lastResult = m_currentResult;
   m_currentResult = sum;
 
-  if (m_continuous && std::abs(sum) > (m_maximumInput - m_minimumInput) / 2.0) {
-    if (sum > 0.0) {
-      return sum - (m_maximumInput - m_minimumInput);
-    } else {
-      return sum + (m_maximumInput - m_minimumInput);
+  if (m_continuous && m_inputRange != 0) {
+    sum = std::fmod(sum, m_inputRange);
+    if (std::abs(sum) > m_inputRange / 2.0) {
+      if (sum > 0.0) {
+        return sum - m_inputRange;
+      } else {
+        return sum + m_inputRange;
+      }
     }
-  } else {
-    return sum;
   }
+
+  return sum;
 }
 
 /**
@@ -70,8 +73,7 @@ void SumNode::SetContinuous(bool continuous) {
  */
 void SumNode::SetInputRange(double minimumInput, double maximumInput) {
   std::lock_guard<std::mutex> sync(m_mutex);
-  m_minimumInput = minimumInput;
-  m_maximumInput = maximumInput;
+  m_inputRange = maximumInput - minimumInput;
 }
 
 /**

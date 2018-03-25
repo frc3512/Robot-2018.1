@@ -47,8 +47,7 @@ class SumNode : public INode {
   double m_lastResult = 0.0;
 
   bool m_continuous = false;
-  double m_minimumInput = 0.0;
-  double m_maximumInput = 0.0;
+  double m_inputRange = 0.0;
 
   double m_tolerance = std::numeric_limits<double>::infinity();
   double m_deltaTolerance = std::numeric_limits<double>::infinity();
