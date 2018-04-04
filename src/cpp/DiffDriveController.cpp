@@ -103,6 +103,4 @@ void DiffDriveController::Debug() {
                                  "Angle FeedForward");
     Robot::liveGrapher.GraphData(m_angleRef.GetAccelerationNode().GetOutput(),
                                  "Angle Acceleration Reference");
-    std::cout << (m_leftEncoder.GetOutput() + m_rightEncoder.GetOutput()) / 2
-              << std::endl;
 }

@@ -66,6 +66,11 @@ public:
     void DeleteAllMethods();
 
     /**
+     * Returns the name of the currently selected autonomous function.
+     */
+    std::string GetAutonomousMode() const;
+
+    /**
      * Runs autonomous init function currently selected.
      */
     void ExecAutonomousInit();

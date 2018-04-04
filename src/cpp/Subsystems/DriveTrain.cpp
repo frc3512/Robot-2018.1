@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <limits>
+#include <string>
 
 #include "Robot.hpp"
 
@@ -107,8 +108,10 @@ void DriveTrain::ResetGyro() { m_gyro.Reset(); }
 void DriveTrain::CalibrateGyro() { m_gyro.Calibrate(); }
 
 void DriveTrain::Debug() {
-    std::cout << "Left Pos: " << m_leftEncoder.GetDistance()
-              << " Right Pos: " << m_rightEncoder.GetDistance() << std::endl;
+    Robot::logger.Log(LogEvent(
+        "Left Pos: " + std::to_string(m_leftEncoder.GetDistance()) +
+            " Right Pos: " + std::to_string(m_rightEncoder.GetDistance()),
+        LogEvent::VERBOSE_DEBUG));
     m_controller.Debug();
 }
 

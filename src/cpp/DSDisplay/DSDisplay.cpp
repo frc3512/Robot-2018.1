@@ -147,6 +147,10 @@ void DSDisplay::AddAutoMethod(std::string methodName,
 
 void DSDisplay::DeleteAllMethods() { m_autonModes.clear(); }
 
+std::string DSDisplay::GetAutonomousMode() const {
+    return std::get<0>(m_autonModes[m_curAutonMode]);
+}
+
 void DSDisplay::ExecAutonomousInit() {
     // Retrieves correct autonomous routine and runs it
     std::get<1>(m_autonModes[m_curAutonMode])();
