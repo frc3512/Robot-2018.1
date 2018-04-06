@@ -97,11 +97,13 @@ private:
     WPI_TalonSRX m_leftFront{kLeftDriveMasterID};
     WPI_TalonSRX m_leftRear{kLeftDriveSlaveID};
     CANTalonGroup m_leftGrbx{m_leftFront, m_leftRear};
+    Encoder m_leftEncoder{kLeftEncoderA, kLeftEncoderB};
 
     // Right gearbox used in position PID
     WPI_TalonSRX m_rightFront{kRightDriveMasterID};
     WPI_TalonSRX m_rightRear{kRightDriveSlaveID};
     CANTalonGroup m_rightGrbx{m_rightFront, m_rightRear};
+    Encoder m_rightEncoder{kRightEncoderA, kRightEncoderB};
 
     frc::DifferentialDrive m_drive{m_leftGrbx, m_rightGrbx};
 
@@ -114,11 +116,13 @@ private:
                                      kRobotTimeToMaxRotateRate};
 
     // Sensor adapters
-    frc::FuncNode m_leftEncoder{[this] { return m_leftGrbx.GetPosition(); }};
-    frc::FuncNode m_rightEncoder{[this] { return m_rightGrbx.GetPosition(); }};
+    frc::FuncNode m_leftDistance{
+        [this] { return m_leftEncoder.GetDistance(); }};
+    frc::FuncNode m_rightDistance{
+        [this] { return m_rightEncoder.GetDistance(); }};
     frc::FuncNode m_angleSensor{[this] { return m_gyro.GetAngle(); }};
 
     frc::DiffDriveController m_controller{
-        m_posRef,      m_angleRef, m_leftEncoder, m_rightEncoder,
-        m_angleSensor, true,       m_leftGrbx,    m_rightGrbx};
+        m_posRef,      m_angleRef, m_leftDistance, m_rightDistance,
+        m_angleSensor, true,       m_leftGrbx,     m_rightGrbx};
 };

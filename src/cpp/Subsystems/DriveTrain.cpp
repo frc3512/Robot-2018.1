@@ -11,13 +11,14 @@
 DriveTrain::DriveTrain() {
     m_drive.SetDeadband(kJoystickDeadband);
 
-    m_leftGrbx.SetDistancePerPulse(kLeftDpP);
-    m_rightGrbx.SetDistancePerPulse(kRightDpP);
+    m_leftEncoder.SetDistancePerPulse(kDpP);
+    m_rightEncoder.SetDistancePerPulse(kDpP);
 
     m_leftGrbx.Set(0.0);
     m_rightGrbx.Set(0.0);
 
-    m_leftGrbx.SetSensorDirection(true);
+    m_leftEncoder.SetReverseDirection(false);
+    m_rightEncoder.SetReverseDirection(true);
 
     m_controller.GetPositionPID().SetPID(kPosP, kPosI, kPosD);
     m_controller.GetAnglePID().SetPID(kAngleP, kAngleI, kAngleD);
@@ -26,17 +27,17 @@ DriveTrain::DriveTrain() {
     m_controller.SetAngleTolerance(1.0, 1.75);
 }
 
-int32_t DriveTrain::GetLeftRaw() const { return m_leftGrbx.Get(); }
+int32_t DriveTrain::GetLeftRaw() const { return m_leftEncoder.GetRaw(); }
 
-int32_t DriveTrain::GetRightRaw() const { return m_rightGrbx.Get(); }
+int32_t DriveTrain::GetRightRaw() const { return m_rightEncoder.GetRaw(); }
 
 void DriveTrain::Drive(double throttle, double turn, bool isQuickTurn) {
     m_drive.CurvatureDrive(throttle, -turn, isQuickTurn);
 }
 
 void DriveTrain::ResetEncoders() {
-    m_leftGrbx.ResetEncoder();
-    m_rightGrbx.ResetEncoder();
+    m_leftEncoder.Reset();
+    m_rightEncoder.Reset();
 }
 
 void DriveTrain::SetLeftManual(double value) { m_leftGrbx.Set(value); }
@@ -44,16 +45,16 @@ void DriveTrain::SetLeftManual(double value) { m_leftGrbx.Set(value); }
 void DriveTrain::SetRightManual(double value) { m_rightGrbx.Set(value); }
 
 double DriveTrain::GetLeftDisplacement() const {
-    return m_leftGrbx.GetPosition();
+    return m_leftEncoder.GetDistance();
 }
 
 double DriveTrain::GetRightDisplacement() const {
-    return m_rightGrbx.GetPosition();
+    return m_rightEncoder.GetDistance();
 }
 
-double DriveTrain::GetLeftRate() const { return m_leftGrbx.GetSpeed(); }
+double DriveTrain::GetLeftRate() const { return m_leftEncoder.GetRate(); }
 
-double DriveTrain::GetRightRate() const { return m_rightGrbx.GetSpeed(); }
+double DriveTrain::GetRightRate() const { return m_rightEncoder.GetRate(); }
 
 double DriveTrain::GetPosition() { return m_controller.GetPosition(); }
 
@@ -106,8 +107,8 @@ void DriveTrain::ResetGyro() { m_gyro.Reset(); }
 void DriveTrain::CalibrateGyro() { m_gyro.Calibrate(); }
 
 void DriveTrain::Debug() {
-    std::cout << "Left Pos: " << m_leftGrbx.GetPosition()
-              << " Right Pos: " << m_rightGrbx.GetPosition() << std::endl;
+    std::cout << "Left Pos: " << m_leftEncoder.GetDistance()
+              << " Right Pos: " << m_rightEncoder.GetDistance() << std::endl;
     m_controller.Debug();
 }
 

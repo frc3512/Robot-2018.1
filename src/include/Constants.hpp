@@ -35,11 +35,16 @@ constexpr int kLeftDriveSlaveID = 2;
 constexpr int kRightDriveMasterID = 3;
 constexpr int kRightDriveSlaveID = 4;
 
-// Distance per Pulse
+constexpr int kLeftEncoderA = 6;
+constexpr int kLeftEncoderB = 5;
+constexpr int kRightEncoderA = 8;
+constexpr int kRightEncoderB = 7;
+
+// Distance per Pulse that I'm too lazy to move and don't want to delete
 // constexpr double kLeftDpP = 139.0 / 6934.33; Proto
 // constexpr double kRightDpP = 139.0 / 10748.33; Proto
-constexpr double kLeftDpP = 99.0 / ((7319.0 + 7306.0 + 7305.0) / 3.0);
-constexpr double kRightDpP = 99.0 / ((7440.0 + 7338.0 + 7400.0) / 3.0);
+// constexpr double kLeftDpP = 102.0 / ((7710.0 + 7680.0 + 7735.0) / 3.0);
+// constexpr double kRightDpP = 102.0 / ((7668.0 + 7594.0 + 7548.0) / 3.0);
 
 // DriveTrain position PID
 constexpr double kPosP = 0.07;  // .06
@@ -71,6 +76,12 @@ constexpr double kDegreesToRadians = 3.1415926535897932 / 180.0;
 constexpr double kRobotLength = 37.0;  // Approximate
 constexpr double kRobotWidth = 33.0;   // Approximate
 constexpr double kMaxControlVoltage = 12;
+constexpr double kPi = 3.1415926537897932;
+constexpr double kWheelRadius = 2.9375;
+constexpr double kDriveGearRatio = 1.0 / 1.0;
+
+// Distance per Pulse
+constexpr double kDpP = (2.0 * kPi * kWheelRadius) * kDriveGearRatio / 2048.0;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
