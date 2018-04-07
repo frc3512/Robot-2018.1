@@ -1,8 +1,0 @@
-PBAR EV_POS_DISP,EV_POS left "Elevator Height: 0" "Elevator Height: %s"
-TEXT ENCODER_LEFT left "Encoder Left: 0" "Encoder Left: %s"
-TEXT ENCODER_RIGHT left "Encoder Right: 0" "Encoder Right: %s"
-TEXT GYRO_VAL left "Gyro: 0\u00b0" "Gyro: %s\u00b0"
-
-STATUSLIGHT PAWL_ENGAGED right "Pawl Engaged" "Pawl Engaged"
-STATUSLIGHT LOW_GEAR right "High Gear" "High Gear"
-TEXT VERSION right "Version: 0" "Version: %s"

@@ -10,18 +10,12 @@ void Climber::EngagePawl() { m_pawl.Set(true); }
 
 void Climber::LockPawl() { m_pawl.Set(false); }
 
-bool Climber::GetPawl() const { return m_pawl.Get(); }
-
 void Climber::Shift() {
     if (m_setupSolenoid.Get() == DoubleSolenoid::kForward) {
         m_setupSolenoid.Set(DoubleSolenoid::kReverse);  // Low gear
     } else {
         m_setupSolenoid.Set(DoubleSolenoid::kForward);  // High gear
     }
-}
-
-bool Climber::IsLowGear() const {
-    return m_setupSolenoid.Get() == DoubleSolenoid::kForward;
 }
 
 void Climber::HandleEvent(Event event) {

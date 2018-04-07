@@ -52,8 +52,7 @@ Robot::Robot() {
         "Right Position Double",
         std::bind(&AutoRightDouble::Reset, &rightDouble),
         std::bind(&AutoRightDouble::PostEvent, &rightDouble, kTimeout));
-
-    version = GetFileCreationTime("/home/lvuser/FRCUserProgram");
+    server.SetSource(camera1);
 
     std::array<Waypoint, 3> waypoints;
     waypoints[0] = {-4, -1, d2r(45)};
@@ -68,11 +67,6 @@ Robot::Robot() {
 
     // camera2.SetResolution(640, 480);
     // camera2.SetFPS(30);
-
-    // camera1Sink.SetSource(camera1);
-    // camera2Sink.SetSource(camera2);
-
-    server.SetSource(camera1);
 }
 
 void Robot::DisabledInit() {
@@ -140,22 +134,13 @@ void Robot::TeleopPeriodic() {
 }
 
 void Robot::HandleEvent(Event event) {
-    // Camera Switching
-    /* if (event == Event{kButtonPressed, 11}) {
+    /*if (event == Event{kButtonPressed, 11}) {
         if (server.GetSource() == camera1) {
             server.SetSource(camera2);
         } else {
             server.SetSource(camera1);
         }
-    } */
-}
-
-std::string Robot::GetFileCreationTime(std::string filePath) {
-    struct stat attrib;
-    stat(filePath.c_str(), &attrib);
-    std::string ret(21, '\0');
-    std::strftime(&ret[0], 21, "%F %R:%S", std::localtime(&(attrib.st_ctime)));
-    return ret;
+    }*/
 }
 
 void Robot::DS_PrintOut() {
@@ -171,25 +156,13 @@ void Robot::DS_PrintOut() {
         prevVel = curVel;
         liveGrapher.ResetInterval();
         */
-    // robotDrive.Debug();
+    robotDrive.Debug();
     // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
     // robotDrive.GetRightDisplacement() << std::endl;
-    // std::cout << robotDrive.GetAngle() << std::endl;
-    // std::cout << elevator.GetHeight() << std::endl;
+    std::cout << robotDrive.GetAngle() << std::endl;
+    std::cout << elevator.GetHeight() << std::endl;
     // std::cout << "Version 1.5" << std::endl; // To ensure a
     // successful(butchered) upload
-    dsDisplay.Clear();
-
-    dsDisplay.AddData("ENCODER_LEFT", robotDrive.GetLeftDisplacement());
-    dsDisplay.AddData("ENCODER_RIGHT", robotDrive.GetRightDisplacement());
-    dsDisplay.AddData("GYRO_VAL", robotDrive.GetAngle());
-    dsDisplay.AddData("PAWL_ENGAGED",
-                      climber.GetPawl());  // todo: add the function
-    dsDisplay.AddData("LOW_GEAR",
-                      climber.IsLowGear());  // todo: add the function
-    dsDisplay.AddData("VERSION", version);
-
-    dsDisplay.SendToDS();
 }
 
 START_ROBOT_CLASS(Robot)
