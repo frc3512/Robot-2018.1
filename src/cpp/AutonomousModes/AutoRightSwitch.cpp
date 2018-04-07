@@ -2,6 +2,8 @@
 
 #include "AutonomousModes/AutoRightSwitch.hpp"
 
+#include <iostream>
+
 #include <DriverStation.h>
 
 #include "Robot.hpp"
@@ -20,8 +22,11 @@ void AutoRightSwitch::HandleEvent(Event event) {
 
             if (platePosition[kFriendlySwitch] == 'R') {
                 Robot::robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
+            } else if (platePosition[kFriendlySwitch] == 'L') {
+                Robot::robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0 -
+                                                  12.0);
             } else {
-                Robot::robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0);
+                std::cout << "THIS IS TERRIBLE" << std::endl;
             }
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
@@ -39,7 +44,7 @@ void AutoRightSwitch::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetGyro();
-                Robot::robotDrive.SetAngleGoal(90.0);
+                Robot::robotDrive.SetAngleGoal(-90.0);
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
                     state = State::kFinalRotate;
@@ -64,7 +69,7 @@ void AutoRightSwitch::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetGyro();
-                Robot::robotDrive.SetAngleGoal(90.0);
+                Robot::robotDrive.SetAngleGoal(-90.0);
                 autoTimer.Reset();
 
                 state = State::kFinalRotate;
