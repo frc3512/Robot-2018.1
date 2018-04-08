@@ -21,7 +21,7 @@ void AutoLeftScale::HandleEvent(Event event) {
             if (platePosition[kScale] == 'L') {
                 Robot::robotDrive.SetPositionGoal(324.0 - kRobotLength / 2.0);
             } else {
-                Robot::robotDrive.SetPositionGoal(236.5 - kRobotLength / 2.0);
+                Robot::robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0);
             }
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
@@ -52,7 +52,7 @@ void AutoLeftScale::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
-                Robot::robotDrive.SetPositionGoal(199.0);
+                Robot::robotDrive.SetPositionGoal(199.0 + 18.0 + 36.0 + 18.0);
                 autoTimer.Reset();
 
                 state = State::kRightForward;
@@ -76,10 +76,10 @@ void AutoLeftScale::HandleEvent(Event event) {
                 Robot::robotDrive.ResetEncoders();
                 autoTimer.Reset();
                 if (platePosition[kScale] == 'L') {
-                    Robot::robotDrive.SetPositionGoal(24.0 + 6.0 -
+                    Robot::robotDrive.SetPositionGoal(24.0 + 6.0 - 6.0 + 24.0 -
                                                       kRobotLength / 2.0);
                 } else {
-                    Robot::robotDrive.SetPositionGoal(56.0 + 9.0 + 12.0 -
+                    Robot::robotDrive.SetPositionGoal(56.0 + 9.0 + 18.0 -
                                                       kRobotLength / 2.0);
                 }
 
@@ -89,8 +89,8 @@ void AutoLeftScale::HandleEvent(Event event) {
         case State::kFinalForward:
             if (Robot::robotDrive.AtPositionGoal() ||
                 autoTimer.Get() >
-                    Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                Robot::intake.Open();
+                    Robot::robotDrive.PositionProfileTimeTotal() + 0.1) {
+                Robot::intake.AutoOuttake();
 
                 Robot::robotDrive.StopClosedLoop();
                 Robot::elevator.StopClosedLoop();

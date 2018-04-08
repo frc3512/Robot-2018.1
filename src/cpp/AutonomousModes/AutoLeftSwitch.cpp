@@ -53,7 +53,7 @@ void AutoLeftSwitch::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
-                Robot::robotDrive.SetPositionGoal(190.0);
+                Robot::robotDrive.SetPositionGoal(190.0 - 50.0);
                 autoTimer.Reset();
 
                 state = State::kLeftForward;
@@ -64,7 +64,7 @@ void AutoLeftSwitch::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetGyro();
-                Robot::robotDrive.SetAngleGoal(90.0);
+                Robot::robotDrive.SetAngleGoal(90.0 - 50.0);
                 autoTimer.Reset();
 
                 state = State::kFinalRotate;
@@ -79,8 +79,8 @@ void AutoLeftSwitch::HandleEvent(Event event) {
                     Robot::robotDrive.SetPositionGoal(
                         65.0 - kRobotLength / 2.0 - kRobotWidth / 2.0);
                 } else {
-                    Robot::robotDrive.SetPositionGoal(36.0 - kRobotLength /
-                                                                 2.0);  // 28.0
+                    Robot::robotDrive.SetPositionGoal(
+                        36.0 + 24.0 - kRobotLength / 2.0);  // 28.0
                 }
                 autoTimer.Reset();
 
@@ -90,7 +90,7 @@ void AutoLeftSwitch::HandleEvent(Event event) {
         case State::kFinalForward:
             if (Robot::robotDrive.AtPositionGoal() ||
                 autoTimer.Get() >
-                    Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
+                    Robot::robotDrive.PositionProfileTimeTotal() + 0.1) {
                 Robot::intake.AutoOuttake();
                 Robot::robotDrive.StopClosedLoop();
                 Robot::elevator.StopClosedLoop();

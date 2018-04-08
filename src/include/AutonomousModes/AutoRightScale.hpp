@@ -23,6 +23,8 @@ private:
         kLeftForward,
         kFinalRotate,
         kFinalForward,
+        kPrepReverse,
+        kPrepRotate,
         kIdle
     };
 

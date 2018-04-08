@@ -89,10 +89,10 @@ private:
                kMaxControlVoltage / RobotController::GetInputVoltage();
     }};
     FuncNode m_angleFeedForward{[&] {
-        return (kVAngle * m_angleRef.GetVelocityNode().GetOutput() *
-                    kDegreesToRadians * kWheelbaseWidth / 2.0 +
-                kAAngle * m_angleRef.GetAccelerationNode().GetOutput() *
-                    kDegreesToRadians * kWheelbaseWidth / 2.0) *
+        return deg2rad(kVAngle * m_angleRef.GetVelocityNode().GetOutput() *
+                           kWheelbaseWidth / 2.0 +
+                       kAAngle * m_angleRef.GetAccelerationNode().GetOutput() *
+                           kWheelbaseWidth / 2.0) *
                kMaxControlVoltage / RobotController::GetInputVoltage();
     }};
 
