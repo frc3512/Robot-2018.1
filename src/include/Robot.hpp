@@ -22,9 +22,11 @@
 #include "AutonomousModes/AutoCenterScale.hpp"
 #include "AutonomousModes/AutoCenterSwitch.hpp"
 #include "AutonomousModes/AutoLeftDouble.hpp"
+#include "AutonomousModes/AutoLeftPriority.hpp"
 #include "AutonomousModes/AutoLeftScale.hpp"
 #include "AutonomousModes/AutoLeftSwitch.hpp"
 #include "AutonomousModes/AutoRightDouble.hpp"
+#include "AutonomousModes/AutoRightPriority.hpp"
 #include "AutonomousModes/AutoRightScale.hpp"
 #include "AutonomousModes/AutoRightSwitch.hpp"
 #include "Constants.hpp"
@@ -90,9 +92,11 @@ private:
     AutoCenterScale centerScale;
     AutoCenterSwitch centerSwitch;
     AutoLeftDouble leftDouble;
+    AutoLeftPriority leftPriority;
     AutoLeftScale leftScale;
     AutoLeftSwitch leftSwitch;
     AutoRightDouble rightDouble;
+    AutoRightPriority rightPriority;
     AutoRightScale rightScale;
     AutoRightSwitch rightSwitch;
 

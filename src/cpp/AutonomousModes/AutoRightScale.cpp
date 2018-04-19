@@ -75,8 +75,9 @@ void AutoRightScale::HandleEvent(Event event) {
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
                 if (platePosition[kScale] == 'R') {
-                    Robot::robotDrive.SetPositionGoal(24.0 + 24.0 -
-                                                      kRobotLength / 2.0);
+                    /*Robot::robotDrive.SetPositionGoal(24.0 + 24.0 -
+                                                      kRobotLength / 2.0);*/
+                    Robot::intake.AutoOuttake();
                 } else {
                     Robot::robotDrive.SetPositionGoal(56.0 + 9.0 + 12.0 + 36.0 -
                                                       kRobotLength / 2.0);
@@ -90,9 +91,7 @@ void AutoRightScale::HandleEvent(Event event) {
             if (Robot::robotDrive.AtPositionGoal() ||
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                if (platePosition[kScale] == 'R') {
-                    Robot::intake.AutoOuttake();
-                } else {
+                if (platePosition[kScale] == 'L') {
                     Robot::intake.Open();
                 }
 

@@ -41,6 +41,14 @@ Robot::Robot() {
         std::bind(&AutoRightSwitch::Reset, &rightSwitch),
         std::bind(&AutoRightSwitch::PostEvent, &rightSwitch, kTimeout));
     dsDisplay.AddAutoMethod(
+        "Left Position Priority",
+        std::bind(&AutoLeftPriority::Reset, &leftPriority),
+        std::bind(&AutoLeftPriority::PostEvent, &leftPriority, kTimeout));
+    dsDisplay.AddAutoMethod(
+        "Right Position Priority",
+        std::bind(&AutoRightPriority::Reset, &rightPriority),
+        std::bind(&AutoRightPriority::PostEvent, &rightPriority, kTimeout));
+    dsDisplay.AddAutoMethod(
         "Left Position Scale", std::bind(&AutoLeftScale::Reset, &leftScale),
         std::bind(&AutoLeftScale::PostEvent, &leftScale, kTimeout));
     dsDisplay.AddAutoMethod(
