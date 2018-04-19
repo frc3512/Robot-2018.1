@@ -75,7 +75,7 @@ Robot::Robot() {
     //    std::tie(trajectory, leftTrajectory, rightTrajectory) =
     //        GenerateTrajectory(waypoints);
 
-    camera1.SetResolution(640, 480);
+    camera1.SetResolution(320, 240);
     camera1.SetFPS(30);
 
     // camera2.SetResolution(640, 480);

@@ -20,13 +20,13 @@ void AutoLeftScale::HandleEvent(Event event) {
 
             if (platePosition[kScale] == 'L') {
                 Robot::robotDrive.SetPositionGoal(324.0 - kRobotLength / 2.0);
+                Robot::elevator.SetHeightReference(kScaleHeight);
             } else {
                 Robot::robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0);
             }
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
 
-            Robot::elevator.SetHeightReference(kScaleHeight);
             Robot::elevator.StartClosedLoop();
 
             autoTimer.Reset();
@@ -52,6 +52,7 @@ void AutoLeftScale::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
+                Robot::elevator.SetHeightReference(kScaleHeight);
                 Robot::robotDrive.SetPositionGoal(199.0 + 18.0 + 36.0 + 18.0);
                 autoTimer.Reset();
 
