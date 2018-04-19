@@ -38,8 +38,10 @@ void AutoCenterSwitch::HandleEvent(Event event) {
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    Robot::robotDrive.SetAngleGoal(rad2deg(std::atan2(
-                        58.44 + kExchangeOffset, 140 - kRobotWidth)));
+                    Robot::robotDrive.SetAngleGoal(
+                        rad2deg(std::atan2(58.44 + kExchangeOffset,
+                                           140 - kRobotWidth)) -
+                        10);
                 } else {
                     Robot::robotDrive.SetAngleGoal(
                         rad2deg(std::atan2(-76.44 - kExchangeOffset,
@@ -115,6 +117,7 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kIdle:
+            Robot::robotDrive.StopClosedLoop();
             break;
     }
 }

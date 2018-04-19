@@ -20,13 +20,13 @@ void AutoRightScale::HandleEvent(Event event) {
 
             if (platePosition[kScale] == 'R') {
                 Robot::robotDrive.SetPositionGoal(324.0 - kRobotLength / 2.0);
+                Robot::elevator.SetHeightReference(kScaleHeight);
             } else {
                 Robot::robotDrive.SetPositionGoal(236.5 - kRobotLength / 2.0);
             }
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
 
-            Robot::elevator.SetHeightReference(kScaleHeight);
             Robot::elevator.StartClosedLoop();
 
             autoTimer.Reset();
@@ -53,6 +53,7 @@ void AutoRightScale::HandleEvent(Event event) {
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
                 Robot::robotDrive.SetPositionGoal(199.0 + 45.0 - 18.0);
+                Robot::elevator.SetHeightReference(kScaleHeight);
                 autoTimer.Reset();
 
                 state = State::kLeftForward;
@@ -77,14 +78,16 @@ void AutoRightScale::HandleEvent(Event event) {
                 if (platePosition[kScale] == 'R') {
                     /*Robot::robotDrive.SetPositionGoal(24.0 + 24.0 -
                                                       kRobotLength / 2.0);*/
+                    Robot::robotDrive.SetPositionGoal(0.0);
                     Robot::intake.AutoOuttake();
+                    state = State::kIdle;
                 } else {
                     Robot::robotDrive.SetPositionGoal(56.0 + 9.0 + 12.0 + 36.0 -
                                                       kRobotLength / 2.0);
+                    state = State::kFinalForward;
                 }
 
                 autoTimer.Reset();
-                state = State::kFinalForward;
             }
             break;
         case State::kFinalForward:
@@ -123,6 +126,7 @@ void AutoRightScale::HandleEvent(Event event) {
                 state = State::kIdle;
             }
         case State::kIdle:
+            Robot::robotDrive.StopClosedLoop();
             break;
     }
 }
