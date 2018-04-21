@@ -47,7 +47,7 @@ void AutoRightPriority::HandleEvent(Event event) {
             if (Robot::robotDrive.AtPositionGoal() ||
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                Robot::robotDrive.SetAngleGoal(-90.0);
+                Robot::robotDrive.SetAngleGoal(-88.0);
                 autoTimer.Reset();
                 if (platePosition[kScale] == 'R') {
                     state = State::kFinalRotate;
@@ -87,23 +87,20 @@ void AutoRightPriority::HandleEvent(Event event) {
                 if (platePosition[kScale] == 'R') {
                     /*Robot::robotDrive.SetPositionGoal(24.0 + 24.0 -
                                                       kRobotLength / 2.0);*/
-                    Robot::intake.AutoOuttake();
-                    state = State::kIdle;
+                    Robot::robotDrive.SetPositionGoal(10.0);
                 } else {
                     Robot::robotDrive.SetPositionGoal(40.0 - kRobotWidth / 2.0 -
                                                       kRobotLength / 2.0);
-                    state = State::kFinalForward;
                 }
                 autoTimer.Reset();
+                state = State::kFinalForward;
             }
             break;
         case State::kFinalForward:
             if (Robot::robotDrive.AtPositionGoal() ||
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                if (platePosition[kScale] == 'L') {
-                    Robot::intake.AutoOuttake();
-                }
+                Robot::intake.AutoOuttake();
                 Robot::robotDrive.StopClosedLoop();
                 Robot::elevator.StopClosedLoop();
                 autoTimer.Reset();
@@ -139,7 +136,7 @@ void AutoRightPriority::HandleEvent(Event event) {
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
                 Robot::robotDrive.SetPositionGoal(
-                    65.0 + 18.0 - kRobotLength / 2.0 - kRobotWidth / 2.0);
+                    65.0 + 12.0 - kRobotLength / 2.0 - kRobotWidth / 2.0);
                 autoTimer.Reset();
 
                 state = State::kAutoSwitchForward;

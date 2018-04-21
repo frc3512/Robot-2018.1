@@ -65,7 +65,7 @@ Robot::Robot() {
         "Right Position Double",
         std::bind(&AutoRightDouble::Reset, &rightDouble),
         std::bind(&AutoRightDouble::PostEvent, &rightDouble, kTimeout));
-    server.SetSource(camera1);
+    // server.SetSource(camera1);
 
     std::array<Waypoint, 3> waypoints;
     waypoints[0] = {-4, -1, d2r(45)};
@@ -74,9 +74,9 @@ Robot::Robot() {
 
     //    std::tie(trajectory, leftTrajectory, rightTrajectory) =
     //        GenerateTrajectory(waypoints);
-
-    camera1.SetResolution(320, 240);
-    camera1.SetFPS(30);
+    // camera1.SetVideoMode(PixelFormat.kYUYV, 320, 240, 30)
+    // camera1.SetResolution(160, 120);
+    // camera1.SetFPS(15);
 
     // camera2.SetResolution(640, 480);
     // camera2.SetFPS(30);
@@ -122,8 +122,6 @@ void Robot::TeleopInit() {
 void Robot::TestInit() {}
 
 void Robot::RobotPeriodic() {
-    DS_PrintOut();
-
     if (!elevator.GetBottomHallEffect()) {
         elevator.ResetEncoder();
     }
@@ -160,10 +158,18 @@ void Robot::AutonomousPeriodic() {
                      " Angle: " + std::to_string(robotDrive.GetAngle()) +
                      " At Goal?: " + std::to_string(robotDrive.AtAngleGoal()),
                  LogEvent::VERBOSE_DEBUG));
+    DS_PrintOut();
 }
 
 void Robot::TeleopPeriodic() {
-    robotDrive.PostEvent(EventType::kTimeout);
+    if (driveStick1.GetRawButton(1)) {
+        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
+                         driveStick2.GetRawButton(2));
+    } else {
+        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
+                         driveStick2.GetRawButton(2));
+    }
+    // robotDrive.PostEvent(EventType::kTimeout);
     elevator.PostEvent(EventType::kTimeout);
     climber.PostEvent(EventType::kTimeout);
 }

@@ -146,7 +146,7 @@ constexpr double kGravityFeedForward = -0.01;
 constexpr double kFloorHeight = 73.0;  // Makes sure it hits bottom
 constexpr double kSecondBlockHeight = -10.0;
 constexpr double kSwitchHeight = -36.0;
-constexpr double kScaleHeight = -71.5; // -67.0
+constexpr double kScaleHeight = -71.5;  // -67.0
 constexpr double kClimbHeight = -71.5;  // 74.0
 
 /*

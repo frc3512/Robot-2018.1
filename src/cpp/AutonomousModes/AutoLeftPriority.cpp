@@ -159,6 +159,7 @@ void AutoLeftPriority::HandleEvent(Event event) {
             }
             break;
         case State::kIdle:
+            Robot::robotDrive.StopClosedLoop();
             break;
     }
 }

@@ -65,7 +65,7 @@ void AutoRightSwitch::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetGyro();
-                Robot::robotDrive.SetAngleGoal(-90.0 + 40.0);
+                Robot::robotDrive.SetAngleGoal(-90.0 + 35.0);
                 autoTimer.Reset();
 
                 state = State::kFinalRotate;

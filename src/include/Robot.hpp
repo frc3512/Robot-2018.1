@@ -108,10 +108,10 @@ private:
     LogConsoleSink consoleSink;
 
     // Camera
-    cs::UsbCamera camera1{"Camera 1", 0};
+    // cs::UsbCamera camera1{"Camera 1", 0};
     // cs::UsbCamera camera2{"Camera 2", 1};
 
-    cs::MjpegServer server{"Server", kMjpegServerPort};
+    // cs::MjpegServer server{"Server", kMjpegServerPort};
 };
 
 #include "Robot.inc"

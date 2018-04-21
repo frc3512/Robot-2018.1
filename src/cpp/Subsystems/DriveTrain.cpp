@@ -115,12 +115,4 @@ void DriveTrain::Debug() {
     m_controller.Debug();
 }
 
-void DriveTrain::HandleEvent(Event event) {
-    if (Robot::driveStick1.GetRawButton(1)) {
-        Drive(Robot::driveStick1.GetY() * 0.5, Robot::driveStick2.GetX() * 0.5,
-              Robot::driveStick2.GetRawButton(2));
-    } else {
-        Drive(Robot::driveStick1.GetY(), Robot::driveStick2.GetX(),
-              Robot::driveStick2.GetRawButton(2));
-    }
-}
+void DriveTrain::HandleEvent(Event event) {}
