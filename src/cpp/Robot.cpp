@@ -7,10 +7,6 @@
 
 #include <DriverStation.h>
 
-std::unique_ptr<Segment[]> Robot::trajectory;
-std::unique_ptr<Segment[]> Robot::leftTrajectory;
-std::unique_ptr<Segment[]> Robot::rightTrajectory;
-
 DriveTrain Robot::robotDrive;
 Intake Robot::intake;
 Elevator Robot::elevator;
@@ -67,13 +63,6 @@ Robot::Robot() {
         std::bind(&AutoRightDouble::PostEvent, &rightDouble, kTimeout));
     // server.SetSource(camera1);
 
-    std::array<Waypoint, 3> waypoints;
-    waypoints[0] = {-4, -1, d2r(45)};
-    waypoints[1] = {-1, 2, 0};
-    waypoints[2] = {2, 4, 0};
-
-    //    std::tie(trajectory, leftTrajectory, rightTrajectory) =
-    //        GenerateTrajectory(waypoints);
     // camera1.SetVideoMode(PixelFormat.kYUYV, 320, 240, 30)
     camera1.SetResolution(160, 120);
     camera1.SetFPS(15);
