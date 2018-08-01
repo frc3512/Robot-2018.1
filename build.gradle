@@ -1,7 +1,7 @@
 plugins {
     id "cpp"
-    id "visual-studio"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.02.17"
+    id "edu.wpi.first.GradleRIO" version "2019.0.0-alpha-3"
+    id "edu.wpi.first.GradleVsCode" version "0.3.0"
 }
 
 def TEAM = 3512
@@ -10,44 +10,43 @@ def TEAM = 3512
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
     targets {
-        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
-            team = TEAM
+        target("roborio", edu.wpi.first.gradlerio.frc.RoboRIO) {
+            team = getTeamOrDefault(TEAM)
         }
     }
     artifacts {
-        artifact('frcNative', jaci.openrio.gradle.frc.FRCNativeArtifact) {
+        artifact('frcCpp', edu.wpi.first.gradlerio.frc.FRCNativeArtifact) {
             targets << "roborio"
             component = 'FRCUserProgram'
+            // Debug can be overridden by command line, for use with VSCode
+            debug = getDebugOrDefault(false)
         }
     }
 }
 
-// Defining my C++ project. In this case, it is called 'FRCUserProgram',
-// and is of the language C++.
 model {
     components {
         FRCUserProgram(NativeExecutableSpec) {
-            // Target the RoboRIO (arm-frc-linux-gnueabihf)
             targetPlatform 'roborio'
+
             sources.cpp {
-                // This is where our source files are located (src/cpp for C++ files, src/include for headers)
                 source {
                     srcDirs = ['src/cpp']
                     include '**/*.cpp'
                 }
-                exportedHeaders{
+                exportedHeaders {
                     srcDirs = ['src/cpp', 'src/include', 'src/include/WPILib']
                     include '**/*.hpp', '**/*.h'
                 }
-
-                // Define my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX) and NavX.
-                lib library: "wpilib"
-                lib library: "ctre"
             }
+
+            // Define my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
+            // and NavX.
+            useLibrary(it, "wpilib", "ctre")
         }
     }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.5'
+    gradleVersion = '4.9'
 }
