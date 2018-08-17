@@ -1,8 +1,5 @@
 cHeaderFileInclude {
   \.h$
-}
-
-cppHeaderFileInclude {
   \.hpp$
   \.inl$
   \.inc$
@@ -21,4 +18,8 @@ includeOtherLibs {
   CtrlSys/
   cscore\.h$
   ctre/
+}
+
+generatedFileExclue {
+  Eigen/
 }
