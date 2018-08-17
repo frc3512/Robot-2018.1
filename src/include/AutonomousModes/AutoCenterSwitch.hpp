@@ -10,7 +10,7 @@ class AutoCenterSwitch : public Service {
 public:
     AutoCenterSwitch();
 
-    void Reset();
+    void Reset(void);
 
     void HandleEvent(Event event) override;
 

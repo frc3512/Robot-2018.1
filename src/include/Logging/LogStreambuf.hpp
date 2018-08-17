@@ -29,7 +29,7 @@ public:
      * (message, verbosity level, etc...) and calls the given logEvent function
      * of the given Logger class instance.
      */
-    void Sync();
+    void Sync(void);
 
     /**
      * The SetLevel() function is called by LogStream::SetLevel().

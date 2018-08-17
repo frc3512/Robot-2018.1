@@ -57,7 +57,7 @@ public:
      *
      * @return The verbosity level of the event.
      */
-    VerbosityLevel GetVerbosityLevel();
+    VerbosityLevel GetVerbosityLevel(void);
 
     /**
      * Retrieve the time the event occurred as a time in seconds since the
@@ -65,7 +65,7 @@ public:
      *
      * @return A normal POSIX format time.
      */
-    std::time_t GetAbsoluteTimestamp();
+    std::time_t GetAbsoluteTimestamp(void);
 
     /**
      * Retrieve the time the event occurred as a time in seconds since the
@@ -78,14 +78,14 @@ public:
      * @return The time in seconds since the initialization of the Logger class
      *         instance.
      */
-    std::time_t GetRelativeTimestamp();
+    std::time_t GetRelativeTimestamp(void);
 
     /**
      * Retrieves the string describing the event.
      *
      * @return The string describing the event.
      */
-    std::string GetData();
+    std::string GetData(void);
 
     /**
      * Formats the information contained in the event in a printable string.
@@ -101,7 +101,7 @@ public:
      * \ref VerbosityLevelChar()
      * \ref GetData()
      */
-    std::string ToFormattedString();
+    std::string ToFormattedString(void);
 
     /**
      * Returns a textual representation of the specified verbosity levels.

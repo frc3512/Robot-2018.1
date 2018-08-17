@@ -56,7 +56,7 @@ public:
      *
      * @see bind
      */
-    void unbind();
+    void unbind(void);
 
     /**
      * Send raw data to a remote peer
@@ -139,13 +139,13 @@ private:
     bool m_isBlocking{true};  // Current blocking mode of the socket
 
     // Create the internal representation of the socket
-    void create();
+    void create(void);
 
     // Create the internal representation of the socket from a socket handle
     void create(int handle);
 
     // Close the socket gracefully
-    void close();
+    void close(void);
 
     /* Create an internal sockaddr_in address
      * Params:
@@ -156,5 +156,5 @@ private:
     static sockaddr_in createAddress(uint32_t address, uint16_t port);
 
     // Returns status corresponding to the last socket error
-    static Status getErrorStatus();
+    static Status getErrorStatus(void);
 };

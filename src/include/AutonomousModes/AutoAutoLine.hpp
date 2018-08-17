@@ -10,7 +10,7 @@ class AutoAutoLine : public Service {
 public:
     AutoAutoLine();
 
-    void Reset();
+    void Reset(void);
 
     void HandleEvent(Event event) override;
 

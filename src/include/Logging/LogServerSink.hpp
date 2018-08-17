@@ -28,8 +28,8 @@ public:
 
 private:
     int TcpListen(uint16_t port);
-    int AcceptConnectionBlocking();
-    int AcceptConnectionNonBlocking();
+    int AcceptConnectionBlocking(void);
+    int AcceptConnectionNonBlocking(void);
 
     int m_listensd = -1;
     std::list<int> m_connections;

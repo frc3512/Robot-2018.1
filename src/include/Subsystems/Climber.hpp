@@ -14,9 +14,9 @@
 
 class Climber : public Service {
 public:
-    void EngagePawl();
-    void LockPawl();
-    void Shift();
+    void EngagePawl(void);
+    void LockPawl(void);
+    void Shift(void);
     void HandleEvent(Event event) override;
 
 private:

@@ -10,7 +10,7 @@ class AutoLeftSwitch : public Service {
 public:
     AutoLeftSwitch();
 
-    void Reset();
+    void Reset(void);
 
     void HandleEvent(Event event) override;
 

@@ -26,14 +26,14 @@ public:
     void SetVelocity(double velocity);
 
     // Set encoder distance to 0
-    void ResetEncoder();
+    void ResetEncoder(void);
 
     // Starts and stops PID loops
-    void StartClosedLoop();
-    void StopClosedLoop();
+    void StartClosedLoop(void);
+    void StopClosedLoop(void);
 
     // Gets encoder values
-    double GetHeight();
+    double GetHeight(void);
 
     // Sets encoder PID setpoints
     void SetHeightReference(double height);
@@ -45,7 +45,7 @@ public:
     bool HeightAtReference() const;
 
     // Gets whether the Hall Effect sensor has triggered
-    bool GetBottomHallEffect();
+    bool GetBottomHallEffect(void);
 
     void HandleEvent(Event event) override;
 

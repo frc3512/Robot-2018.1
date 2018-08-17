@@ -35,7 +35,7 @@ public:
     void Drive(double throttle, double turn, bool isQuickTurn = false);
 
     // Set encoder distances to 0
-    void ResetEncoders();
+    void ResetEncoders(void);
 
     // Directly set wheel speeds [0..1] (see GearBox::SetManual(double))
     void SetLeftManual(double value);
@@ -50,25 +50,25 @@ public:
     double GetRightRate() const;
 
     // Returns robot's current position
-    double GetPosition();
+    double GetPosition(void);
 
     // Return gyro's angle
-    double GetAngle();
+    double GetAngle(void);
 
     // Return gyro's rate
     double GetAngularRate() const;
 
     // Starts and stops PID loops
-    void StartClosedLoop();
-    void StopClosedLoop();
+    void StartClosedLoop(void);
+    void StopClosedLoop(void);
 
     // Sets encoder PID setpoints
     void SetPositionGoal(double position);
     void SetAngleGoal(double angle);
 
     // Returns encoder PID loop references
-    double GetPosReference();
-    double GetAngleReference();
+    double GetPosReference(void);
+    double GetAngleReference(void);
 
     // Returns final goals for PID loops
     double GetPositionGoal() const;
@@ -82,13 +82,13 @@ public:
     double AngleProfileTimeTotal() const;
 
     // Resets gyro
-    void ResetGyro();
+    void ResetGyro(void);
 
     // Calibrates gyro
-    void CalibrateGyro();
+    void CalibrateGyro(void);
 
     // Sends print statements for debugging purposes
-    void Debug();
+    void Debug(void);
 
     void HandleEvent(Event event) override;
 

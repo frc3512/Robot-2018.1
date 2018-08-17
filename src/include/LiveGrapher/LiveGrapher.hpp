@@ -63,12 +63,12 @@ public:
     /* Returns true if the time between the last data transmission is greater
      * than the sending interval time
      */
-    bool HasIntervalPassed();
+    bool HasIntervalPassed(void);
 
     /* Resets time interval passed since last data transmission (makes
      * hasIntervalPassed() return false)
      */
-    void ResetInterval();
+    void ResetInterval(void);
 
 private:
     // Last time data was graphed
@@ -103,7 +103,7 @@ private:
     static inline uint8_t packetID(uint8_t id);
     static inline uint8_t graphID(uint8_t id);
 
-    void socket_threadmain();
+    void socket_threadmain(void);
 
     static int socket_listen(int port, uint32_t s_addr);
     static int socket_accept(int listenfd);

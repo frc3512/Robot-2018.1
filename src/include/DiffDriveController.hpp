@@ -55,8 +55,8 @@ public:
     PIDNode& GetPositionPID();
     PIDNode& GetAnglePID();
 
-    double GetPosition();
-    double GetAngle();
+    double GetPosition(void);
+    double GetAngle(void);
 
     void SetPositionTolerance(double tolerance, double deltaTolerance);
     void SetAngleTolerance(double tolerance, double deltaTolerance);
@@ -64,7 +64,7 @@ public:
     bool AtPosition() const;
     bool AtAngle() const;
 
-    void Debug();
+    void Debug(void);
 
 private:
     // Control system references
