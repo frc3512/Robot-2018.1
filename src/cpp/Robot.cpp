@@ -61,6 +61,9 @@ Robot::Robot() {
         "Right Position Double",
         std::bind(&AutoRightDouble::Reset, &rightDouble),
         std::bind(&AutoRightDouble::PostEvent, &rightDouble, kTimeout));
+    
+    version = GetFileCreationTime("/home/lvuser/FRCUserProgram");
+
     // server.SetSource(camera1);
 
     // camera1.SetVideoMode(PixelFormat.kYUYV, 320, 240, 30)
@@ -74,6 +77,8 @@ Robot::Robot() {
     consoleSink.SetVerbosityLevels(LogEvent::VERBOSE_WARN);
     logger.AddLogSink(fileSink);
     logger.AddLogSink(consoleSink);
+
+    DS_PrintOut();
 }
 
 void Robot::DisabledInit() {
@@ -173,6 +178,55 @@ void Robot::HandleEvent(Event event) {
     }*/
 }
 
+
+std::string Robot::GetFileCreationTime(std::string filePath) {
+    struct stat attrib;
+    stat(filePath.c_str(), &attrib);
+    std::string ret(21, '\0');
+    std::strftime(&ret[0], 21, "%F %R:%S", std::localtime(&(attrib.st_ctime)));
+    return ret;
+}
+
+std::pair<uint64_t, uint64_t> Robot::GetDataUsage() {
+    static int oldTransmittedData = 0;
+    static int oldRecievedData = 0;
+
+    auto oldTime = std::chrono::steady_clock::now();
+
+    auto currentTime = std::chrono::steady_clock::now();
+    std::ifstream in("/proc/net/dev");
+    std::string line;
+    std::getline(in, line);
+
+    std::regex reg2(
+        "eth0:\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+("
+        "\\d+)\\s+"
+        "(\\d+)\\s+(\\d+)");  // We only need bytes and 9 is all we need to
+                              // bytes transmitted
+    std::smatch match;
+    std::regex_match(line, match, reg2);
+    uint64_t newRecievedData = std::stoi(match[1]);
+    uint64_t newTransmittedData = std::stoi(match[9]);
+
+    int recievedDataRate =
+        (newRecievedData - oldRecievedData) /
+        std::chrono::duration_cast<std::chrono::seconds>(currentTime - oldTime)
+            .count();
+    int transmittedDataRate =
+        (newTransmittedData - oldTransmittedData) /
+        std::chrono::duration_cast<std::chrono::seconds>(currentTime - oldTime)
+            .count();
+
+    oldRecievedData = newRecievedData;
+    oldTransmittedData = newTransmittedData;
+    oldTime = currentTime;
+
+    double recievedData =
+        recievedDataRate / 1000000;  // conversion to mbps rather than bps
+    double transmittedData = transmittedDataRate / 1000000;
+    return std::make_pair(recievedData, transmittedData);
+}
+
 void Robot::DS_PrintOut() {
     /*if (liveGrapher.HasIntervalPassed()) {
         liveGrapher.GraphData(
@@ -190,12 +244,27 @@ void Robot::DS_PrintOut() {
         LogEvent("Elevator Position: " + std::to_string(elevator.GetHeight()),
                  LogEvent::VERBOSE_DEBUG));
     robotDrive.Debug();
-    // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
-    // robotDrive.GetRightDisplacement() << std::endl;
+    // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" << robotDrive.GetRightDisplacement() << std::endl;
     // std::cout << robotDrive.GetAngle() << std::endl;
     // std::cout << elevator.GetHeight() << std::endl;
     // std::cout << "Version 1.5" << std::endl; // To ensure a
     // successful(butchered) upload
+    
+    auto usage = GetDataUsage();
+
+    std::cout << usage.first << ", " << usage.second << std::endl;
+    dsDisplay.Clear();
+
+    dsDisplay.AddData("ENCODER_LEFT", robotDrive.GetLeftDisplacement());
+    dsDisplay.AddData("ENCODER_RIGHT", robotDrive.GetRightDisplacement());
+    dsDisplay.AddData("GYRO_VAL", robotDrive.GetAngle());
+    /*dsDisplay.AddData("PAWL_ENGAGED",
+                      climber.GetPawl());  // todo: add the function
+    dsDisplay.AddData("LOW_GEAR",
+                      climber.IsLowGear());  // todo: add the function */
+    dsDisplay.AddData("VERSION", version);
+
+    dsDisplay.SendToDS();
 }
 
 START_ROBOT_CLASS(Robot)

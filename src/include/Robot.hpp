@@ -2,6 +2,18 @@
 
 #pragma once
 
+#include <sys/stat.h>
+
+#include <array>
+#include <ctime>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <regex>
+#include <string>
+#include <tuple>
+#include <utility>
+
 #include <Joystick.h>
 #include <TimedRobot.h>
 #include <cscore.h>
@@ -44,9 +56,14 @@ public:
     void AutonomousPeriodic() override;
     void TeleopPeriodic() override;
 
+    static std::string GetFileCreationTime(std::string filePath);
+    static std::pair<uint64_t, uint64_t> GetDataUsage();
+
     void HandleEvent(Event event) override;
 
     void DS_PrintOut();
+
+    std::string version;
 
     static DriveTrain robotDrive;
     static Intake intake;
