@@ -77,7 +77,7 @@ Robot::Robot() {
 }
 
 void Robot::DisabledInit() {
-    robotDrive.StopClosedLoop();
+    robotDrive.Disable();
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
     intake.SetMotors(MotorState::kIdle);
@@ -100,7 +100,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::TeleopInit() {
-    robotDrive.StopClosedLoop();
+    robotDrive.Disable();
     elevator.StopClosedLoop();
     intake.Deploy();
     intake.Close();
@@ -137,16 +137,7 @@ void Robot::DisabledPeriodic() {}
 
 void Robot::AutonomousPeriodic() {
     dsDisplay.ExecAutonomousPeriodic();
-    logger.Log(LogEvent(
-        "Pos Goal: " + std::to_string(robotDrive.GetPositionGoal()) +
-            " Pos: " + std::to_string(robotDrive.GetPosition()) +
-            " At Goal?: " + std::to_string(robotDrive.AtPositionGoal()),
-        LogEvent::VERBOSE_DEBUG));
-    logger.Log(
-        LogEvent("Angle Goal: " + std::to_string(robotDrive.GetAngleGoal()) +
-                     " Angle: " + std::to_string(robotDrive.GetAngle()) +
-                     " At Goal?: " + std::to_string(robotDrive.AtAngleGoal()),
-                 LogEvent::VERBOSE_DEBUG));
+    // TODO: add logging of state-space controllers
     DS_PrintOut();
 }
 
