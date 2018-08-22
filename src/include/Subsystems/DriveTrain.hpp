@@ -7,12 +7,14 @@
 #include <CtrlSys/TrapezoidProfile.h>
 #include <Drive/DifferentialDrive.h>
 #include <Encoder.h>
+#include <Notifier.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
 #include "Constants.hpp"
-#include "DiffDriveController.hpp"
 #include "ES/Service.hpp"
+#include "Pose.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
+#include "Subsystems/DrivetrainController.hpp"
 
 class CANTalonGroup;
 
@@ -24,10 +26,17 @@ public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
     DriveTrain();
-    virtual ~DriveTrain() = default;
+    DriveTrain(const DriveTrain&) = delete;
+    DriveTrain& operator=(const DriveTrain&) = delete;
 
-    int32_t GetLeftRaw() const;
-    int32_t GetRightRaw() const;
+    /**
+     * Enable controller.
+     */
+    void Enable(void);
+    /**
+     * Disable controller.
+     */
+    void Disable(void);
 
     /* Drives robot with given speed and turn values [-1..1].
      * This is a convenience function for use in Operator Control.
@@ -36,6 +45,47 @@ public:
 
     // Set encoder distances to 0
     void ResetEncoders(void);
+
+    /**
+     * Sets the goal of the profiles
+     *
+     * @param pose  Target global pose x, y, and theta (not actually global yet)
+     */
+    void SetGoal(Pose pose);
+
+    /*
+     * Sets the references
+     * 
+     * @param leftPosition  Position of the left side in inches
+     * @param leftVelocity  Velocity of the left side in inches per second
+     * @param rightPosition Position of the right side in inches
+     * @param rightVelocity Velocity of the right side in inches per second
+     */
+    void SetReferences(double leftPosition, double leftVelocity,
+                      double rightPosition, double rightVelocity);
+
+    bool AtReference() const;
+
+    bool AtGoal() const;
+
+    /**
+     * Iterates the drivetrain control loop one cycle
+     */
+    void Iterate(void);
+
+    /**
+     * Returns controller output for left side
+     */
+    double ControllerLeftVoltage() const;
+    /**
+     * Returns controller output for right side
+     */
+    double ControllerRightVoltage() const;
+
+    void Reset(void);
+
+    int32_t GetLeftRaw() const;
+    int32_t GetRightRaw() const;
 
     // Directly set wheel speeds [0..1] (see GearBox::SetManual(double))
     void SetLeftManual(double value);
@@ -49,37 +99,8 @@ public:
     double GetLeftRate() const;
     double GetRightRate() const;
 
-    // Returns robot's current position
-    double GetPosition(void);
-
-    // Return gyro's angle
-    double GetAngle(void);
-
     // Return gyro's rate
     double GetAngularRate() const;
-
-    // Starts and stops PID loops
-    void StartClosedLoop(void);
-    void StopClosedLoop(void);
-
-    // Sets encoder PID setpoints
-    void SetPositionGoal(double position);
-    void SetAngleGoal(double angle);
-
-    // Returns encoder PID loop references
-    double GetPosReference(void);
-    double GetAngleReference(void);
-
-    // Returns final goals for PID loops
-    double GetPositionGoal() const;
-    double GetAngleGoal() const;
-
-    // Returns whether or not robot has reached its final goal
-    bool AtPositionGoal() const;
-    bool AtAngleGoal() const;
-
-    double PositionProfileTimeTotal() const;
-    double AngleProfileTimeTotal() const;
 
     // Resets gyro
     void ResetGyro(void);
@@ -109,20 +130,6 @@ private:
 
     // Gyro used for angle PID
     ADXRS450_Gyro m_gyro;
-
-    // Control system references
-    frc::TrapezoidProfile m_posRef{kRobotMaxV, kRobotTimeToMaxV};
-    frc::TrapezoidProfile m_angleRef{kRobotMaxRotateRate,
-                                     kRobotTimeToMaxRotateRate};
-
-    // Sensor adapters
-    frc::FuncNode m_leftDistance{
-        [this] { return m_leftEncoder.GetDistance(); }};
-    frc::FuncNode m_rightDistance{
-        [this] { return m_rightEncoder.GetDistance(); }};
-    frc::FuncNode m_angleSensor{[this] { return m_gyro.GetAngle(); }};
-
-    frc::DiffDriveController m_controller{
-        m_posRef,      m_angleRef, m_leftDistance, m_rightDistance,
-        m_angleSensor, true,       m_leftGrbx,     m_rightGrbx};
+    DrivetrainController m_drivetrain;
+    frc::Notifier m_thread{&DriveTrain::Iterate, this};
 };

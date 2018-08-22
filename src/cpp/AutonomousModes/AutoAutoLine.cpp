@@ -14,18 +14,16 @@ void AutoAutoLine::Reset() { state = State::kInit; }
 void AutoAutoLine::HandleEvent(Event event) {
     switch (state) {
         case State::kInit:
-            Robot::robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
-            Robot::robotDrive.SetAngleGoal(0.0);
-            Robot::robotDrive.StartClosedLoop();
+            Robot::robotDrive.SetGoal(pose(168.0 - kRobotLength / 2.0, 0.0, 0.0);
+            Robot::robotDrive.Enable();
             autoTimer.Reset();
 
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (Robot::robotDrive.AtPositionGoal() ||
-                autoTimer.Get() >
-                    Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                Robot::robotDrive.StopClosedLoop();
+            if (Robot::robotDrive.AtGoal() ||
+                autoTimer.Get() > positionProfile.ProfileTimeTotal() + 1.0) {
+                Robot::robotDrive.Disable();
 
                 state = State::kIdle;
             }
