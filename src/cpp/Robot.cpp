@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2017-2019 FRC Team 3512. All Rights Reserved.
 
 #include "Robot.hpp"
 
@@ -7,7 +7,7 @@
 
 #include <DriverStation.h>
 
-DriveTrain Robot::robotDrive;
+Drivetrain Robot::robotDrive;
 Intake Robot::intake;
 Elevator Robot::elevator;
 Climber Robot::climber;
@@ -18,6 +18,7 @@ frc::Joystick Robot::driveStick2{kDriveStick2Port};
 LiveGrapher Robot::liveGrapher{kLiveGrapherPort};
 
 Logger Robot::logger;
+CsvLogger Robot::csvLogger{kCSVFile};
 
 Robot::Robot() {
     // Auton: does nothing
@@ -77,7 +78,7 @@ Robot::Robot() {
 }
 
 void Robot::DisabledInit() {
-    robotDrive.StopClosedLoop();
+    robotDrive.Disable();
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
     intake.SetMotors(MotorState::kIdle);
@@ -86,8 +87,10 @@ void Robot::DisabledInit() {
 }
 
 void Robot::AutonomousInit() {
+    std::cout << "AutoInit" << std::endl;
     robotDrive.ResetEncoders();
     robotDrive.ResetGyro();
+    robotDrive.Reset();
     elevator.ResetEncoder();
     intake.Deploy();
     climber.LockPawl();
@@ -100,7 +103,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::TeleopInit() {
-    robotDrive.StopClosedLoop();
+    robotDrive.Disable();
     elevator.StopClosedLoop();
     intake.Deploy();
     intake.Close();
@@ -133,20 +136,11 @@ void Robot::RobotPeriodic() {
     }
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() { robotDrive.SetGoal(Pose(0.0, 0.0, 0.0)); }
 
 void Robot::AutonomousPeriodic() {
     dsDisplay.ExecAutonomousPeriodic();
-    logger.Log(LogEvent(
-        "Pos Goal: " + std::to_string(robotDrive.GetPositionGoal()) +
-            " Pos: " + std::to_string(robotDrive.GetPosition()) +
-            " At Goal?: " + std::to_string(robotDrive.AtPositionGoal()),
-        LogEvent::VERBOSE_DEBUG));
-    logger.Log(
-        LogEvent("Angle Goal: " + std::to_string(robotDrive.GetAngleGoal()) +
-                     " Angle: " + std::to_string(robotDrive.GetAngle()) +
-                     " At Goal?: " + std::to_string(robotDrive.AtAngleGoal()),
-                 LogEvent::VERBOSE_DEBUG));
+    // TODO: add logging of state-space controllers
     DS_PrintOut();
 }
 
@@ -186,9 +180,9 @@ void Robot::DS_PrintOut() {
         prevVel = curVel;
         liveGrapher.ResetInterval();
         */
-    logger.Log(
+    /*logger.Log(
         LogEvent("Elevator Position: " + std::to_string(elevator.GetHeight()),
-                 LogEvent::VERBOSE_DEBUG));
+                 LogEvent::VERBOSE_DEBUG));*/
     robotDrive.Debug();
     // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
     // robotDrive.GetRightDisplacement() << std::endl;

@@ -1,6 +1,8 @@
-// Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2016-2019 FRC Team 3512. All Rights Reserved.
 
 #include "AutonomousModes/AutoAutoLine.hpp"
+
+#include <iostream>
 
 #include <DriverStation.h>
 
@@ -14,18 +16,16 @@ void AutoAutoLine::Reset() { state = State::kInit; }
 void AutoAutoLine::HandleEvent(Event event) {
     switch (state) {
         case State::kInit:
-            Robot::robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
-            Robot::robotDrive.SetAngleGoal(0.0);
-            Robot::robotDrive.StartClosedLoop();
+            Robot::robotDrive.SetGoal(
+                Pose(4.2672 /*168.0*/ - kRobotLength / 2.0, 0.0, 0.0));
+            Robot::robotDrive.Enable();
             autoTimer.Reset();
 
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (Robot::robotDrive.AtPositionGoal() ||
-                autoTimer.Get() >
-                    Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                Robot::robotDrive.StopClosedLoop();
+            if (Robot::robotDrive.AtGoal()) {
+                Robot::robotDrive.Disable();
 
                 state = State::kIdle;
             }

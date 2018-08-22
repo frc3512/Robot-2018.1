@@ -10,7 +10,6 @@ cppSrcFileInclude {
 }
 
 modifiableFileExclude {
-  WPILib/
   gradle/
 }
 
@@ -18,8 +17,10 @@ includeOtherLibs {
   CtrlSys/
   cscore\.h$
   ctre/
+  frc/
 }
 
 generatedFileExclude {
   Eigen/
+  thirdparty/
 }

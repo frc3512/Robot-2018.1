@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2014-2019 FRC Team 3512. All Rights Reserved.
 
 #include "Logging/LogEvent.hpp"
 

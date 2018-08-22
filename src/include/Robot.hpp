@@ -1,6 +1,8 @@
-// Copyright (c) 2017-2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2017-2019 FRC Team 3512. All Rights Reserved.
 
 #pragma once
+
+#include <string>
 
 #include <Joystick.h>
 #include <TimedRobot.h>
@@ -21,12 +23,13 @@
 #include "DSDisplay/DSDisplay.hpp"
 #include "ES/Service.hpp"
 #include "LiveGrapher/LiveGrapher.hpp"
+#include "Logging/CsvLogger.hpp"
 #include "Logging/LogConsoleSink.hpp"
 #include "Logging/LogFileSink.hpp"
 #include "Logging/Logger.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 #include "Subsystems/Climber.hpp"
-#include "Subsystems/DriveTrain.hpp"
+#include "Subsystems/Drivetrain.hpp"
 #include "Subsystems/Elevator.hpp"
 #include "Subsystems/Intake.hpp"
 
@@ -48,7 +51,7 @@ public:
 
     void DS_PrintOut();
 
-    static DriveTrain robotDrive;
+    static Drivetrain robotDrive;
     static Intake intake;
     static Elevator elevator;
     static Climber climber;
@@ -61,6 +64,8 @@ public:
 
     // Logging
     static Logger logger;
+
+    static CsvLogger csvLogger;
 
 private:
     AutoAutoLine autoLine;

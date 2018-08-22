@@ -45,11 +45,12 @@ model {
 
             sources.cpp {
                 source {
-                    srcDirs = ['src/cpp']
+                    srcDirs = ['src/cpp', 'thirdparty/cpp']
                     include '**/*.cpp'
                 }
                 exportedHeaders {
-                    srcDirs = ['src/cpp', 'src/include', 'src/include/WPILib']
+                    srcDirs = ['src/cpp', 'src/include', 'thirdparty/cpp',
+                               'thirdparty/include']
                     include '**/*.hpp', '**/*.h'
                 }
             }

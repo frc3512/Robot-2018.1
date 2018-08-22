@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2016-2019 FRC Team 3512. All Rights Reserved.
 
 #include "Subsystems/CANTalonGroup.hpp"
 
@@ -84,5 +84,3 @@ void CANTalonGroup::ResetEncoder() {
 void CANTalonGroup::SetSensorDirection(bool reverse) {
     m_canTalons[0].get().SetSensorPhase(reverse);
 }
-
-double CANTalonGroup::GetOutput() { return GetPosition(); }

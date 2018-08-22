@@ -8,9 +8,48 @@ if "--noninteractive" in sys.argv:
 
     mpl.use("svg")
 
+import control as cnt
 import frccontrol as frccnt
 import matplotlib.pyplot as plt
 import numpy as np
+
+
+def drivetrain(motor, num_motors, m, r, rb, J, Gl, Gr):
+    """Returns the state-space model for a drivetrain.
+
+    States: [[left velocity], [right velocity]]
+    Inputs: [[left voltage], [right voltage]]
+    Outputs: [[left velocity], [right velocity]]
+
+    Keyword arguments:
+    motor -- instance of DcBrushedMotor
+    um_motors -- number of motors driving the mechanism
+    m -- mass of robot in kg
+    r -- radius of wheels in meters
+    rb -- radius of robot in meters
+    J -- moment of inertia of the drivetrain in kg-m^2
+    Gl -- gear ratio of left side of drivetrain
+    Gr -- gear ratio of right side of drivetrain
+
+    Returns:
+    StateSpace instance containing continuous model
+    """
+    motor = frccnt.models.gearbox(motor, num_motors)
+
+    C1 = -Gl**2 * motor.Kt / (motor.Kv * motor.R * r**2)
+    C2 = Gl * motor.Kt / (motor.R * r)
+    C3 = -Gr**2 * motor.Kt / (motor.Kv * motor.R * r**2)
+    C4 = Gr * motor.Kt / (motor.R * r)
+    # fmt: off
+    A = np.matrix([[(1 / m + rb**2 / J) * C1, (1 / m - rb**2 / J) * C3],
+                   [(1 / m - rb**2 / J) * C1, (1 / m + rb**2 / J) * C3]])
+    B = np.matrix([[(1 / m + rb**2 / J) * C2, (1 / m - rb**2 / J) * C4],
+                   [(1 / m - rb**2 / J) * C2, (1 / m + rb**2 / J) * C4]])
+    C = np.matrix([[1, 0], [0, 1]])
+    D = np.matrix([[0, 0], [0, 0]])
+    # fmt: on
+
+    return cnt.ss(A, B, C, D)
 
 
 class Drivetrain(frccnt.System):
@@ -18,15 +57,11 @@ class Drivetrain(frccnt.System):
     def __init__(self, dt):
         """Drivetrain subsystem.
 
+
         Keyword arguments:
         dt -- time between model/controller updates
         """
-        state_labels = [
-            ("Left position", "m"),
-            ("Left velocity", "m/s"),
-            ("Right position", "m"),
-            ("Right velocity", "m/s"),
-        ]
+        state_labels = [("Left velocity", "m/s"), ("Right velocity", "m/s")]
         u_labels = [("Left voltage", "V"), ("Right voltage", "V")]
         self.set_plot_labels(state_labels, u_labels)
 
@@ -36,17 +71,16 @@ class Drivetrain(frccnt.System):
         self.num_motors = 2.0
 
         # High and low gear ratios of drivetrain
-        Glow = 60.0 / 11.0
-        Ghigh = 60.0 / 11.0
+        Ghigh = 72.0 / 12.0
 
         # Drivetrain mass in kg
-        self.m = 52
+        self.m = 64
         # Radius of wheels in meters
-        self.r = 0.08255 / 2.0
+        self.r = 0.0746125
         # Radius of robot in meters
-        self.rb = 0.59055 / 2.0
+        self.rb = 0.6096 / 2.0
         # Moment of inertia of the drivetrain in kg-m^2
-        self.J = 6.0
+        self.J = 4.0
 
         # Gear ratios of left and right sides of drivetrain respectively
         if self.in_low_gear:
@@ -56,7 +90,7 @@ class Drivetrain(frccnt.System):
             self.Gl = Ghigh
             self.Gr = Ghigh
 
-        self.model = frccnt.models.drivetrain(
+        self.model = drivetrain(
             frccnt.models.MOTOR_CIM,
             self.num_motors,
             self.m,
@@ -71,34 +105,28 @@ class Drivetrain(frccnt.System):
         frccnt.System.__init__(self, self.model, u_min, u_max, dt)
 
         if self.in_low_gear:
-            q_pos = 0.12
             q_vel = 1.0
         else:
-            q_pos = 0.14
             q_vel = 0.95
 
-        q = [q_pos, q_vel, q_pos, q_vel]
+        q = [q_vel, q_vel]
         r = [12.0, 12.0]
         self.design_dlqr_controller(q, r)
 
-        qff_pos = 0.005
-        qff_vel = 1.0
-        self.design_two_state_feedforward([qff_pos, qff_vel, qff_pos, qff_vel],
-                                          [12.0, 12.0])
+        qff_vel = 0.01
+        self.design_two_state_feedforward([qff_vel, qff_vel], [12, 12])
 
-        q_pos = 0.05
         q_vel = 1.0
-        q_voltage = 10.0
-        q_encoder_uncertainty = 2.0
-        r_pos = 0.0001
-        r_gyro = 0.000001
-        self.design_kalman_filter([q_pos, q_vel, q_pos, q_vel], [r_pos, r_pos])
+        r_vel = 0.01
+        self.design_kalman_filter([q_vel, q_vel], [r_vel, r_vel])
+
+        print("ctrb cond =", np.linalg.cond(cnt.ctrb(self.sysd.A, self.sysd.B)))
 
 
 def main():
     dt = 0.00505
     drivetrain = Drivetrain(dt)
-    drivetrain.export_cpp_coeffs("Drivetrain", "Subsystems/")
+    drivetrain.export_cpp_coeffs("Drivetrain", "Control/")
 
     if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
         try:

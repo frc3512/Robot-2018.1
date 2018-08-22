@@ -1,18 +1,17 @@
-// Copyright (c) 2018 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2018-2019 FRC Team 3512. All Rights Reserved.
 
 #pragma once
 
-#include <CtrlSys/FuncNode.h>
-#include <CtrlSys/Output.h>
-#include <CtrlSys/PIDNode.h>
-#include <CtrlSys/RefInput.h>
-#include <CtrlSys/SumNode.h>
 #include <DigitalInput.h>
 #include <Notifier.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
+#include <frc/CtrlSys/FuncNode.h>
+#include <frc/CtrlSys/Output.h>
+#include <frc/CtrlSys/PIDNode.h>
+#include <frc/CtrlSys/RefInput.h>
+#include <frc/CtrlSys/SumNode.h>
 
 #include "Constants.hpp"
-#include "DriveTrain.hpp"
 #include "ES/Service.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
 
