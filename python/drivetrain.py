@@ -30,31 +30,24 @@ class Drivetrain(frccnt.System):
         u_labels = [("Left voltage", "V"), ("Right voltage", "V")]
         self.set_plot_labels(state_labels, u_labels)
 
-        self.in_low_gear = False
-
         # Number of motors per side
         self.num_motors = 2.0
 
-        # High and low gear ratios of drivetrain
-        Glow = 60.0 / 11.0
-        Ghigh = 60.0 / 11.0
+        # Gear ratios of drivetrain (switch?)
+        Ghigh = 72.0 / 11.0
 
-        # Drivetrain mass in kg
-        self.m = 52
+        # Drivetrain mass in kg (estimate)
+        self.m = 64
         # Radius of wheels in meters
-        self.r = 0.08255 / 2.0
+        self.r = 0.0746125
         # Radius of robot in meters
-        self.rb = 0.59055 / 2.0
-        # Moment of inertia of the drivetrain in kg-m^2
-        self.J = 6.0
+        self.rb = 0.4318 
+        # Moment of inertia of the drivetrain in kg-m^2 (ESTIMATE)
+        self.J = 4.0
 
         # Gear ratios of left and right sides of drivetrain respectively
-        if self.in_low_gear:
-            self.Gl = Glow
-            self.Gr = Glow
-        else:
-            self.Gl = Ghigh
-            self.Gr = Ghigh
+        self.Gl = Ghigh
+        self.Gr = Ghigh
 
         self.model = frccnt.models.drivetrain(
             frccnt.models.MOTOR_CIM,
@@ -70,12 +63,8 @@ class Drivetrain(frccnt.System):
         u_max = np.matrix([[12.0], [12.0]])
         frccnt.System.__init__(self, self.model, u_min, u_max, dt)
 
-        if self.in_low_gear:
-            q_pos = 0.12
-            q_vel = 1.0
-        else:
-            q_pos = 0.14
-            q_vel = 0.95
+        q_pos = 0.14
+        q_vel = 0.95
 
         q = [q_pos, q_vel, q_pos, q_vel]
         r = [12.0, 12.0]
