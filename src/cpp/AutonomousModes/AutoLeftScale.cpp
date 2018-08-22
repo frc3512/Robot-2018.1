@@ -25,7 +25,7 @@ void AutoLeftScale::HandleEvent(Event event) {
                 Robot::robotDrive.SetPositionGoal(252.0 - kRobotLength / 2.0);
             }
             Robot::robotDrive.SetAngleGoal(0.0);
-            Robot::robotDrive.StartClosedLoop();
+            Robot::robotDrive.Enable();
 
             Robot::elevator.StartClosedLoop();
 
@@ -94,13 +94,13 @@ void AutoLeftScale::HandleEvent(Event event) {
                     Robot::robotDrive.PositionProfileTimeTotal() + 0.1) {
                 Robot::intake.AutoOuttake();
 
-                Robot::robotDrive.StopClosedLoop();
+                Robot::robotDrive.Disable();
                 Robot::elevator.StopClosedLoop();
                 state = State::kIdle;
             }
             break;
         case State::kIdle:
-            Robot::robotDrive.StopClosedLoop();
+            Robot::robotDrive.Disable();
             break;
     }
 }
