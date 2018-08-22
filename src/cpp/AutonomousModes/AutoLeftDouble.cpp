@@ -6,24 +6,28 @@
 
 #include "Robot.hpp"
 
+#include "WPILib/CtrlSys/TrapezoidProfile.h"
+
 AutoLeftDouble::AutoLeftDouble() { autoTimer.Start(); }
 
 void AutoLeftDouble::Reset() { state = State::kInit; }
 
 void AutoLeftDouble::HandleEvent(Event event) {
     static std::string platePosition;
-
+    static frc::TrapezoidProfile positionProfile;
+    static frc::TrapezoidProfile angleProfile;
+   
     switch (state) {
         case State::kInit:
             platePosition =
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
-            Robot::robotDrive.SetPositionGoal(236.5 - kRobotLength / 2.0);
-            Robot::robotDrive.SetAngleGoal(0.0);
-            Robot::robotDrive.StartClosedLoop();
+            positionProfile.SetGoal(236.5 - kRobotLength / 2.0);
+            angleProfile.SetGoal(236.5 - kRobotLength / 2.0);
+            Robot::robotDrive.Enable();
 
             Robot::elevator.SetHeightReference(kScaleHeight);
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
 
@@ -31,10 +35,10 @@ void AutoLeftDouble::HandleEvent(Event event) {
             break;
 
         case State::kInitialForward:
-            if (Robot::robotDrive.AtPositionGoal() ||
+            if (Robot::robotDrive.AtGoal() ||
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
-                Robot::robotDrive.SetAngleGoal(90.0);
+                angleProfile.SetGoal(90.0);
                 autoTimer.Reset();
 
                 state = State::kLeftRotate;
