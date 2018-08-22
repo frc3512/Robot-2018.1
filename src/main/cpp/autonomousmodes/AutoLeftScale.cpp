@@ -10,7 +10,7 @@ AutoLeftScale::AutoLeftScale() { autoTimer.Start(); }
 
 void AutoLeftScale::Reset() { state = State::kInit; }
 
-void AutoLeftScale::HandleEvent(Event event) {
+void AutoLeftScale::Run() {
     static std::string platePosition;
 
     switch (state) {

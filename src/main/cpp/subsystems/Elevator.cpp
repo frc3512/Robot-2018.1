@@ -8,13 +8,14 @@
 
 #include "Robot.hpp"
 
-Elevator::Elevator() : m_notifier([&] { Robot::elevator.PostEvent({}); }) {
+Elevator::Elevator() : PublishNode("Elevator") {
     m_elevatorGearbox.Set(0.0);
     m_elevatorGearbox.SetDistancePerPulse(kElevatorDpP);
     m_elevatorGearbox.EnableHardLimits(&m_elevatorBottomHall, nullptr);
     m_elevatorGearbox.EnableSoftLimits(std::numeric_limits<double>::infinity(),
                                        kClimbHeight);
     m_elevatorGearbox.SetHardLimitPressedState(false);
+    Subscribe(*this);
 }
 
 void Elevator::SetVelocity(double velocity) { m_elevatorGearbox.Set(velocity); }
@@ -55,43 +56,50 @@ double Elevator::ControllerVoltage() const {
 
 void Elevator::Reset() { m_controller.Reset(); }
 
-void Elevator::HandleEvent(Event event) {
-    enum State { kPosition, kVelocity };
-    static State state = State::kVelocity;
+enum class State { kPosition, kVelocity };
+static State state = State::kVelocity;
+
+void Elevator::ProcessMessage(const ButtonPacket& message) {
     bool makeTransition = false;
     State nextState;
     switch (state) {
         case State::kPosition:
-            if (event.type == EventType::kEntry) {
+            if (message.topic == "Event/StateEntry") {
                 Enable();
             }
-            if (event == Event{kButtonPressed, 7}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 7 && message.pressed) {
                 SetGoal(kFloorHeight);
             }
-            if (event == Event{kButtonPressed, 8}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 8 && message.pressed) {
                 SetGoal(kSwitchHeight);
             }
-            if (event == Event{kButtonPressed, 9}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 9 && message.pressed) {
                 SetGoal(kSecondBlockHeight);
             }
-            if (event == Event{kButtonPressed, 10}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 10 && message.pressed) {
                 SetGoal(kScaleHeight);
             }
-            if (event == Event{kButtonPressed, 11}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 11 && message.pressed) {
                 SetGoal(kClimbHeight);
             }
-            if (event == Event{kButtonPressed, 12}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 12 && message.pressed) {
                 nextState = State::kVelocity;
                 makeTransition = true;
             }
-            if (event.type == EventType::kExit) {
+            if (message.topic == "Event/StateExit") {
                 SetGoal(GetHeight());
                 Disable();
             }
             break;
         case State::kVelocity:
-            SetVelocity(Robot::appendageStick.GetY());
-            if (event == Event{kButtonPressed, 12}) {
+            if (message.topic == "Robot/AppendageStick" &&
+                message.button == 12 && message.pressed) {
                 SetGoal(GetHeight());
                 nextState = State::kPosition;
                 makeTransition = true;
@@ -99,9 +107,21 @@ void Elevator::HandleEvent(Event event) {
             break;
     }
     if (makeTransition) {
-        HandleEvent(EventType::kExit);
+        ButtonPacket stateExit{"Event/StateExit", 0, false};
+        ProcessMessage(stateExit);
         state = nextState;
-        HandleEvent(EventType::kEntry);
+        ButtonPacket stateEntry{"Event/StateEntry", 0, false};
+        ProcessMessage(stateEntry);
+    }
+}
+
+void Elevator::SubsystemPeriodic() {
+    switch (state) {
+        case State::kVelocity:
+            SetVelocity(Robot::appendageStick.GetY());
+            break;
+        case State::kPosition:
+            break;
     }
 }
 

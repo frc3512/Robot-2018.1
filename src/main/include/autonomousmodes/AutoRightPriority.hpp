@@ -4,15 +4,13 @@
 
 #include <frc/Timer.h>
 
-#include "es/Service.hpp"
-
-class AutoRightPriority : public Service {
+class AutoRightPriority {
 public:
     AutoRightPriority();
 
     void Reset();
 
-    void HandleEvent(Event event) override;
+    void Run();
 
 private:
     frc::Timer autoTimer;

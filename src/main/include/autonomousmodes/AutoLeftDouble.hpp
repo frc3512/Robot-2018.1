@@ -4,15 +4,13 @@
 
 #include <frc/Timer.h>
 
-#include "es/Service.hpp"
-
-class AutoLeftDouble : public Service {
+class AutoLeftDouble {
 public:
     AutoLeftDouble();
 
     void Reset();
 
-    void HandleEvent(Event event) override;
+    void Run();
 
 private:
     frc::Timer autoTimer;

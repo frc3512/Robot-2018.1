@@ -12,7 +12,7 @@ AutoCenterSwitch::AutoCenterSwitch() { autoTimer.Start(); }
 
 void AutoCenterSwitch::Reset() { state = State::kInit; }
 
-void AutoCenterSwitch::HandleEvent(Event event) {
+void AutoCenterSwitch::Run() {
     static std::string platePosition;
 
     switch (state) {

@@ -4,15 +4,13 @@
 
 #include <frc/Timer.h>
 
-#include "es/Service.hpp"
-
-class AutoCenterSwitch : public Service {
+class AutoCenterSwitch {
 public:
     AutoCenterSwitch();
 
     void Reset();
 
-    void HandleEvent(Event event) override;
+    void Run();
 
 private:
     frc::Timer autoTimer;

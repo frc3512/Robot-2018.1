@@ -61,8 +61,9 @@ model {
                 binary.getTasks().withType(AbstractNativeSourceCompileTask) {
                     it.dependsOn pythonTask
                 }
-                if (!(toolChain instanceof VisualCpp))
+                if (!(toolChain instanceof VisualCpp)) {
                     cppCompiler.args << '-O2' << '-Wno-deprecated-declarations'
+                }
             }
 
             sources.cpp {

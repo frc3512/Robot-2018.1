@@ -4,15 +4,13 @@
 
 #include <frc/Timer.h>
 
-#include "es/Service.hpp"
-
-class AutoLeftScale : public Service {
+class AutoLeftScale {
 public:
     AutoLeftScale();
 
     void Reset();
 
-    void HandleEvent(Event event) override;
+    void Run();
 
 private:
     frc::Timer autoTimer;

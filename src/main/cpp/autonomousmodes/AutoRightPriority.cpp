@@ -10,7 +10,7 @@ AutoRightPriority::AutoRightPriority() { autoTimer.Start(); }
 
 void AutoRightPriority::Reset() { state = State::kInit; }
 
-void AutoRightPriority::HandleEvent(Event event) {
+void AutoRightPriority::Run() {
     static std::string platePosition;
 
     switch (state) {

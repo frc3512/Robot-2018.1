@@ -7,11 +7,13 @@
 #include <frc/Notifier.h>
 
 #include "Constants.hpp"
+#include "Drivetrain.hpp"
+#include "communications/PublishNode.hpp"
 #include "control/ElevatorController.hpp"
-#include "es/Service.hpp"
 #include "subsystems/CANTalonGroup.hpp"
+#include "subsystems/SubsystemBase.hpp"
 
-class Elevator : public Service {
+class Elevator : public SubsystemBase, public PublishNode {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -45,7 +47,9 @@ public:
     // Gets whether the Hall Effect sensor has triggered
     bool GetBottomHallEffect();
 
-    void HandleEvent(Event event) override;
+    void ProcessMessage(const ButtonPacket& message) override;
+
+    void SubsystemPeriodic() override;
 
     void Debug();
 
@@ -54,8 +58,6 @@ private:
     WPI_TalonSRX m_elevatorSlaveMotor{kElevatorSlaveID};
     CANTalonGroup m_elevatorGearbox{m_elevatorMasterMotor,
                                     m_elevatorSlaveMotor};
-
-    frc::Notifier m_notifier;
 
     // Sensors
     frc::DigitalInput m_elevatorBottomHall{kElevatorBottomHallPort};

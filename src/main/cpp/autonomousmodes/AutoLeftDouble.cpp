@@ -10,7 +10,7 @@ AutoLeftDouble::AutoLeftDouble() { autoTimer.Start(); }
 
 void AutoLeftDouble::Reset() { state = State::kInit; }
 
-void AutoLeftDouble::HandleEvent(Event event) {
+void AutoLeftDouble::Run() {
     static std::string platePosition;
 
     switch (state) {

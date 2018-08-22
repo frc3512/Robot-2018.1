@@ -6,6 +6,8 @@
 
 enum class State { kInit, kSetup, kWaiting, kClimb, kIdle };
 
+Climber::Climber() : PublishNode("Climber") {}
+
 void Climber::EngagePawl() { m_pawl.Set(true); }
 
 void Climber::LockPawl() { m_pawl.Set(false); }
@@ -18,13 +20,15 @@ void Climber::Shift() {
     }
 }
 
-void Climber::HandleEvent(Event event) {
+void Climber::ProcessMessage(const ButtonPacket& message) {
     if (Robot::driveStick2.GetRawButton(7) &&
-        event == Event{kButtonPressed, 2}) {
+        message.topic == "Robot/AppendageStick" && message.button == 2 &&
+        message.pressed == true) {
         Shift();
     }
     if (Robot::driveStick2.GetRawButton(10) &&
-        event == Event{kButtonPressed, 10}) {
+        message.topic == "Robot/AppendageStick" && message.button == 10 &&
+        message.pressed == true) {
         EngagePawl();
     }
 }

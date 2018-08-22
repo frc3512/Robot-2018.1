@@ -11,7 +11,7 @@
 
 #include "Robot.hpp"
 
-Drivetrain::Drivetrain() {
+Drivetrain::Drivetrain() : PublishNode("Drivetrain") {
     m_drive.SetDeadband(kJoystickDeadband);
 
     m_leftEncoder.SetDistancePerPulse(kDpP);
@@ -57,8 +57,9 @@ void Drivetrain::SetGoal(Pose&& pose) { m_controller.SetGoal(std::move(pose)); }
 bool Drivetrain::AtGoal() const { return m_controller.AtGoal(); }
 
 void Drivetrain::Iterate() {
-    m_controller.SetMeasuredStates(m_leftEncoder.GetRate(),
-                                   m_rightEncoder.GetRate(), m_gyro.GetAngle());
+    // m_controller.SetMeasuredStates(m_leftEncoder.GetRate(),
+    //                               m_rightEncoder.GetRate(),
+    //                               m_gyro.GetAngle());
     m_controller.Update();
 
     // Set motor inputs
@@ -98,36 +99,34 @@ double Drivetrain::GetLeftRate() const { return m_leftGrbx.GetSpeed(); }
 
 double Drivetrain::GetRightRate() const { return m_rightGrbx.GetSpeed(); }
 
-double Drivetrain::GetAngularRate() const { return m_gyro.GetRate(); }
+// double Drivetrain::GetAngularRate() const { return m_gyro.GetRate(); }
 
-void Drivetrain::ResetGyro() { m_gyro.Reset(); }
+// void Drivetrain::ResetGyro() { m_gyro.Reset(); }
 
-void Drivetrain::CalibrateGyro() { m_gyro.Calibrate(); }
+// void Drivetrain::CalibrateGyro() { m_gyro.Calibrate(); }
 
 void Drivetrain::Debug() {
     TrajectoryPoint estimatedPose = m_controller.EstimatedPose();
     TrajectoryPoint desiredPose = m_controller.GoalPose();
-    /*
-    Robot::logger.Log(
-        LogEvent("Estimated Pose: " + std::to_string(estimatedPose.x) + " , " +
-                     std::to_string(estimatedPose.y) + " , " +
-                     std::to_string(estimatedPose.theta),
-                 LogEvent::VERBOSE_DEBUG));
-    Robot::logger.Log(LogEvent(
-        "Left Error: " + std::to_string(m_controller.LeftVelocityError()) +
-            " Right Error: " +
-            std::to_string(m_controller.RightVelocityError()),
-        LogEvent::VERBOSE_DEBUG));
-    Robot::logger.Log(LogEvent(
-        "Left U: " + std::to_string(m_controller.ControllerLeftVoltage()) +
-            " Right U: " +
-            std::to_string(m_controller.ControllerRightVoltage()),
-        LogEvent::VERBOSE_DEBUG));
-    Robot::logger.Log(LogEvent(
-        "Left Pos: " + std::to_string(m_leftEncoder.GetDistance()) +
-            " Right Pos: " + std::to_string(m_rightEncoder.GetDistance()) +
-            "Angle" + std::to_string(deg2rad(m_gyro.GetAngle())),
-        LogEvent::VERBOSE_DEBUG));*/
+
+    /*Publish(&("Pose", "Estimated Pose: " + std::to_string(estimatedPose.x) + "
+    , " + std::to_string(estimatedPose.y) + " , " +
+                     std::to_string(estimatedPose.theta))
+                 );
+    Publish(&(
+        "Error", "Left Error: " +
+    std::to_string(m_controller.LeftVelocityError()) + " Right Error: " +
+            std::to_string(m_controller.RightVelocityError()))
+        );
+    Publish(&("U","Left U: " +
+    std::to_string(m_controller.ControllerLeftVoltage()) + " Right U: " +
+    std::to_string(m_controller.ControllerRightVoltage()))
+        );
+    Publish(&("Position", "Left Pos: " +
+    std::to_string(m_leftEncoder.GetDistance()) + " Right Pos: " +
+    std::to_string(m_rightEncoder.GetDistance()) + "Angle" +
+    std::to_string(deg2rad(m_gyro.GetAngle())))
+        ); */
     Robot::csvLogger.Log(estimatedPose.x, estimatedPose.y, estimatedPose.theta,
                          desiredPose.x, desiredPose.y, desiredPose.theta,
                          m_controller.ControllerLeftVoltage(),
@@ -138,4 +137,12 @@ void Drivetrain::Debug() {
                          m_controller.EstimatedRightVelocity());
 }
 
-void Drivetrain::HandleEvent(Event event) {}
+void Drivetrain::SubsystemPeriodic() {
+    if (Robot::driveStick1.GetRawButton(1)) {
+        Drive(Robot::driveStick1.GetY() * 0.5, Robot::driveStick2.GetX() * 0.5,
+              Robot::driveStick2.GetRawButton(2));
+    } else {
+        Drive(Robot::driveStick1.GetY(), Robot::driveStick2.GetX(),
+              Robot::driveStick2.GetRawButton(2));
+    }
+}

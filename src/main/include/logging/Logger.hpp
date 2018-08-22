@@ -6,13 +6,15 @@
 #include <string>
 #include <vector>
 
+#include "communications/PublishNode.hpp"
 #include "logging/LogEvent.hpp"
 #include "logging/LogSinkBase.hpp"
+#include "subsystems/SubsystemBase.hpp"
 
 /**
  * A logging engine.
  */
-class Logger : public LogSinkBase {
+class Logger : public LogSinkBase, public PublishNode, public SubsystemBase {
 public:
     using LogSinkBaseList = std::vector<std::reference_wrapper<LogSinkBase>>;
 
@@ -70,6 +72,10 @@ public:
      * This initial time is used to calculate an event's relative time.
      */
     void SetInitialTime(std::time_t time);
+
+    void ProcessMessage(const StatePacket& message) override;
+
+    void ProcessMessage(const ButtonPacket& message) override;
 
 private:
     LogSinkBaseList m_sinkList;

@@ -4,7 +4,15 @@
 
 #include <algorithm>
 
-Logger::Logger() { ResetInitialTime(); }
+#include "Robot.hpp"
+
+Logger::Logger() : Logger::PublishNode("Logger") {
+    ResetInitialTime();
+    Subscribe(Robot::elevator);
+    Subscribe(Robot::intake);
+    Subscribe(Robot::drivetrain);
+    Subscribe(Robot::climber);
+}
 
 void Logger::Log(LogEvent event) {
     event.SetInitialTime(m_initialTime);
@@ -32,3 +40,21 @@ Logger::LogSinkBaseList Logger::ListLogSinks() const { return m_sinkList; }
 void Logger::ResetInitialTime() { m_initialTime = std::time(nullptr); }
 
 void Logger::SetInitialTime(std::time_t time) { m_initialTime = time; }
+
+void Logger::ProcessMessage(const StatePacket& message) {
+    Log(LogEvent(
+        "StatePacket (" + message.topic + "): " + std::to_string(message.state),
+        LogEvent::VERBOSE_DEBUG));
+}
+
+void Logger::ProcessMessage(const ButtonPacket& message) {
+    if (message.pressed) {
+        Log(LogEvent("ButtonPacket (" + message.topic +
+                         "): " + std::to_string(message.button) + " Pressed",
+                     LogEvent::VERBOSE_DEBUG));
+    } else {
+        Log(LogEvent("ButtonPacket (" + message.topic +
+                         "): " + std::to_string(message.button) + " Released",
+                     LogEvent::VERBOSE_DEBUG));
+    }
+}

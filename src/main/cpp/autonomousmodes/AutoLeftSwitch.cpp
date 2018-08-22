@@ -10,7 +10,7 @@ AutoLeftSwitch::AutoLeftSwitch() { autoTimer.Start(); }
 
 void AutoLeftSwitch::Reset() { state = State::kInit; }
 
-void AutoLeftSwitch::HandleEvent(Event event) {
+void AutoLeftSwitch::Run() {
     static std::string platePosition;
 
     switch (state) {

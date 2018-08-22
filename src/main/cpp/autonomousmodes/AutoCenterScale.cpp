@@ -10,7 +10,7 @@ AutoCenterScale::AutoCenterScale() { autoTimer.Reset(); }
 
 void AutoCenterScale::Reset() { state = State::kInit; }
 
-void AutoCenterScale::HandleEvent(Event event) {
+void AutoCenterScale::Run() {
     static std::string platePosition;
 
     switch (state) {

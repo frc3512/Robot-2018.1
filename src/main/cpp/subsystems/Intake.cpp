@@ -4,6 +4,8 @@
 
 #include "Robot.hpp"
 
+Intake::Intake() : PublishNode("Intake") {}
+
 void Intake::Open() { m_intakeClaw.Set(true); }
 
 void Intake::Close() { m_intakeClaw.Set(false); }
@@ -36,16 +38,17 @@ void Intake::AutoOuttake() {
     m_intakeRight.Set(-0.75);
 }
 
-void Intake::HandleEvent(Event event) {
-    if (event == Event{kButtonPressed, 3}) {
+void Intake::ProcessMessage(const ButtonPacket& message) {
+    if (message.topic == "Robot/AppendageStick" && message.button == 3 &&
+        message.pressed) {
         if (IsOpen()) {
             Close();
         } else if (IsDeployed()) {
             Open();
         }
     }
-    if (event == Event{kButtonPressed, 5} &&
-        !Robot::elevator.GetBottomHallEffect()) {
+    if (message.topic == "Robot/AppendageStick" && message.button == 5 &&
+        message.pressed && !Robot::elevator.GetBottomHallEffect()) {
         if (IsDeployed()) {
             Stow();
             Close();
@@ -53,14 +56,18 @@ void Intake::HandleEvent(Event event) {
             Deploy();
         }
     }
-    if (event == Event{kButtonPressed, 4}) {
+    if (message.topic == "Robot/AppendageStick" && message.button == 4 &&
+        message.pressed) {
         SetMotors(MotorState::kIntake);
     }
-    if (event == Event{kButtonPressed, 6}) {
+    if (message.topic == "Robot/AppendageStick" && message.button == 6 &&
+        message.pressed) {
         SetMotors(MotorState::kOuttake);
     }
-    if (event == Event{kButtonReleased, 4} ||
-        event == Event{kButtonReleased, 6}) {
+    if (message.topic == "Robot/AppendageStick" && message.button == 4 &&
+            !message.pressed ||
+        message.topic == "Robot/AppendageStick" && message.button == 6 &&
+            !message.pressed) {
         SetMotors(MotorState::kIdle);
     }
 }

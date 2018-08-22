@@ -6,13 +6,16 @@
 #include <frc/Solenoid.h>
 
 #include "Constants.hpp"
-#include "es/Service.hpp"
+#include "communications/PublishNode.hpp"
+#include "subsystems/SubsystemBase.hpp"
 
 enum class MotorState { kIntake, kOuttake, kIdle };
 
-class Intake : public Service {
+class Intake : public SubsystemBase, public PublishNode {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
+
+    Intake();
 
     /**
      * Opens and closes the claw of the Intake, also gets the current state of
@@ -37,7 +40,7 @@ public:
 
     void AutoOuttake();
 
-    void HandleEvent(Event event) override;
+    void ProcessMessage(const ButtonPacket& message) override;
 
 private:
     frc::Solenoid m_intakeClaw{kIntakeClawPort};

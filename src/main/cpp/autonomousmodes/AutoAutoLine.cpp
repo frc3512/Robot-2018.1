@@ -13,7 +13,7 @@ AutoAutoLine::AutoAutoLine() { autoTimer.Start(); }
 void AutoAutoLine::Reset() { state = State::kInit; }
 
 // Drives forward until passing white line 120 inches away from start
-void AutoAutoLine::HandleEvent(Event event) {
+void AutoAutoLine::Run() {
     switch (state) {
         case State::kInit:
             Robot::drivetrain.SetGoal(

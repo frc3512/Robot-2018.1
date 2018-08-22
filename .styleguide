@@ -18,6 +18,7 @@ modifiableFileExclude {
 includeOtherLibs {
   ctre/
   frc/
+  gtest/
   hal/
   units\.h$
 }

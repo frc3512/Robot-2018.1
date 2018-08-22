@@ -9,17 +9,18 @@
 #include <frc/drive/DifferentialDrive.h>
 
 #include "Constants.hpp"
+#include "communications/PublishNode.hpp"
 #include "control/DrivetrainController.hpp"
 #include "control/Pose.hpp"
-#include "es/Service.hpp"
 #include "subsystems/CANTalonGroup.hpp"
+#include "subsystems/SubsystemBase.hpp"
 
 class CANTalonGroup;
 
 /**
  * Provides an interface for this year's drive train
  */
-class Drivetrain : public Service {
+class Drivetrain : public SubsystemBase, public PublishNode {
 public:
     using WPI_TalonSRX = ctre::phoenix::motorcontrol::can::WPI_TalonSRX;
 
@@ -113,7 +114,7 @@ public:
     // Sends print statements for debugging purposes
     void Debug();
 
-    void HandleEvent(Event event) override;
+    void SubsystemPeriodic() override;
 
 private:
     // Left gearbox used in position PID
@@ -131,7 +132,7 @@ private:
     frc::DifferentialDrive m_drive{m_leftGrbx, m_rightGrbx};
 
     // Gyro used for angle PID
-    frc::ADXRS450_Gyro m_gyro;
+    // frc::ADXRS450_Gyro m_gyro;
     DrivetrainController m_controller;
     frc::Notifier m_thread{&Drivetrain::Iterate, this};
 };

@@ -4,8 +4,6 @@
 
 #include <cscore.h>
 
-#include <string>
-
 #include <frc/Joystick.h>
 #include <frc/TimedRobot.h>
 
@@ -21,8 +19,10 @@
 #include "autonomousmodes/AutoRightPriority.hpp"
 #include "autonomousmodes/AutoRightScale.hpp"
 #include "autonomousmodes/AutoRightSwitch.hpp"
+#include "communications/ButtonPacket.hpp"
+#include "communications/PublishNode.hpp"
+#include "communications/StatePacket.hpp"
 #include "dsdisplay/DSDisplay.hpp"
-#include "es/Service.hpp"
 #include "livegrapher/LiveGrapher.hpp"
 #include "logging/CsvLogger.hpp"
 #include "logging/LogConsoleSink.hpp"
@@ -34,7 +34,7 @@
 #include "subsystems/Elevator.hpp"
 #include "subsystems/Intake.hpp"
 
-class Robot : public frc::TimedRobot, public Service {
+class Robot : public frc::TimedRobot, public PublishNode {
 public:
     Robot();
 
@@ -48,14 +48,12 @@ public:
     void AutonomousPeriodic() override;
     void TeleopPeriodic() override;
 
-    void HandleEvent(Event event) override;
-
     void DS_PrintOut();
 
     static Drivetrain drivetrain;
-    static Intake intake;
     static Elevator elevator;
     static Climber climber;
+    static Intake intake;
     static frc::Joystick appendageStick;
     static frc::Joystick driveStick1;
     static frc::Joystick driveStick2;

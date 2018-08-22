@@ -4,17 +4,14 @@
 
 #include <frc/Timer.h>
 
-#include "es/Service.hpp"
-
-class AutoRightDouble : public Service {
+class AutoRightDouble {
 public:
     AutoRightDouble();
 
     void Reset();
 
-    void HandleEvent(Event event) override;
+    void Run();
 
-private:
     frc::Timer autoTimer;
 
     enum class State {

@@ -7,17 +7,19 @@
 #include <frc/Solenoid.h>
 #include <frc/Timer.h>
 
-#include "../Constants.hpp"
-#include "Elevator.hpp"
-#include "Intake.hpp"
-#include "es/Service.hpp"
+#include "Constants.hpp"
+#include "communications/PublishNode.hpp"
+#include "subsystems/Elevator.hpp"
+#include "subsystems/Intake.hpp"
+#include "subsystems/SubsystemBase.hpp"
 
-class Climber : public Service {
+class Climber : public SubsystemBase, public PublishNode {
 public:
+    Climber();
     void EngagePawl();
     void LockPawl();
     void Shift();
-    void HandleEvent(Event event) override;
+    void ProcessMessage(const ButtonPacket& message) override;
 
 private:
     frc::Solenoid m_pawl{kPawlPort};
