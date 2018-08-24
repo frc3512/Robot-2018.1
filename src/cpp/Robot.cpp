@@ -81,8 +81,8 @@ void Robot::DisabledInit() {
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
     intake.SetMotors(MotorState::kIdle);
-    elevator.StopClosedLoop();
-    elevator.SetHeightReference(elevator.GetHeight());
+    elevator.Disable();
+    elevator.SetReferences(elevator.GetHeight(), 0);
 }
 
 void Robot::AutonomousInit() {
@@ -101,7 +101,7 @@ void Robot::AutonomousInit() {
 
 void Robot::TeleopInit() {
     robotDrive.StopClosedLoop();
-    elevator.StopClosedLoop();
+    elevator.Disable();
     intake.Deploy();
     intake.Close();
     climber.LockPawl();

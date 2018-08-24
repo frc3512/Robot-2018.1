@@ -22,8 +22,8 @@ void AutoRightDouble::HandleEvent(Event event) {
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
 
-            Robot::elevator.SetHeightReference(kScaleHeight);
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.SetReferences(kScaleHeight, 0.0);
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
 
@@ -115,7 +115,7 @@ void AutoRightDouble::HandleEvent(Event event) {
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::intake.SetMotors(MotorState::kIdle);
                 Robot::intake.Open();
-                Robot::elevator.SetHeightReference(kFloorHeight);
+                Robot::elevator.SetReferences(kFloorHeight, 0.0);
                 Robot::robotDrive.ResetEncoders();
                 if (platePosition[kScale] == 'R' &&
                     platePosition[kFriendlySwitch] == 'R') {
@@ -133,18 +133,18 @@ void AutoRightDouble::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::intake.Close();
-                Robot::elevator.SetHeightReference(kSwitchHeight);
+                Robot::elevator.SetReferences(kSwitchHeight, 0.0);
 
                 state = State::kSpit;
             }
             break;
         case State::kSpit:
-            if (Robot::elevator.HeightAtReference() &&
+            if (Robot::elevator.AtReference() &&
                 autoTimer.HasPeriodPassed(3.0)) {
                 Robot::intake.SetMotors(MotorState::kOuttake);
 
                 Robot::robotDrive.StopClosedLoop();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
 
                 state = State::kIdle;
             }

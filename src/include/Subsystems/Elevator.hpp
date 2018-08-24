@@ -8,6 +8,7 @@
 #include <CtrlSys/RefInput.h>
 #include <CtrlSys/SumNode.h>
 #include <DigitalInput.h>
+#include <DriverStation.h>
 #include <Notifier.h>
 #include <ctre/phoenix/MotorControl/CAN/WPI_TalonSRX.h>
 
@@ -15,6 +16,7 @@
 #include "DriveTrain.hpp"
 #include "ES/Service.hpp"
 #include "Subsystems/CANTalonGroup.hpp"
+#include "Subsystems/ElevatorController.hpp"
 
 class Elevator : public Service {
 public:
@@ -22,27 +24,30 @@ public:
 
     Elevator();
 
+    Elevator(const Elevator&) = delete;
+    Elevator& operator=(const Elevator&) = delete;
+
     // Sets the voltage of the motors
     void SetVelocity(double velocity);
 
     // Set encoder distance to 0
     void ResetEncoder(void);
 
-    // Starts and stops PID loops
-    void StartClosedLoop(void);
-    void StopClosedLoop(void);
-
     // Gets encoder values
     double GetHeight(void);
 
-    // Sets encoder PID setpoints
-    void SetHeightReference(double height);
+    void Enable(void);
+    void Disable(void);
 
-    // Returns encoder PID loop references
-    double GetHeightReference() const;
+    void SetReferences(double position, double velocity);
 
-    // Returns whether or not elevator has reached reference
-    bool HeightAtReference() const;
+    bool AtReference() const;
+
+    void Iterate(void);
+
+    double ControllerVoltage() const;
+
+    void Reset(void);
 
     // Gets whether the Hall Effect sensor has triggered
     bool GetBottomHallEffect(void);
@@ -64,9 +69,6 @@ private:
     frc::FuncNode m_elevatorEncoder{
         [this] { return m_elevatorGearbox.GetPosition(); }};
 
-    frc::RefInput m_feedForward{kGravityFeedForward};
-    frc::SumNode m_errorSum{m_heightRef, true, m_elevatorEncoder, false};
-    frc::PIDNode m_pid{kElevatorP,    kElevatorI, kElevatorD,
-                       m_feedForward, m_errorSum, kElevatorControllerPeriod};
-    frc::Output m_output{m_pid, m_elevatorGearbox, kElevatorControllerPeriod};
+    ElevatorController m_elevator;
+    frc::Notifier m_thread{&Elevator::Iterate, this};
 };

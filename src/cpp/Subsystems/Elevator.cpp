@@ -21,17 +21,39 @@ void Elevator::ResetEncoder() { m_elevatorGearbox.ResetEncoder(); }
 
 double Elevator::GetHeight() { return m_elevatorGearbox.GetPosition(); }
 
-void Elevator::StartClosedLoop() { m_output.Enable(); }
-
-void Elevator::StopClosedLoop() { m_output.Disable(); }
-
-void Elevator::SetHeightReference(double height) { m_heightRef.Set(height); }
-
-double Elevator::GetHeightReference() const { return m_heightRef.GetOutput(); }
-
-bool Elevator::HeightAtReference() const { return m_errorSum.InTolerance(); }
-
 bool Elevator::GetBottomHallEffect() { return m_elevatorBottomHall.Get(); }
+
+void Elevator::Enable() {
+    m_elevator.Enable();
+    m_thread.StartPeriodic(0.005);
+}
+
+void Elevator::Disable() {
+    m_elevator.Disable();
+    m_thread.Stop();
+}
+
+void Elevator::SetReferences(double position, double velocity) {
+    m_elevator.SetReferences(position, velocity);
+}
+
+bool Elevator::AtReference() const { return m_elevator.AtReferences(); }
+
+void Elevator::Iterate() {
+    m_elevator.SetMeasuredPosition(m_elevatorGearbox.GetPosition());
+    m_elevator.Update();
+
+    // Set motor input
+    double batteryVoltage =
+        frc::DriverStation::GetInstance().GetBatteryVoltage();
+    m_elevatorGearbox.Set(m_elevator.ControllerVoltage() / batteryVoltage);
+}
+
+double Elevator::ControllerVoltage() const {
+    return m_elevator.ControllerVoltage();
+}
+
+void Elevator::Reset() { m_elevator.Reset(); }
 
 void Elevator::HandleEvent(Event event) {
     enum State { kPosition, kVelocity };
@@ -41,36 +63,36 @@ void Elevator::HandleEvent(Event event) {
     switch (state) {
         case State::kPosition:
             if (event.type == EventType::kEntry) {
-                StartClosedLoop();
+                Enable();
             }
             if (event == Event{kButtonPressed, 7}) {
-                SetHeightReference(kFloorHeight);
+                SetReferences(kFloorHeight, 0.0);
             }
             if (event == Event{kButtonPressed, 8}) {
-                SetHeightReference(kSwitchHeight);
+                SetReferences(kSwitchHeight, 0.0);
             }
             if (event == Event{kButtonPressed, 9}) {
-                SetHeightReference(kSecondBlockHeight);
+                SetReferences(kSecondBlockHeight, 0.0);
             }
             if (event == Event{kButtonPressed, 10}) {
-                SetHeightReference(kScaleHeight);
+                SetReferences(kScaleHeight, 0.0);
             }
             if (event == Event{kButtonPressed, 11}) {
-                SetHeightReference(kClimbHeight);
+                SetReferences(kClimbHeight, 0.0);
             }
             if (event == Event{kButtonPressed, 12}) {
                 nextState = State::kVelocity;
                 makeTransition = true;
             }
             if (event.type == EventType::kExit) {
-                SetHeightReference(GetHeight());
-                StopClosedLoop();
+                SetReferences(GetHeight(), 0.0);
+                Disable();
             }
             break;
         case State::kVelocity:
             SetVelocity(Robot::appendageStick.GetY());
             if (event == Event{kButtonPressed, 12}) {
-                SetHeightReference(GetHeight());
+                SetReferences(GetHeight(), 0.0);
                 nextState = State::kPosition;
                 makeTransition = true;
             }

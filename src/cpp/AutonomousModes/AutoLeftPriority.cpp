@@ -20,13 +20,13 @@ void AutoLeftPriority::HandleEvent(Event event) {
 
             if (platePosition[kScale] == 'L') {
                 Robot::robotDrive.SetPositionGoal(324.0 - kRobotLength / 2.0);
-                Robot::elevator.SetHeightReference(kScaleHeight);
+                Robot::elevator.SetReferences(kScaleHeight, 0.0);
 
                 state = State::kInitialForward;
             } else if (platePosition[kFriendlySwitch] == 'L' &&
                        platePosition[kScale] == 'R') {
                 Robot::robotDrive.SetPositionGoal(168.0 - kRobotLength / 2.0);
-                Robot::elevator.SetHeightReference(kSwitchHeight);
+                Robot::elevator.SetReferences(kSwitchHeight, 0.0);
 
                 state = State::kAutoSwitch;
             } else {
@@ -38,7 +38,7 @@ void AutoLeftPriority::HandleEvent(Event event) {
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
 
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
             break;
@@ -104,7 +104,7 @@ void AutoLeftPriority::HandleEvent(Event event) {
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::intake.AutoOuttake();
                 Robot::robotDrive.StopClosedLoop();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
                 autoTimer.Reset();
 
                 state = State::kIdle;
@@ -115,7 +115,7 @@ void AutoLeftPriority::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.PositionProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.StopClosedLoop();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
                 autoTimer.Reset();
 
                 state = State::kIdle;
@@ -153,7 +153,7 @@ void AutoLeftPriority::HandleEvent(Event event) {
                 autoTimer.Reset();
 
                 Robot::robotDrive.StopClosedLoop();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
 
                 state = State::kIdle;
             }

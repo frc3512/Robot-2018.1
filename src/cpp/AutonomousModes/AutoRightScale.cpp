@@ -20,7 +20,7 @@ void AutoRightScale::HandleEvent(Event event) {
 
             if (platePosition[kScale] == 'R') {
                 Robot::robotDrive.SetPositionGoal(324.0 - kRobotLength / 2.0);
-                Robot::elevator.SetHeightReference(kScaleHeight);
+                Robot::elevator.SetReferences(kScaleHeight, 0.0);
             } else {
                 Robot::robotDrive.SetPositionGoal(236.5 + 10.0 -
                                                   kRobotLength / 2.0);
@@ -28,7 +28,7 @@ void AutoRightScale::HandleEvent(Event event) {
             Robot::robotDrive.SetAngleGoal(0.0);
             Robot::robotDrive.StartClosedLoop();
 
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.Disable();
 
             autoTimer.Reset();
 
@@ -54,7 +54,7 @@ void AutoRightScale::HandleEvent(Event event) {
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.ResetEncoders();
                 Robot::robotDrive.SetPositionGoal(199.0);
-                Robot::elevator.SetHeightReference(kScaleHeight);
+                Robot::elevator.SetReferences(kScaleHeight, 0.0);
                 autoTimer.Reset();
 
                 state = State::kLeftForward;
@@ -96,7 +96,7 @@ void AutoRightScale::HandleEvent(Event event) {
                 Robot::intake.AutoOuttake();
 
                 Robot::robotDrive.StopClosedLoop();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
                 state = State::kIdle;
                 // state = State::kPrepReverse;
             }
@@ -118,7 +118,7 @@ void AutoRightScale::HandleEvent(Event event) {
                 autoTimer.Get() >
                     Robot::robotDrive.AngleProfileTimeTotal() + 1.0) {
                 Robot::robotDrive.SetAngleGoal(-90.0);
-                Robot::elevator.SetHeightReference(0.0);
+                Robot::elevator.SetReferences(0.0, 0.0);
                 autoTimer.Reset();
                 state = State::kIdle;
             }
