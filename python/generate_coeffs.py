@@ -4,6 +4,6 @@ import os
 import subprocess
 import sys
 
-#subprocess.run([sys.executable, "flywheel.py", "--noninteractive"])
-#os.rename("ShooterCoeffs.h", "../src/include/Subsystems/ShooterCoeffs.h")
-#os.rename("ShooterCoeffs.cpp", "../src/cpp/Subsystems/ShooterCoeffs.cpp")
+subprocess.run([sys.executable, "elevator.py", "--noninteractive"])
+os.rename("ElevatorCoeffs.h", "../src/include/Subsystems/ElevatorCoeffs.h")
+os.rename("ElevatorCoeffs.cpp", "../src/cpp/Subsystems/ElevatorCoeffs.cpp")

@@ -21,17 +21,36 @@ void Elevator::ResetEncoder() { m_elevatorGearbox.ResetEncoder(); }
 
 double Elevator::GetHeight() { return m_elevatorGearbox.GetPosition(); }
 
-void Elevator::StartClosedLoop() { m_output.Enable(); }
-
-void Elevator::StopClosedLoop() { m_output.Disable(); }
-
-void Elevator::SetHeightReference(double height) { m_heightRef.Set(height); }
-
-double Elevator::GetHeightReference() const { return m_heightRef.GetOutput(); }
-
-bool Elevator::HeightAtReference() const { return m_errorSum.InTolerance(); }
-
 bool Elevator::GetBottomHallEffect() { return m_elevatorBottomHall.Get(); }
+
+void Elevator::Enable() {
+  m_elevator.Enable();
+  m_thread.StartPeriodic(0.005);
+}
+
+void Elevator::Disable() {
+  m_elevator.Disable();
+  m_thread.Stop();
+}
+
+void Elevator::SetReferences(double position, double velocity) {
+  m_elevator.SetReferences(position, velocity);
+}
+
+void Elevator::Iterate() {
+  m_elevator.SetMeasuredPosition(m_encoder.GetDistance());
+  m_elevator.Update();
+
+  // Set motor input
+  double batteryVoltage = frc::DriverStation::GetInstance().GetBatteryVoltage();
+  m_motor.Set(m_elevator.ControllerVoltage() / batteryVoltage);
+}
+
+double Elevator::ControllerVoltage() const {
+  return m_elevator.ControllerVoltage();
+}
+
+void Elevator::Reset() { m_elevator.Reset(); }
 
 void Elevator::HandleEvent(Event event) {
     enum State { kPosition, kVelocity };
