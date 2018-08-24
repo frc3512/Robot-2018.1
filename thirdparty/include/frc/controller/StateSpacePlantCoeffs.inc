@@ -12,10 +12,9 @@ namespace frc {
 template <int States, int Inputs, int Outputs>
 StateSpacePlantCoeffs<States, Inputs, Outputs>::StateSpacePlantCoeffs(
     const Eigen::Matrix<double, States, States>& A,
-    const Eigen::Matrix<double, States, States>& Ainv,
     const Eigen::Matrix<double, States, Inputs>& B,
     const Eigen::Matrix<double, Outputs, States>& C,
     const Eigen::Matrix<double, Outputs, Inputs>& D)
-    : A(A), Ainv(Ainv), B(B), C(C), D(D) {}
+    : A(A), B(B), C(C), D(D) {}
 
 }  // namespace frc

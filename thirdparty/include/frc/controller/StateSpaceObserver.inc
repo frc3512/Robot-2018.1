@@ -19,13 +19,13 @@ StateSpaceObserver<States, Inputs, Outputs>::StateSpaceObserver(
 
 template <int States, int Inputs, int Outputs>
 const Eigen::Matrix<double, States, Outputs>&
-StateSpaceObserver<States, Inputs, Outputs>::L() const {
-  return GetCoefficients().L;
+StateSpaceObserver<States, Inputs, Outputs>::K() const {
+  return GetCoefficients().K;
 }
 
 template <int States, int Inputs, int Outputs>
-double StateSpaceObserver<States, Inputs, Outputs>::L(int i, int j) const {
-  return L()(i, j);
+double StateSpaceObserver<States, Inputs, Outputs>::K(int i, int j) const {
+  return K()(i, j);
 }
 
 template <int States, int Inputs, int Outputs>
@@ -65,14 +65,8 @@ template <int States, int Inputs, int Outputs>
 void StateSpaceObserver<States, Inputs, Outputs>::Correct(
     const Eigen::Matrix<double, Inputs, 1>& u,
     const Eigen::Matrix<double, Outputs, 1>& y) {
-  /*
-   * A^-1 is applied here to step the L matrix back an iteration to match the
-   * prediction step. Note that this cancels the A in "A * K" for a Kalman
-   * filter run as a Luenberger observer to give simply K, as expected for
-   * separate steps.
-   */
   m_Xhat +=
-      m_plant->Ainv() * L() * (y - m_plant->C() * Xhat() - m_plant->D() * u);
+      K() * (y - m_plant->C() * Xhat() - m_plant->D() * u);
 }
 
 template <int States, int Inputs, int Outputs>

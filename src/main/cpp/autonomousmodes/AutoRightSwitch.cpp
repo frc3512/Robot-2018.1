@@ -27,8 +27,8 @@ void AutoRightSwitch::HandleEvent(Event event) {
             }
             Robot::robotDrive.Enable();
 
-            Robot::elevator.SetHeightReference(kSwitchHeight);
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.SetGoal(kSwitchHeight);
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
 
@@ -83,7 +83,7 @@ void AutoRightSwitch::HandleEvent(Event event) {
             if (Robot::robotDrive.AtGoal()) {
                 Robot::intake.AutoOuttake();
                 Robot::robotDrive.Disable();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
 
                 state = State::kIdle;
             }

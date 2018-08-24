@@ -20,11 +20,11 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             platePosition =
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
-            Robot::robotDrive.SetGoal(Pose(kRobotWidth / 2.0, 0.0, 0.0));
+            // Robot::robotDrive.SetGoal(Pose(kRobotWidth / 2.0, 0.0, 0.0));
             Robot::robotDrive.Enable();
 
-            Robot::elevator.SetHeightReference(kSwitchHeight);
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.SetGoal(kSwitchHeight);
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
 
@@ -103,7 +103,7 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             if (Robot::robotDrive.AtGoal()) {
                 Robot::intake.SetMotors(MotorState::kOuttake);
                 Robot::robotDrive.Disable();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
 
                 state = State::kIdle;
             }

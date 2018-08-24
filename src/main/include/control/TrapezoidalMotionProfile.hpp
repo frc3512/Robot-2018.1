@@ -14,13 +14,13 @@
  *
  * Initialization:
  * @code{.cpp}
- * TrapzeoidalMotionProfile::Constraints constraints{kMaxV, kMaxA};
+ * TrapezoidalMotionProfile::Constraints constraints{kMaxV, kMaxA};
  * double previousProfiledReference = initialReference;
  * @endcode
  *
  * Run on update:
  * @code{.cpp}
- * TrapzeoidalMotionProfile profile{constraints, unprofiledReference,
+ * TrapezoidalMotionProfile profile{constraints, unprofiledReference,
  *                                  previousProfiledReference};
  * previousProfiledReference = profile.Calculate(timeSincePreviousUpdate);
  * @endcode

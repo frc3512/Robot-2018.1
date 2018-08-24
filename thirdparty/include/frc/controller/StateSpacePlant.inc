@@ -30,17 +30,6 @@ double StateSpacePlant<States, Inputs, Outputs>::A(int i, int j) const {
 }
 
 template <int States, int Inputs, int Outputs>
-const Eigen::Matrix<double, States, States>&
-StateSpacePlant<States, Inputs, Outputs>::Ainv() const {
-  return GetCoefficients().Ainv;
-}
-
-template <int States, int Inputs, int Outputs>
-double StateSpacePlant<States, Inputs, Outputs>::Ainv(int i, int j) const {
-  return Ainv()(i, j);
-}
-
-template <int States, int Inputs, int Outputs>
 const Eigen::Matrix<double, States, Inputs>&
 StateSpacePlant<States, Inputs, Outputs>::B() const {
   return GetCoefficients().B;

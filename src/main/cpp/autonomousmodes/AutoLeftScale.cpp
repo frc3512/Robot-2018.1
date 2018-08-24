@@ -21,14 +21,14 @@ void AutoLeftScale::HandleEvent(Event event) {
             if (platePosition[kScale] == 'L') {
                 Robot::robotDrive.SetGoal(
                     Pose(324.0 - kRobotLength / 2.0, 0.0, 0.0));
-                Robot::elevator.SetHeightReference(kScaleHeight);
+                Robot::elevator.SetGoal(kScaleHeight);
             } else {
                 Robot::robotDrive.SetGoal(
                     Pose(252.0 - kRobotLength / 2.0, 0.0, 0.0));
             }
             Robot::robotDrive.Enable();
 
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.Disable();
 
             autoTimer.Reset();
 
@@ -49,8 +49,8 @@ void AutoLeftScale::HandleEvent(Event event) {
         case State::kRightRotate:
             if (Robot::robotDrive.AtGoal()) {
                 Robot::robotDrive.ResetEncoders();
-                Robot::elevator.SetHeightReference(kScaleHeight);
                 Robot::robotDrive.SetGoal(Pose(199.0, 0.0, 0.0));
+                Robot::elevator.SetGoal(kScaleHeight);
                 autoTimer.Reset();
 
                 state = State::kRightForward;
@@ -85,7 +85,7 @@ void AutoLeftScale::HandleEvent(Event event) {
                 Robot::intake.AutoOuttake();
 
                 Robot::robotDrive.Disable();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
                 state = State::kIdle;
             }
             break;

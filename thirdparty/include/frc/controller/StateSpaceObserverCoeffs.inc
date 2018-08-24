@@ -11,7 +11,7 @@ namespace frc {
 
 template <int States, int Inputs, int Outputs>
 StateSpaceObserverCoeffs<States, Inputs, Outputs>::StateSpaceObserverCoeffs(
-    const Eigen::Matrix<double, States, Outputs>& L)
-    : L(L) {}
+    const Eigen::Matrix<double, States, Outputs>& K)
+    : K(K) {}
 
 }  // namespace frc

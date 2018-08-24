@@ -24,11 +24,6 @@ struct StateSpacePlantCoeffs final {
   const Eigen::Matrix<double, States, States> A;
 
   /**
-   * Inverse system matrix (A^-1).
-   */
-  const Eigen::Matrix<double, States, States> Ainv;
-
-  /**
    * Input matrix.
    */
   const Eigen::Matrix<double, States, Inputs> B;
@@ -47,13 +42,11 @@ struct StateSpacePlantCoeffs final {
    * Construct the container for the state-space plant coefficients.
    *
    * @param A    System matrix.
-   * @param Ainv Inverse of system matrix.
    * @param B    Input matrix.
    * @param C    Output matrix.
    * @param D    Feedthrough matrix.
    */
   StateSpacePlantCoeffs(const Eigen::Matrix<double, States, States>& A,
-                        const Eigen::Matrix<double, States, States>& Ainv,
                         const Eigen::Matrix<double, States, Inputs>& B,
                         const Eigen::Matrix<double, Outputs, States>& C,
                         const Eigen::Matrix<double, Outputs, Inputs>& D);

@@ -21,15 +21,15 @@ struct StateSpaceObserverCoeffs final {
   /**
    * Estimator gain matrix.
    */
-  const Eigen::Matrix<double, States, Outputs> L;
+  const Eigen::Matrix<double, States, Outputs> K;
 
   /**
    * Construct the container for the observer coefficients.
    *
-   * @param L The observer gain matrix.
+   * @param K The observer gain matrix.
    */
   explicit StateSpaceObserverCoeffs(
-      const Eigen::Matrix<double, States, Outputs>& L);
+      const Eigen::Matrix<double, States, Outputs>& K);
 };
 
 }  // namespace frc

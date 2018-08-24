@@ -52,7 +52,7 @@ class Elevator(frccnt.System):
 def main():
     dt = 0.00505
     elevator = Elevator(dt)
-    elevator.export_cpp_coeffs("Elevator", "Subsystems/")
+    elevator.export_cpp_coeffs("Elevator", "control/")
 
     if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
         try:

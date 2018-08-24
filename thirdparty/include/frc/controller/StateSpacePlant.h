@@ -55,19 +55,6 @@ class StateSpacePlant {
   double A(int i, int j) const;
 
   /**
-   * Returns the inverse of the system matrix A.
-   */
-  const Eigen::Matrix<double, States, States>& Ainv() const;
-
-  /**
-   * Returns an element of the inverse of the system matrix A.
-   *
-   * @param i Row of A^-1.
-   * @param j Column of A^-1.
-   */
-  double Ainv(int i, int j) const;
-
-  /**
    * Returns the input matrix B.
    */
   const Eigen::Matrix<double, States, Inputs>& B() const;

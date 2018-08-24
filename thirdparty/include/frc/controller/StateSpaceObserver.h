@@ -53,17 +53,17 @@ class StateSpaceObserver {
   StateSpaceObserver& operator=(StateSpaceObserver&&) = default;
 
   /**
-   * Returns the estimator gain matrix L.
+   * Returns the estimator gain matrix K.
    */
-  const Eigen::Matrix<double, States, Outputs>& L() const;
+  const Eigen::Matrix<double, States, Outputs>& K() const;
 
   /**
-   * Returns an element of the estimator gain matrix L.
+   * Returns an element of the estimator gain matrix K.
    *
-   * @param i Row of L.
-   * @param j Column of L.
+   * @param i Row of K.
+   * @param j Column of K.
    */
-  double L(int i, int j) const;
+  double K(int i, int j) const;
 
   /**
    * Returns the state estimate x-hat.

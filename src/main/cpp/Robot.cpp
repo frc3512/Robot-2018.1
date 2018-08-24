@@ -81,9 +81,11 @@ void Robot::DisabledInit() {
     robotDrive.Disable();
     robotDrive.ResetGyro();
     robotDrive.ResetEncoders();
+    robotDrive.Reset();
     intake.SetMotors(MotorState::kIdle);
-    elevator.StopClosedLoop();
-    elevator.SetHeightReference(elevator.GetHeight());
+    elevator.Disable();
+    elevator.Reset();
+    elevator.SetGoal(elevator.GetHeight());
 }
 
 void Robot::AutonomousInit() {
@@ -92,6 +94,7 @@ void Robot::AutonomousInit() {
     robotDrive.ResetGyro();
     robotDrive.Reset();
     elevator.ResetEncoder();
+    elevator.Reset();
     intake.Deploy();
     climber.LockPawl();
 
@@ -104,7 +107,7 @@ void Robot::AutonomousInit() {
 
 void Robot::TeleopInit() {
     robotDrive.Disable();
-    elevator.StopClosedLoop();
+    elevator.Disable();
     intake.Deploy();
     intake.Close();
     climber.LockPawl();
@@ -183,7 +186,7 @@ void Robot::DS_PrintOut() {
     /*logger.Log(
         LogEvent("Elevator Position: " + std::to_string(elevator.GetHeight()),
                  LogEvent::VERBOSE_DEBUG));*/
-    robotDrive.Debug();
+    elevator.Debug();
     // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
     // robotDrive.GetRightDisplacement() << std::endl;
     // std::cout << robotDrive.GetAngle() << std::endl;

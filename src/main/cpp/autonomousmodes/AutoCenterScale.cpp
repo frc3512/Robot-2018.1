@@ -22,8 +22,8 @@ void AutoCenterScale::HandleEvent(Event event) {
                 Pose(67.0 - kRobotLength / 2.0, 0.0, 0.0));
             Robot::robotDrive.Enable();
 
-            Robot::elevator.SetHeightReference(kSwitchHeight);
-            Robot::elevator.StartClosedLoop();
+            Robot::elevator.SetGoal(kSwitchHeight);
+            Robot::elevator.Enable();
 
             autoTimer.Reset();
 
@@ -106,7 +106,7 @@ void AutoCenterScale::HandleEvent(Event event) {
             if (Robot::robotDrive.AtGoal()) {
                 Robot::intake.Open();
                 Robot::robotDrive.Disable();
-                Robot::elevator.StopClosedLoop();
+                Robot::elevator.Disable();
 
                 state = State::kIdle;
             }
