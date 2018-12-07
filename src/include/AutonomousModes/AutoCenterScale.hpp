@@ -10,7 +10,7 @@ class AutoCenterScale : public Service {
 public:
     AutoCenterScale();
 
-    void Reset(void);
+    void Reset();
 
     void HandleEvent(Event event) override;
 

@@ -89,7 +89,7 @@ public:
     /**
      * Resets the observer.
      */
-    void Reset(void);
+    void Reset();
 
     /**
      * Project the model into the future with a new control input u.

@@ -42,12 +42,12 @@ public:
     /**
      * Enables controller.
      */
-    void Enable(void);
+    void Enable();
 
     /**
      * Disables controller, zeroing controller output U.
      */
-    void Disable(void);
+    void Disable();
 
     /**
      * Returns the controller matrix K.
@@ -102,7 +102,7 @@ public:
     /**
      * Resets the controller.
      */
-    void Reset(void);
+    void Reset();
 
     /**
      * Update controller without setting a new reference.
@@ -169,7 +169,7 @@ private:
         m_coefficients;
     int m_index = 0;
 
-    void CapU(void);
+    void CapU();
 };
 
 }  // namespace frc

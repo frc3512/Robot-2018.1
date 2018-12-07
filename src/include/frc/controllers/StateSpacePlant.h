@@ -196,7 +196,7 @@ public:
     /**
      * Resets the plant.
      */
-    void Reset(void);
+    void Reset();
 
     /**
      * Computes the new x and y given the control input.

@@ -40,7 +40,7 @@ public:
     /**
      * Empties internal packet of data.
      */
-    void Clear(void);
+    void Clear();
 
     void AddData(std::string ID, StatusLight data);
     void AddData(std::string ID, bool data);
@@ -52,7 +52,7 @@ public:
     /**
      * Sends data currently in class's internal packet to Driver Station.
      */
-    void SendToDS(void);
+    void SendToDS();
 
     /**
      * Add an autonomous function.
@@ -63,7 +63,7 @@ public:
     /**
      * Remove all autonomous functions.
      */
-    void DeleteAllMethods(void);
+    void DeleteAllMethods();
 
     /**
      * Returns the name of the currently selected autonomous function.
@@ -73,12 +73,12 @@ public:
     /**
      * Runs autonomous init function currently selected.
      */
-    void ExecAutonomousInit(void);
+    void ExecAutonomousInit();
 
     /**
      * Runs autonomous periodic function currently selected.
      */
-    void ExecAutonomousPeriodic(void);
+    void ExecAutonomousPeriodic();
 
 private:
     using steady_clock = std::chrono::steady_clock;
@@ -121,5 +121,5 @@ private:
     /**
      * Receives control commands from Driver Station and processes them.
      */
-    void ReceiveFromDS(void);
+    void ReceiveFromDS();
 };

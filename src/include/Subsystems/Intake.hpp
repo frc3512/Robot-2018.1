@@ -18,24 +18,24 @@ public:
      * Opens and closes the claw of the Intake, also gets the current state of
      * the Intake
      */
-    void Open(void);
+    void Open();
 
-    void Close(void);
+    void Close();
 
     bool IsOpen() const;
     /**
      * Stows and Deploys the Intake back into the frame of the elevator, also
      * gets the current state of the Intake
      */
-    void Deploy(void);
+    void Deploy();
 
-    void Stow(void);
+    void Stow();
 
     bool IsDeployed() const;
 
     void SetMotors(MotorState state);
 
-    void AutoOuttake(void);
+    void AutoOuttake();
 
     void HandleEvent(Event event) override;
 

@@ -38,5 +38,5 @@ private:
      * Blocks the thread until the event queue receives at least one event or
      * until the service deconstructs, then handles each event.
      */
-    void RunFramework(void);
+    void RunFramework();
 };

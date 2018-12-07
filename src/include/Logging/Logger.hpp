@@ -62,7 +62,7 @@ public:
      *
      * This initial time is used to calculate an event's relative time.
      */
-    void ResetInitialTime(void);
+    void ResetInitialTime();
 
     /**
      * Sets the 'initial' time to the specified time.

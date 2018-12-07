@@ -26,9 +26,9 @@ public:
     const T& back() const;
     void push_front(T value);
     void push_back(T value);
-    T pop_front(void);
-    T pop_back(void);
-    void reset(void);
+    T pop_front();
+    T pop_back();
+    void reset();
 
     T& operator[](size_t index);
     const T& operator[](size_t index) const;

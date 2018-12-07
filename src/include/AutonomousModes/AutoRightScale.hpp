@@ -10,7 +10,7 @@ class AutoRightScale : public Service {
 public:
     AutoRightScale();
 
-    void Reset(void);
+    void Reset();
 
     void HandleEvent(Event event) override;
 

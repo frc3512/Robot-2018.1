@@ -71,12 +71,12 @@ public:
     /**
      * Enables the controller.
      */
-    void Enable(void);
+    void Enable();
 
     /**
      * Disables the controller and zeros the control input.
      */
-    void Disable(void);
+    void Disable();
 
     /**
      * Returns the observer's state estimate x-hat.
@@ -157,7 +157,7 @@ public:
      * Zeroes reference r, controller output u, plant output y, and state
      * estimate x-hat.
      */
-    void Reset(void);
+    void Reset();
 
     /**
      * Returns difference between reference r and x-hat.

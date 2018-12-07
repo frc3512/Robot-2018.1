@@ -71,12 +71,12 @@ public:
     /**
      * Enables the controller.
      */
-    void Enable(void);
+    void Enable();
 
     /**
      * Disables the controller and zeros the control input.
      */
-    void Disable(void);
+    void Disable();
 
     /**
      * Returns the observer's state estimate x-hat.
@@ -155,7 +155,7 @@ public:
      * Zeroes reference R, controller output U, plant output Y, and state
      * estimate Xhat.
      */
-    void Reset(void);
+    void Reset();
 
     /**
      * Returns difference between reference R and Xhat.
@@ -178,7 +178,7 @@ public:
      *
      * @param dt Timestep for prediction.
      */
-    void Predict(void);
+    void Predict();
 
     /**
      * Sets the current controller to be "index". This can be used for gain

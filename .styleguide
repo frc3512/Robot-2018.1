@@ -1,4 +1,4 @@
-cHeaderFileInclude {
+cppHeaderFileInclude {
   \.h$
   \.hpp$
   \.inl$

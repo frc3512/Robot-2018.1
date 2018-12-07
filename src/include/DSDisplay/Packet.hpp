@@ -18,7 +18,7 @@ public:
     void append(const void* data, size_t sizeInBytes);
 
     // Empty the packet
-    void clear(void);
+    void clear();
 
     /* Get a pointer to the data contained in the packet
      *

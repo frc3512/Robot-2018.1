@@ -10,7 +10,7 @@ class AutoLeftPriority : public Service {
 public:
     AutoLeftPriority();
 
-    void Reset(void);
+    void Reset();
 
     void HandleEvent(Event event) override;
 

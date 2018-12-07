@@ -10,7 +10,7 @@ class AutoLeftDouble : public Service {
 public:
     AutoLeftDouble();
 
-    void Reset(void);
+    void Reset();
 
     void HandleEvent(Event event) override;
 

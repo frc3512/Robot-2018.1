@@ -46,7 +46,7 @@ public:
 
     void HandleEvent(Event event) override;
 
-    void DS_PrintOut(void);
+    void DS_PrintOut();
 
     static DriveTrain robotDrive;
     static Intake intake;

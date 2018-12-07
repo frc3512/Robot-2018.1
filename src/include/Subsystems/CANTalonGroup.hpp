@@ -59,7 +59,7 @@ public:
     void SetDistancePerPulse(double distancePerPulse);
 
     // Resets encoder distance to 0
-    void ResetEncoder(void);
+    void ResetEncoder();
 
     // Reverses gearbox encoder direction
     void SetSensorDirection(bool reverse);

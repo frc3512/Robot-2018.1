@@ -21,8 +21,8 @@ public:
     SocketConnection& operator=(const SocketConnection&) = delete;
 
     int recvData(char* buf, size_t length);
-    int readPackets(void);
-    void writePackets(void);
+    int readPackets();
+    void writePackets();
 
     template <class T>
     void queueWrite(T& buf);
