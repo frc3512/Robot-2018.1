@@ -9,10 +9,10 @@
 
 #include <mutex>
 
-#include "Controller.h"
+#include "frc/Controller.h"
 #include "frc/CtrlSys/INode.h"
-#include "Notifier.h"
-#include "PIDOutput.h"
+#include "frc/Notifier.h"
+#include "frc/PIDOutput.h"
 
 namespace frc {
 

@@ -9,7 +9,7 @@
 
 #include <limits>
 
-#include <HAL/HAL.h>
+#include <hal/HAL.h>
 
 #include "frc/CtrlSys/GainNode.h"
 #include "frc/CtrlSys/INode.h"
@@ -17,9 +17,9 @@
 #include "frc/CtrlSys/PIDNode.h"
 #include "frc/CtrlSys/RefInput.h"
 #include "frc/CtrlSys/SumNode.h"
-#include "PIDInterface.h"
-#include "PIDOutput.h"
-#include "SmartDashboard/SendableBase.h"
+#include "frc/PIDInterface.h"
+#include "frc/PIDOutput.h"
+#include "frc/smartdashboard/SendableBase.h"
 
 namespace frc {
 
@@ -65,9 +65,9 @@ class PIDController : public SendableBase, public PIDInterface {
   double GetError();
   bool OnTarget() const;
 
-  void Enable() override;
-  void Disable() override;
-  bool IsEnabled() const override;
+  void Enable();
+  void Disable();
+  bool IsEnabled() const;
   void SetEnabled(bool enable);
 
   void Reset() override;

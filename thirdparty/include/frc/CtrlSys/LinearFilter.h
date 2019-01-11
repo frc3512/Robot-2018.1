@@ -9,11 +9,11 @@
 
 #include <vector>
 
-#include <llvm/ArrayRef.h>
+#include <wpi/ArrayRef.h>
 
 #include "frc/CtrlSys/INode.h"
 #include "frc/CtrlSys/NodeBase.h"
-#include "circular_buffer.h"
+#include "frc/circular_buffer.h"
 
 namespace frc {
 
@@ -91,8 +91,8 @@ class LinearFilter : public NodeBase {
   LinearFilter(SinglePoleIIR, INode& input, double timeConstant, double period);
   LinearFilter(HighPass, INode& input, double timeConstant, double period);
   LinearFilter(MovingAverage, INode& input, int taps);
-  LinearFilter(INode& input, llvm::ArrayRef<double> ffGains,
-               llvm::ArrayRef<double> fbGains);
+  LinearFilter(INode& input, wpi::ArrayRef<double> ffGains,
+               wpi::ArrayRef<double> fbGains);
 
   double GetOutput() override;
 

@@ -81,8 +81,8 @@ LinearFilter::LinearFilter(MovingAverage, INode& input, int taps)
  * @param ffGains The "feed forward" or FIR gains
  * @param fbGains The "feed back" or IIR gains
  */
-LinearFilter::LinearFilter(INode& input, llvm::ArrayRef<double> ffGains,
-                           llvm::ArrayRef<double> fbGains)
+LinearFilter::LinearFilter(INode& input, wpi::ArrayRef<double> ffGains,
+                           wpi::ArrayRef<double> fbGains)
     : NodeBase(input),
       m_inputs(ffGains.size()),
       m_outputs(fbGains.size()),

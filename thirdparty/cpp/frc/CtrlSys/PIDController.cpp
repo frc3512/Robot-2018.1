@@ -10,7 +10,7 @@
 #include <cmath>
 #include <string>
 
-#include "SmartDashboard/SendableBuilder.h"
+#include "frc/smartdashboard/SendableBuilder.h"
 
 using namespace frc;
 

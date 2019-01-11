@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "frc/CtrlSys/Output.h"
-#include "Notifier.h"
+#include "frc/Notifier.h"
 
 namespace frc {
 

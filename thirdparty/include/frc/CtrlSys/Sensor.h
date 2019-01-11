@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <PIDSource.h>
+#include <frc/PIDSource.h>
 
 #include "frc/CtrlSys/INode.h"
 

@@ -14,13 +14,11 @@ modifiableFileExclude {
 }
 
 includeOtherLibs {
-  CtrlSys/
-  cscore\.h$
   ctre/
   frc/
+  hal/
 }
 
 generatedFileExclude {
-  Eigen/
   thirdparty/
 }

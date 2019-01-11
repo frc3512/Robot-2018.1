@@ -1,10 +1,8 @@
 plugins {
     id "cpp"
-    id "edu.wpi.first.GradleRIO" version "2019.0.0-alpha-3"
-    id "edu.wpi.first.GradleVsCode" version "0.3.0"
+    id "google-test-test-suite"
+    id "edu.wpi.first.GradleRIO" version "2019.1.1"
 }
-
-def TEAM = 3512
 
 task pythonTask(type: Exec) {
     workingDir 'python'
@@ -15,24 +13,48 @@ task pythonTask(type: Exec) {
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
     targets {
-        target("roborio", edu.wpi.first.gradlerio.frc.RoboRIO) {
-            team = getTeamOrDefault(TEAM)
+        roboRIO("roborio") {
+            // Team number is loaded either from the .wpilib/wpilib_preferences.json
+            // or from command line. If not found an exception will be thrown.
+            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
+            // want to store a team number in this file.
+            team = frc.getTeamOrDefault(3512)
         }
     }
     artifacts {
-        artifact('frcCpp', edu.wpi.first.gradlerio.frc.FRCNativeArtifact) {
+        frcNativeArtifact('frcCpp') {
             targets << "roborio"
-            component = 'FRCUserProgram'
+            component = 'frcUserProgram'
             // Debug can be overridden by command line, for use with VSCode
-            debug = getDebugOrDefault(false)
+            debug = frc.getDebugOrDefault(false)
+        }
+        // Built in artifact to deploy arbitrary files to the roboRIO.
+        fileTreeArtifact('frcStaticFileDeploy') {
+            // The directory below is the local directory to deploy
+            files = fileTree(dir: 'src/main/deploy')
+            // Deploy to RoboRIO target, into /home/lvuser/deploy
+            targets << "roborio"
+            directory = '/home/lvuser/deploy'
         }
     }
 }
 
+// Set this to true to include the src folder in the include directories passed
+// to the compiler. Some eclipse project imports depend on this behavior.
+// We recommend leaving this disabled if possible. Note for eclipse project
+// imports this is enabled by default. For new projects, its disabled
+def includeSrcInIncludeRoot = false
+
+// Set this to true to enable desktop support.
+def includeDesktopSupport = false
+
 model {
     components {
-        FRCUserProgram(NativeExecutableSpec) {
-            targetPlatform 'roborio'
+        frcUserProgram(NativeExecutableSpec) {
+            targetPlatform wpi.platforms.roborio
+            if (includeDesktopSupport) {
+                targetPlatform wpi.platforms.desktop
+            }
 
             binaries.all {
                 binary ->
@@ -45,23 +67,35 @@ model {
 
             sources.cpp {
                 source {
-                    srcDirs = ['src/cpp', 'thirdparty/cpp']
-                    include '**/*.cpp'
+                    srcDirs = ['src/main/cpp', 'thirdparty/cpp']
+                    include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
-                    srcDirs = ['src/cpp', 'src/include', 'thirdparty/cpp',
-                               'thirdparty/include']
-                    include '**/*.hpp', '**/*.h'
+                    srcDirs = ['src/main/include', 'thirdparty/include']
+                    if (includeSrcInIncludeRoot) {
+                        srcDir 'src/main/cpp'
+                    }
                 }
             }
 
-            // Define my dependencies. In this case, WPILib (+ friends), CTRE Toolsuite (Talon SRX)
-            // and NavX.
-            useLibrary(it, "wpilib", "ctre")
+            // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
+            useLibrary(it, "wpilib")
+            wpi.deps.vendor.cpp(it)
         }
     }
-}
+    testSuites {
+        frcUserProgramTest(GoogleTestTestSuiteSpec) {
+            testing $.components.frcUserProgram
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.9'
+            sources.cpp {
+                source {
+                    srcDir 'src/test/cpp'
+                    include '**/*.cpp'
+                }
+            }
+
+            useLibrary(it, "wpilib", "googletest")
+            wpi.deps.vendor.cpp(it)
+        }
+    }
 }
