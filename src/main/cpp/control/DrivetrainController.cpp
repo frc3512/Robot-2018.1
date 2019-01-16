@@ -14,21 +14,35 @@ void DrivetrainController::Enable() { m_loop.Enable(); }
 void DrivetrainController::Disable() { m_loop.Disable(); }
 
 void DrivetrainController::SetGoal(const Pose& pose) {
-    m_positionProfile.SetGoal(
-        std::hypot(pose.x, pose.y),
-        std::hypot(m_estimatedTrajectory.x, m_estimatedTrajectory.y));
-    m_angleProfile.SetGoal(pose.theta, m_estimatedTrajectory.theta);
+    m_positionProfile = TrapezoidalMotionProfile{
+        positionConstraints,
+        {units::meter_t{
+             std::hypot(m_estimatedTrajectory.x, m_estimatedTrajectory.y)},
+         0_mps},
+        {units::meter_t{std::hypot(pose.x, pose.y)}, 0_mps}};
+    m_angleProfile = TrapezoidalMotionProfile{
+        angleConstraints,
+        {units::meter_t{m_estimatedTrajectory.theta}, 0_mps},
+        {units::meter_t{pose.theta}, 0_mps}};
 }
 
 void DrivetrainController::SetGoal(Pose&& pose) {
-    m_positionProfile.SetGoal(
-        std::hypot(pose.x, pose.y),
-        std::hypot(m_estimatedTrajectory.x, m_estimatedTrajectory.y));
-    m_angleProfile.SetGoal(pose.theta, m_estimatedTrajectory.theta);
+    m_positionProfile = TrapezoidalMotionProfile{
+        positionConstraints,
+        {units::meter_t{std::hypot(pose.x, pose.y)}, 0_mps},
+        {units::meter_t{
+             std::hypot(m_estimatedTrajectory.x, m_estimatedTrajectory.y)},
+         0_mps}};
+    m_angleProfile = TrapezoidalMotionProfile{
+        angleConstraints,
+        {units::meter_t{pose.theta}, 0_mps},
+        {units::meter_t{m_estimatedTrajectory.theta}, 0_mps}};
 }
 
 bool DrivetrainController::AtGoal() const {
-    return m_positionProfile.AtGoal() && m_angleProfile.AtGoal();
+    // TODO: only return true when the unprofiled reference equals the profiled
+    // reference and the controller's error is within an acceptable tolerance.
+    // return m_positionProfile.IsFinished(t) && m_angleProfile.IsFinished(t);
 }
 
 void DrivetrainController::SetMeasuredStates(double leftVelocity,

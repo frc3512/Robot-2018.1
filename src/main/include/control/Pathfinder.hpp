@@ -19,6 +19,9 @@ public:
     template <size_t N>
     explicit Pathfinder(const std::array<hermite_t::waypoint, N>& waypoints);
 
+    Pathfinder(Pathfinder&&) = default;
+    Pathfinder& operator=(Pathfinder&&) = default;
+
     TrajectoryPoint GeneratePath();
 
 private:

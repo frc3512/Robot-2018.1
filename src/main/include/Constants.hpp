@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <units.h>
+
 // Includes definition for Talons and etc that connect to the RoboRIO
 
 /* Order of constants:
@@ -62,10 +64,10 @@ constexpr double kZeta = 1.0;
 constexpr double kDt = 0.00505;
 
 // Drive trapezoid profile constants
-constexpr double kRobotMaxV = 5.461;               // m/sec
-constexpr double kRobotTimeToMaxV = 5.0;           // 3.0;           // sec
-constexpr double kRobotMaxRotateRate = 4.52;       // rad/sec
-constexpr double kRobotTimeToMaxRotateRate = 1.0;  // sec
+constexpr auto kRobotMaxV = 5.461_mps;              // m/sec
+constexpr auto kRobotMaxA = 1.0922_mps_sq;          // 3.0;           // sec
+constexpr auto kRobotMaxRotateRate = 4.52_mps;      // rad/sec
+constexpr auto kRobotMaxRotateAccel = 4.52_mps_sq;  // sec
 
 // Physical Robot Constants
 constexpr double kWheelbaseWidth = 0.6096;  // 24.0;

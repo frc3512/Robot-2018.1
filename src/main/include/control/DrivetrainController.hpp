@@ -8,14 +8,16 @@
 #include <tuple>
 
 #include <Eigen/Core>
+#include <frc/Timer.h>
 #include <frc/controller/StateSpaceLoop.h>
+#include <units.h>
 
 #include "Constants.hpp"
 #include "control/DrivetrainCoeffs.hpp"
 #include "control/Pathfinder.hpp"
 #include "control/Pose.hpp"
 #include "control/TrajectoryPoint.hpp"
-#include "control/TrapezoidProfile.hpp"
+#include "control/TrapezoidalMotionProfile.hpp"
 
 class DrivetrainController {
 public:
@@ -119,9 +121,13 @@ private:
     frc::StateSpaceLoop<2, 2, 2> m_loop{MakeDrivetrainLoop()};
 
     // The motion profiles.
-    TrapezoidProfile m_positionProfile{kRobotMaxV, kRobotTimeToMaxV};
-    TrapezoidProfile m_angleProfile{kRobotMaxRotateRate,
-                                    kRobotTimeToMaxRotateRate};
+    TrapezoidalMotionProfile::Constraints positionConstraints{kRobotMaxV,
+                                                              kRobotMaxA};
+    TrapezoidalMotionProfile m_positionProfile{positionConstraints,
+                                               {0_m, 0_mps}};
+    TrapezoidalMotionProfile::Constraints angleConstraints{
+        kRobotMaxRotateRate, kRobotMaxRotateAccel};
+    TrapezoidalMotionProfile m_angleProfile{angleConstraints, {0_m, 0_mps}};
 
     Pathfinder m_pathfinder;
 
