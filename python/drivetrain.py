@@ -126,7 +126,7 @@ class Drivetrain(frccnt.System):
 def main():
     dt = 0.00505
     drivetrain = Drivetrain(dt)
-    drivetrain.export_cpp_coeffs("Drivetrain", "Control/")
+    drivetrain.export_cpp_coeffs("Drivetrain", "control/")
 
     if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
         try:
