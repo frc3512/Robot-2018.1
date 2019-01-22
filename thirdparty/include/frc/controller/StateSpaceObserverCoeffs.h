@@ -26,7 +26,7 @@ struct StateSpaceObserverCoeffs final {
   /**
    * Construct the container for the observer coefficients.
    *
-   * @param K The observer gain matrix.
+   * @param K The Kalman gain matrix.
    */
   explicit StateSpaceObserverCoeffs(
       const Eigen::Matrix<double, States, Outputs>& K);

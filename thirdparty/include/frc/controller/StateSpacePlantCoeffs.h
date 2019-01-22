@@ -41,10 +41,10 @@ struct StateSpacePlantCoeffs final {
   /**
    * Construct the container for the state-space plant coefficients.
    *
-   * @param A    System matrix.
-   * @param B    Input matrix.
-   * @param C    Output matrix.
-   * @param D    Feedthrough matrix.
+   * @param A System matrix.
+   * @param B Input matrix.
+   * @param C Output matrix.
+   * @param D Feedthrough matrix.
    */
   StateSpacePlantCoeffs(const Eigen::Matrix<double, States, States>& A,
                         const Eigen::Matrix<double, States, Inputs>& B,
