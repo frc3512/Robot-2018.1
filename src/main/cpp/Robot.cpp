@@ -7,7 +7,7 @@
 
 #include <frc/DriverStation.h>
 
-Drivetrain Robot::robotDrive;
+Drivetrain Robot::drivetrain;
 Intake Robot::intake;
 Elevator Robot::elevator;
 Climber Robot::climber;
@@ -78,10 +78,10 @@ Robot::Robot() {
 }
 
 void Robot::DisabledInit() {
-    robotDrive.Disable();
-    robotDrive.ResetGyro();
-    robotDrive.ResetEncoders();
-    robotDrive.Reset();
+    drivetrain.Disable();
+    drivetrain.ResetGyro();
+    drivetrain.ResetEncoders();
+    drivetrain.Reset();
     intake.SetMotors(MotorState::kIdle);
     elevator.Disable();
     elevator.Reset();
@@ -90,9 +90,9 @@ void Robot::DisabledInit() {
 
 void Robot::AutonomousInit() {
     std::cout << "AutoInit" << std::endl;
-    robotDrive.ResetEncoders();
-    robotDrive.ResetGyro();
-    robotDrive.Reset();
+    drivetrain.ResetEncoders();
+    drivetrain.ResetGyro();
+    drivetrain.Reset();
     elevator.ResetEncoder();
     elevator.Reset();
     intake.Deploy();
@@ -106,7 +106,7 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::TeleopInit() {
-    robotDrive.Disable();
+    drivetrain.Disable();
     elevator.Disable();
     intake.Deploy();
     intake.Close();
@@ -139,7 +139,7 @@ void Robot::RobotPeriodic() {
     }
 }
 
-void Robot::DisabledPeriodic() { robotDrive.SetGoal(Pose(0.0, 0.0, 0.0)); }
+void Robot::DisabledPeriodic() { drivetrain.SetGoal(Pose(0.0, 0.0, 0.0)); }
 
 void Robot::AutonomousPeriodic() {
     dsDisplay.ExecAutonomousPeriodic();
@@ -149,13 +149,13 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopPeriodic() {
     if (driveStick1.GetRawButton(1)) {
-        robotDrive.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
+        drivetrain.Drive(driveStick1.GetY() * 0.5, driveStick2.GetX() * 0.5,
                          driveStick2.GetRawButton(2));
     } else {
-        robotDrive.Drive(driveStick1.GetY(), driveStick2.GetX(),
+        drivetrain.Drive(driveStick1.GetY(), driveStick2.GetX(),
                          driveStick2.GetRawButton(2));
     }
-    // robotDrive.PostEvent(EventType::kTimeout);
+    // drivetrain.PostEvent(EventType::kTimeout);
     elevator.PostEvent(EventType::kTimeout);
     climber.PostEvent(EventType::kTimeout);
 }
@@ -173,12 +173,12 @@ void Robot::HandleEvent(Event event) {
 void Robot::DS_PrintOut() {
     /*if (liveGrapher.HasIntervalPassed()) {
         liveGrapher.GraphData(
-            (robotDrive.GetLeftRate() + robotDrive.GetRightRate()) / 2,
+            (drivetrain.GetLeftRate() + drivetrain.GetRightRate()) / 2,
             "Average Velocity");
-        liveGrapher.GraphData(robotDrive.GetAngularRate(), "Angle Rate");
+        liveGrapher.GraphData(drivetrain.GetAngularRate(), "Angle Rate");
         static double prevVel = 0.0;
         static double curVel = 0.0;
-        curVel = robotDrive.GetAngularRate();
+        curVel = drivetrain.GetAngularRate();
         liveGrapher.GraphData((curVel - prevVel) / .005, "Angle Accel");
         prevVel = curVel;
         liveGrapher.ResetInterval();
@@ -187,9 +187,9 @@ void Robot::DS_PrintOut() {
         LogEvent("Elevator Position: " + std::to_string(elevator.GetHeight()),
                  LogEvent::VERBOSE_DEBUG));*/
     elevator.Debug();
-    // std::cout << robotDrive.GetLeftDisplacement() << "Left, Right" <<
-    // robotDrive.GetRightDisplacement() << std::endl;
-    // std::cout << robotDrive.GetAngle() << std::endl;
+    // std::cout << drivetrain.GetLeftDisplacement() << "Left, Right" <<
+    // drivetrain.GetRightDisplacement() << std::endl;
+    // std::cout << drivetrain.GetAngle() << std::endl;
     // std::cout << elevator.GetHeight() << std::endl;
     // std::cout << "Version 1.5" << std::endl; // To ensure a
     // successful(butchered) upload

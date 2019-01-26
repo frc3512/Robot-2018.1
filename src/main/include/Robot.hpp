@@ -52,7 +52,7 @@ public:
 
     void DS_PrintOut();
 
-    static Drivetrain robotDrive;
+    static Drivetrain drivetrain;
     static Intake intake;
     static Elevator elevator;
     static Climber climber;

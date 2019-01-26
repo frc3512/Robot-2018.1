@@ -16,16 +16,16 @@ void AutoAutoLine::Reset() { state = State::kInit; }
 void AutoAutoLine::HandleEvent(Event event) {
     switch (state) {
         case State::kInit:
-            Robot::robotDrive.SetGoal(
+            Robot::drivetrain.SetGoal(
                 Pose(4.2672 /*168.0*/ - kRobotLength / 2.0, 0.0, 0.0));
-            Robot::robotDrive.Enable();
+            Robot::drivetrain.Enable();
             autoTimer.Reset();
 
             state = State::kMoveForward;
             break;
         case State::kMoveForward:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.Disable();
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.Disable();
 
                 state = State::kIdle;
             }

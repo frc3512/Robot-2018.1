@@ -18,8 +18,8 @@ void AutoLeftDouble::HandleEvent(Event event) {
             platePosition =
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
-            Robot::robotDrive.SetGoal(Pose(2.0, 2.0, 1.57));
-            Robot::robotDrive.Enable();
+            Robot::drivetrain.SetGoal(Pose(2.0, 2.0, 1.57));
+            Robot::drivetrain.Enable();
 
             autoTimer.Reset();
 
@@ -27,7 +27,7 @@ void AutoLeftDouble::HandleEvent(Event event) {
             break;
 
         case State::kInitialForward:
-            if (Robot::robotDrive.AtGoal()) {
+            if (Robot::drivetrain.AtGoal()) {
                 state = State::kIdle;
             }
             break;

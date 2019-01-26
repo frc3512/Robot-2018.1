@@ -20,8 +20,8 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             platePosition =
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
-            // Robot::robotDrive.SetGoal(Pose(kRobotWidth / 2.0, 0.0, 0.0));
-            Robot::robotDrive.Enable();
+            // Robot::drivetrain.SetGoal(Pose(kRobotWidth / 2.0, 0.0, 0.0));
+            Robot::drivetrain.Enable();
 
             Robot::elevator.SetGoal(kSwitchHeight);
             Robot::elevator.Enable();
@@ -32,16 +32,16 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             break;
 
         case State::kInitialForward:
-            if (Robot::robotDrive.AtGoal()) {
+            if (Robot::drivetrain.AtGoal()) {
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    Robot::robotDrive.SetGoal(
+                    Robot::drivetrain.SetGoal(
                         Pose(0.0, 0.0,
                              std::atan2(1.484376 + kExchangeOffset,
                                         3.556 - kRobotWidth) -
                                  deg2rad(10)));
                 } else {
-                    Robot::robotDrive.SetGoal(
+                    Robot::drivetrain.SetGoal(
                         Pose(0.0, 0.0,
                              std::atan2(-1.941576 - kExchangeOffset,
                                         3.556 - kRobotWidth) +
@@ -52,17 +52,17 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kInitialRotate:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.ResetEncoders();
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.ResetEncoders();
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    Robot::robotDrive.SetGoal(
+                    Robot::drivetrain.SetGoal(
                         Pose(std::sqrt(std::pow(1.48437 - kExchangeOffset, 2) +
                                        std::pow(3.556 - kRobotWidth, 2)) +
                                  0.1524,
                              0.0, 0.0));
                 } else {
-                    Robot::robotDrive.SetGoal(
+                    Robot::drivetrain.SetGoal(
                         Pose(std::sqrt(std::pow(1.941576 + kExchangeOffset, 2) +
                                        std::pow(3.556 - kRobotWidth, 2)) -
                                  0.2286,
@@ -73,14 +73,14 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kSecondForward:
-            if (Robot::robotDrive.AtGoal()) {
+            if (Robot::drivetrain.AtGoal()) {
                 autoTimer.Reset();
                 /*
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    Robot::robotDrive.SetGoal(rad2deg(0.0, 0.0, std::atan2(
+                    Robot::drivetrain.SetGoal(rad2deg(0.0, 0.0, std::atan2(
                         -140 + kRobotWidth, 58.44 - kExchangeOffset)));
                 } else {
-                    Robot::robotDrive.SetGoal(0.0, 0.0, -rad2deg(std::atan2(
+                    Robot::drivetrain.SetGoal(0.0, 0.0, -rad2deg(std::atan2(
                         -76.44 - kExchangeOffset, 140 - kRobotWidth)) - 10);
                 }*/
                 Robot::intake.AutoOuttake();
@@ -90,9 +90,9 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kFinalRotate:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.ResetEncoders();
-                Robot::robotDrive.SetGoal(
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.ResetEncoders();
+                Robot::drivetrain.SetGoal(
                     Pose(kRobotWidth / 2 - 0.0762, 0.0, 0.0));
                 autoTimer.Reset();
 
@@ -100,16 +100,16 @@ void AutoCenterSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kFinalForward:
-            if (Robot::robotDrive.AtGoal()) {
+            if (Robot::drivetrain.AtGoal()) {
                 Robot::intake.SetMotors(MotorState::kOuttake);
-                Robot::robotDrive.Disable();
+                Robot::drivetrain.Disable();
                 Robot::elevator.Disable();
 
                 state = State::kIdle;
             }
             break;
         case State::kIdle:
-            Robot::robotDrive.Disable();
+            Robot::drivetrain.Disable();
             break;
     }
 }

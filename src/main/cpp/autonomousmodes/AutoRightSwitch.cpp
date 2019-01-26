@@ -19,13 +19,13 @@ void AutoRightSwitch::HandleEvent(Event event) {
                 frc::DriverStation::GetInstance().GetGameSpecificMessage();
 
             if (platePosition[kFriendlySwitch] == 'R') {
-                Robot::robotDrive.SetGoal(
+                Robot::drivetrain.SetGoal(
                     Pose(168.0 - kRobotLength / 2.0, 0.0, 0.0));
             } else {
-                Robot::robotDrive.SetGoal(
+                Robot::drivetrain.SetGoal(
                     Pose(252.0 - 17.0 - kRobotLength / 2.0, 0.0, 0.0));
             }
-            Robot::robotDrive.Enable();
+            Robot::drivetrain.Enable();
 
             Robot::elevator.SetGoal(kSwitchHeight);
             Robot::elevator.Enable();
@@ -36,8 +36,8 @@ void AutoRightSwitch::HandleEvent(Event event) {
             break;
 
         case State::kInitialForward:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.SetGoal(Pose(0.0, 0.0, -90.0));
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.SetGoal(Pose(0.0, 0.0, -90.0));
                 autoTimer.Reset();
                 if (platePosition[kFriendlySwitch] == 'R') {
                     state = State::kFinalRotate;
@@ -47,31 +47,31 @@ void AutoRightSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kRightRotate:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.ResetEncoders();
-                Robot::robotDrive.SetGoal(Pose(190.0 - 38.0, 0.0, 0.0));
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.ResetEncoders();
+                Robot::drivetrain.SetGoal(Pose(190.0 - 38.0, 0.0, 0.0));
                 autoTimer.Reset();
 
                 state = State::kRightForward;
             }
             break;
         case State::kRightForward:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.SetGoal(Pose(0.0, 0.0, -90.0 + 35.0));
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.SetGoal(Pose(0.0, 0.0, -90.0 + 35.0));
                 autoTimer.Reset();
 
                 state = State::kFinalRotate;
             }
             break;
         case State::kFinalRotate:
-            if (Robot::robotDrive.AtGoal()) {
-                Robot::robotDrive.ResetEncoders();
+            if (Robot::drivetrain.AtGoal()) {
+                Robot::drivetrain.ResetEncoders();
                 if (platePosition[kFriendlySwitch] == 'R') {
-                    Robot::robotDrive.SetGoal(Pose(
+                    Robot::drivetrain.SetGoal(Pose(
                         65.0 + 12.0 - kRobotLength / 2.0 - kRobotWidth / 2.0,
                         0.0, 0.0));
                 } else {
-                    Robot::robotDrive.SetGoal(Pose(
+                    Robot::drivetrain.SetGoal(Pose(
                         36.0 + 24.0 - kRobotLength / 2.0, 0.0, 0.0));  // 28.0
                 }
                 autoTimer.Reset();
@@ -80,9 +80,9 @@ void AutoRightSwitch::HandleEvent(Event event) {
             }
             break;
         case State::kFinalForward:
-            if (Robot::robotDrive.AtGoal()) {
+            if (Robot::drivetrain.AtGoal()) {
                 Robot::intake.AutoOuttake();
-                Robot::robotDrive.Disable();
+                Robot::drivetrain.Disable();
                 Robot::elevator.Disable();
 
                 state = State::kIdle;
