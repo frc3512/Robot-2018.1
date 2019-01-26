@@ -111,7 +111,7 @@ class Drivetrain(frccnt.System):
 
         q = [q_vel, q_vel]
         r = [12.0, 12.0]
-        self.design_dlqr_controller(q, r)
+        self.design_lqr(q, r)
 
         qff_vel = 0.01
         self.design_two_state_feedforward([qff_vel, qff_vel], [12, 12])
