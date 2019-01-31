@@ -62,7 +62,7 @@ model {
                     it.dependsOn pythonTask
                 }
                 if (!(toolChain instanceof VisualCpp))
-                    cppCompiler.args << "-O2"
+                    cppCompiler.args << '-O2' << '-Wno-deprecated-declarations'
             }
 
             sources.cpp {
