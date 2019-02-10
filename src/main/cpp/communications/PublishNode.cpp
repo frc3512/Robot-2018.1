@@ -60,12 +60,14 @@ void PublishNode::RunFramework() {
             // which packet to deserialize to, then processes it
             auto packetType = static_cast<PacketType>(message[0]);
             if (packetType == PacketType::kState) {
-                StatePacket packet{message.data(), message.size()};
+                StatePacket packet;
+                packet.Deserialize(message.data(), message.size());
                 m_mutex.unlock();
                 ProcessMessage(packet);
                 m_mutex.lock();
             } else if (packetType == PacketType::kButton) {
-                ButtonPacket packet{message.data(), message.size()};
+                ButtonPacket packet;
+                packet.Deserialize(message.data(), message.size());
                 m_mutex.unlock();
                 ProcessMessage(packet);
                 m_mutex.lock();

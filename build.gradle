@@ -6,7 +6,7 @@ plugins {
 
 task pythonTask(type: Exec) {
     workingDir 'python'
-    commandLine 'python3', 'generate_coeffs.py'
+    commandLine 'python3', 'generate_src.py'
 }
 
 // Define my targets (RoboRIO) and artifacts (deployable files)

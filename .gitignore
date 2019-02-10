@@ -4,5 +4,10 @@
 .vscode/
 build/
 *.swp
-*Coeffs.hpp
 *Coeffs.cpp
+*Coeffs.hpp
+*Packet.cpp
+*Packet.hpp
+!Packet.cpp
+!Packet.hpp
+PacketType.hpp
