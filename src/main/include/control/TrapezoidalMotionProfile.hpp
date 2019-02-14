@@ -15,7 +15,8 @@
  * Initialization:
  * @code{.cpp}
  * TrapezoidalMotionProfile::Constraints constraints{kMaxV, kMaxA};
- * double previousProfiledReference = initialReference;
+ * TrapezoidalMotionProfile::State previousProfiledReference{initialReference,
+ *                                                           0.0};
  * @endcode
  *
  * Run on update:
