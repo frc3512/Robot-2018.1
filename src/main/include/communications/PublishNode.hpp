@@ -55,6 +55,14 @@ public:
     void Publish(P p);
 
     /**
+     * Sends a packet to the object it's called on
+     *
+     * @param p Any packet with a Serialize() method
+     */
+    template <class P>
+    void PushMessage(P p);
+
+    /**
      * Processes a StatePacket.
      *
      * Users should override if this instance has a need to handle state data
