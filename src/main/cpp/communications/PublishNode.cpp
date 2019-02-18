@@ -41,31 +41,35 @@ void PublishNode::RunFramework() {
     while (m_isRunning) {
         std::unique_lock<std::mutex> lock(m_mutex);
 
-        // Waits for queue to contain messages
+        // Waits for queue to contain messages, but does not need to wait for
+        // queue to contain number of contents equal to the size of a complete
+        // message due to the mutex ensuring atomic message insertions.
         m_ready.wait(lock,
                      [this] { return m_queue.size() > 0 || !m_isRunning; });
 
-        // Pops first element out of queue for length of one whole message, then
-        // pops that amount elements
-        size_t msgLength = m_queue.pop_front();
-        wpi::SmallVector<char, 32> message;
-        for (int i = 0; i < msgLength; i++) {
-            message.push_back(m_queue.pop_front());
-        }
+        while (m_queue.size() > 0) {
+            // Pops first element out of queue for length of one whole message,
+            // then pops that amount elements
+            size_t msgLength = m_queue.pop_front();
+            wpi::SmallVector<char, 32> message;
+            for (int i = 0; i < msgLength; i++) {
+                message.push_back(m_queue.pop_front());
+            }
 
-        // Checks the first byte of the message for its ID to determine which
-        // packet to deserialize to, then processes it
-        auto packetType = static_cast<PacketType>(message[0]);
-        if (packetType == PacketType::kState) {
-            StatePacket packet{message.data(), message.size()};
-            m_mutex.unlock();
-            ProcessMessage(packet);
-            m_mutex.lock();
-        } else if (packetType == PacketType::kButton) {
-            ButtonPacket packet{message.data(), message.size()};
-            m_mutex.unlock();
-            ProcessMessage(packet);
-            m_mutex.lock();
+            // Checks the first byte of the message for its ID to determine
+            // which packet to deserialize to, then processes it
+            auto packetType = static_cast<PacketType>(message[0]);
+            if (packetType == PacketType::kState) {
+                StatePacket packet{message.data(), message.size()};
+                m_mutex.unlock();
+                ProcessMessage(packet);
+                m_mutex.lock();
+            } else if (packetType == PacketType::kButton) {
+                ButtonPacket packet{message.data(), message.size()};
+                m_mutex.unlock();
+                ProcessMessage(packet);
+                m_mutex.lock();
+            }
         }
     }
 }
