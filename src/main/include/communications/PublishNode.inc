@@ -6,6 +6,7 @@
 
 template <class P>
 void PublishNode::Publish(P p) {
+    p.topic = m_nodeName + "/" + p.topic;
     for (auto sub : m_subList) {
         sub->PushMessage(p);
     }
@@ -13,7 +14,6 @@ void PublishNode::Publish(P p) {
 
 template <class P>
 void PublishNode::PushMessage(P p) {
-    p.topic = m_nodeName + "/" + p.topic;
     Packet packet = p.Serialize();
     size_t len = packet.getDataSize();
     auto ptr = static_cast<const char*>(packet.getData());
