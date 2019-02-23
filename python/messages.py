@@ -148,6 +148,8 @@ def write_packettype_header(msg_names):
     with open("PacketType.hpp", "w") as output:
         output.write("#pragma once\n")
         output.write("\n")
+        output.write("#include <stdint.h>\n")
+        output.write("\n")
 
         enum_type = "enum class PacketType : int8_t"
         types = ["k" + x for x in msg_names]
@@ -160,6 +162,52 @@ def write_packettype_header(msg_names):
         else:
             output.write(f"{enum_type} {{{multiline_types}\n}};\n")
     os.rename("PacketType.hpp", f"../src/main/include/communications/PacketType.hpp")
+
+
+def write_packettype_source(msg_names):
+    """Write PacketType.cpp source file.
+
+    Keyword arguments:
+    msg_names -- list of packet message names
+    """
+    with open("PacketType.cpp", "w") as output:
+        output.write('#include "communications/PacketType.hpp"\n')
+        output.write("\n")
+        output.write("#include <wpi/SmallVector.h>\n")
+        output.write("\n")
+
+        includes = []
+        for msg_name in msg_names:
+            includes.append(f'#include "communications/{msg_name}Packet.hpp"\n')
+        includes.append('#include "communications/PublishNode.hpp"\n')
+        for include in sorted(includes):
+            output.write(include)
+
+        output.write("\n")
+        output.write(
+            "void PublishNode::DeserializeAndProcessMessage(wpi::SmallVectorImpl<char>& message) {\n"
+        )
+        output.write(
+            "    // Checks the first byte of the message for its ID to determine\n"
+        )
+        output.write("    // which packet to deserialize to, then processes it\n")
+        output.write("    auto packetType = static_cast<PacketType>(message[0]);\n")
+        for i, msg_name in enumerate(msg_names):
+            if i == 0:
+                output.write("    if ")
+            else:
+                output.write(" else if ")
+            output.write(f"(packetType == PacketType::k{msg_name}) " "{\n")
+            output.write(f"        {msg_name}Packet packet;" "\n")
+            output.write(
+                f"        packet.Deserialize(message.data(), message.size());\n"
+            )
+            output.write("        m_mutex.unlock();\n")
+            output.write("        ProcessMessage(packet);\n")
+            output.write("        m_mutex.lock();\n")
+            output.write("    }")
+        output.write("\n}\n")
+    os.rename("PacketType.cpp", f"../src/main/cpp/communications/PacketType.cpp")
 
 
 def main():
@@ -190,6 +238,7 @@ def main():
         write_msg_header(msg_name, match.capturesdict()["type"], arg_types, names)
         write_msg_source(msg_name, arg_types, names, serial_names)
     write_packettype_header(msg_names)
+    write_packettype_source(msg_names)
 
 
 if __name__ == "__main__":

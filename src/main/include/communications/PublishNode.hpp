@@ -31,33 +31,33 @@ public:
     virtual ~PublishNode();
 
     /**
-     * Adds itself to the specified PublishNode's subscriber list
+     * Adds this object to the specified PublishNode's subscriber list.
      *
      * @param publisher The PublishNode that this instance wants to recieve
-     * event from
+     *                  event from.
      */
     void Subscribe(PublishNode& publisher);
 
     /**
-     * Removes itself from the specified PublishNode's subscriber list
+     * Removes this object from the specified PublishNode's subscriber list.
      *
      * @param publisher The PublishNode that this instance wants to stop
-     * recieving event from
+     *                  recieving event from.
      */
     void Unsubscribe(PublishNode& publisher);
 
     /**
-     * Sends a packet to every subscriber
+     * Sends a packet to every subscriber.
      *
-     * @param p Any packet with a Serialize() method
+     * @param p Any packet with a Serialize() method.
      */
     template <class P>
     void Publish(P p);
 
     /**
-     * Sends a packet to the object it's called on
+     * Sends a packet to the object it's called on.
      *
-     * @param p Any packet with a Serialize() method
+     * @param p Any packet with a Serialize() method.
      */
     template <class P>
     void PushMessage(P p);
@@ -66,6 +66,9 @@ public:
      * Processes a StatePacket.
      *
      * Users should override if this instance has a need to handle state data
+     *
+     * @param message The message whose member variables contain deserialized
+     *                data.
      */
     virtual void ProcessMessage(const StatePacket& message);
 
@@ -73,7 +76,10 @@ public:
      * Processes a ButtonPacket.
      *
      * Users should override if this instance has a need to handle joystick
-     * events
+     * button events.
+     *
+     * @param message The message whose member variables contain deserialized
+     *                data.
      */
     virtual void ProcessMessage(const ButtonPacket& message);
 
@@ -92,6 +98,17 @@ private:
      * of a message or until the node deconstructs, then processes each message.
      */
     void RunFramework();
+
+    /**
+     * Deserialize the provided message and process it via the ProcessMessage()
+     * function corresponding to the message type.
+     *
+     * Do NOT provide an implementation for this function. messages.py generates
+     * one in PacketType.cpp.
+     *
+     * @param message The buffer containing the message to deserialize.
+     */
+    void DeserializeAndProcessMessage(wpi::SmallVectorImpl<char>& message);
 };
 
 #include "PublishNode.inc"
