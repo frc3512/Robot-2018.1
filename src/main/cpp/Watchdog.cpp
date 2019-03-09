@@ -1,10 +1,9 @@
 // Copyright (c) 2018-2019 FRC Team 3512. All Rights Reserved.
 
+#include <frc/Watchdog.h>
 #include <wpi/Format.h>
 #include <wpi/PriorityQueue.h>
 #include <wpi/raw_ostream.h>
-
-#include <frc/Watchdog.h>
 
 using namespace frc;
 
