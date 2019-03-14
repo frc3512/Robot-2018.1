@@ -1,4 +1,4 @@
-# FRC Team 3512's 2018 Robot
+# FRC team 3512's 2018 robot
 
 Source code for the 2018 comp robot: Diakoptis
 
@@ -10,7 +10,7 @@ The game for 2018 is called FIRST Power Up and there again is a 15 second auton 
 
 Teleop now has its own paragraph because this year there is a lot of functions. These fucntions are similar to 2015's Talos. These functions include being able to have an elevator go to three different states, to push cubes into a hole in the wall near the ground. As well as placing the cubes we have to climb, and will attempt to raise two other robots with us. This will include ramps and clamps to ensure stability and will also make us have to make a state machine for the climbing mode.
 
-## 2018 Unique Features
+## 2018 unique features
 
 This years robot's unique features include:
 
@@ -30,7 +30,7 @@ Hall effect limit switch (TBD)
 |No |Full switch autonomous|
 |No |Full scale autonomous|
 
-## 2018 Roster
+## 2018 roster
 
 Mentors: Tyler Veness, William Ward
 
