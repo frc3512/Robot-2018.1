@@ -22,7 +22,8 @@ CsvLogger Robot::csvLogger{kCSVFile};
 
 Robot::Robot() : PublishNode("Robot") {
     // Auton: does nothing
-    dsDisplay.AddAutoMethod("No-op", [] {}, [] {});
+    dsDisplay.AddAutoMethod(
+        "No-op", [] {}, [] {});
     dsDisplay.AddAutoMethod("Autoline",
                             std::bind(&AutoAutoLine::Reset, &autoLine),
                             std::bind(&AutoAutoLine::Run, &autoLine));
