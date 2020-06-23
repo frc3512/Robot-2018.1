@@ -67,9 +67,9 @@ class Drivetrain(frccnt.System):
 
         u_min = np.array([[-12.0], [-12.0]])
         u_max = np.array([[12.0], [12.0]])
-        frccnt.System.__init__(self, np.zeros((2, 1)), u_min, u_max, dt)
+        frccnt.System.__init__(self, u_min, u_max, dt, np.zeros((2, 1)), np.zeros((2, 1)))
 
-    def create_model(self, states):
+    def create_model(self, states, inputs):
         self.in_low_gear = False
 
         # Number of motors per side
@@ -122,17 +122,6 @@ def main():
     drivetrain = Drivetrain(dt)
     drivetrain.export_cpp_coeffs("Drivetrain", "control/")
 
-    if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
-        try:
-            import slycot
-
-            plt.figure(1)
-            drivetrain.plot_pzmaps()
-        except ImportError:  # Slycot unavailable. Can't show pzmaps.
-            pass
-    if "--save-plots" in sys.argv:
-        plt.savefig("drivetrain_pzmaps.svg")
-
     t, xprof, vprof, aprof = frccnt.generate_s_curve_profile(
         max_v=4.0, max_a=3.5, time_to_max_a=1.0, dt=dt, goal=50.0
     )
@@ -144,8 +133,7 @@ def main():
         refs.append(r)
 
     if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
-        plt.figure(2)
-        state_rec, ref_rec, u_rec = drivetrain.generate_time_responses(t, refs)
+        state_rec, ref_rec, u_rec, y_rec = drivetrain.generate_time_responses(t, refs)
         drivetrain.plot_time_responses(t, state_rec, ref_rec, u_rec)
     if "--save-plots" in sys.argv:
         plt.savefig("drivetrain_response.svg")

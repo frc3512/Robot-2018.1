@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2019 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2018-2020 FRC Team 3512. All Rights Reserved.
 
 #pragma once
 
@@ -9,7 +9,7 @@
 #include <thread>
 #include <vector>
 
-#include <frc/circular_buffer.h>
+#include <wpi/circular_buffer.h>
 
 #include "Constants.hpp"
 #include "communications/ButtonPacket.hpp"
@@ -86,7 +86,7 @@ public:
 private:
     std::string m_nodeName;
     std::vector<PublishNode*> m_subList;
-    frc::circular_buffer<char> m_queue{kNodeQueueSize};
+    wpi::circular_buffer<char> m_queue{kNodeQueueSize};
 
     std::mutex m_mutex;
     std::thread m_thread;

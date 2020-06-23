@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2019 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2013-2020 FRC Team 3512. All Rights Reserved.
 
 #include "livegrapher/LiveGrapher.hpp"
 

@@ -25,10 +25,11 @@ class Elevator(frccnt.System):
         self.set_plot_labels(state_labels, u_labels)
 
         frccnt.System.__init__(
-            self, np.zeros((2, 1)), np.array([[-12.0]]), np.array([[12.0]]), dt
+            self, np.array([[-12.0]]), np.array([[12.0]]), dt, np.zeros((2, 1)),
+            np.zeros((1, 1))
         )
 
-    def create_model(self, states):
+    def create_model(self, states, inputs):
         # Number of motors
         num_motors = 2.0
         # Elevator carriage mass in kg
@@ -57,17 +58,6 @@ def main():
     elevator = Elevator(dt)
     elevator.export_cpp_coeffs("Elevator", "control/")
 
-    if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
-        try:
-            import slycot
-
-            plt.figure(1)
-            elevator.plot_pzmaps()
-        except ImportError:  # Slycot unavailable. Can't show pzmaps.
-            pass
-    if "--save-plots" in sys.argv:
-        plt.savefig("elevator_pzmaps.svg")
-
     # Set up graphing
     l0 = 0.1
     l1 = l0 + 5.0
@@ -87,8 +77,7 @@ def main():
         refs.append(r)
 
     if "--save-plots" in sys.argv or "--noninteractive" not in sys.argv:
-        plt.figure(2)
-        state_rec, ref_rec, u_rec = elevator.generate_time_responses(t, refs)
+        state_rec, ref_rec, u_rec, y_rec = elevator.generate_time_responses(t, refs)
         elevator.plot_time_responses(t, state_rec, ref_rec, u_rec)
     if "--save-plots" in sys.argv:
         plt.savefig("elevator_response.svg")

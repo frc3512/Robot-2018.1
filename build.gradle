@@ -1,7 +1,7 @@
 plugins {
     id "cpp"
     id "google-test-test-suite"
-    id "edu.wpi.first.GradleRIO" version "2019.3.2"
+    id "edu.wpi.first.GradleRIO" version "2020.3.2"
 }
 
 task pythonTask(type: Exec) {
@@ -39,14 +39,17 @@ deploy {
     }
 }
 
-// Set this to true to include the src folder in the include directories passed
-// to the compiler. Some eclipse project imports depend on this behavior.
-// We recommend leaving this disabled if possible. Note for eclipse project
-// imports this is enabled by default. For new projects, its disabled
-def includeSrcInIncludeRoot = false
-
 // Set this to true to enable desktop support.
-def includeDesktopSupport = false
+def includeDesktopSupport = true
+
+nativeUtils.platformConfigs.named("linuxathena").configure {
+    it.cppCompiler.args.remove('-g')
+}
+
+nativeUtils.platformConfigs.named("linuxx86-64").configure {
+    it.cppCompiler.args.remove('-g')
+    it.linker.args.add('-lstdc++fs')
+}
 
 model {
     components {
@@ -56,13 +59,18 @@ model {
                 targetPlatform wpi.platforms.desktop
             }
 
+            binaries {
+              all {
+                if (it.buildType.name.contains('debug')) {
+                  it.buildable = false
+                }
+              }
+            }
+
             binaries.all {
                 binary ->
                 binary.getTasks().withType(AbstractNativeSourceCompileTask) {
                     it.dependsOn pythonTask
-                }
-                if (!(toolChain instanceof VisualCpp)) {
-                    cppCompiler.args << '-O2' << '-Wno-deprecated-declarations'
                 }
             }
 
@@ -73,20 +81,32 @@ model {
                 }
                 exportedHeaders {
                     srcDirs = ['src/main/include', 'thirdparty/include']
-                    if (includeSrcInIncludeRoot) {
-                        srcDir 'src/main/cpp'
-                    }
                 }
             }
 
             // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
-            useLibrary(it, "wpilib")
+            wpi.deps.wpilib(it)
             wpi.deps.vendor.cpp(it)
         }
     }
     testSuites {
         frcUserProgramTest(GoogleTestTestSuiteSpec) {
             testing $.components.frcUserProgram
+
+            binaries {
+              all {
+                if (it.buildType.name.contains('debug')) {
+                  it.buildable = false
+                }
+              }
+            }
+
+            binaries.all {
+                binary ->
+                binary.getTasks().withType(AbstractNativeSourceCompileTask) {
+                    it.dependsOn pythonTask
+                }
+            }
 
             sources.cpp {
                 source {
@@ -95,7 +115,8 @@ model {
                 }
             }
 
-            useLibrary(it, "wpilib", "googletest")
+            wpi.deps.wpilib(it)
+            wpi.deps.googleTest(it)
             wpi.deps.vendor.cpp(it)
         }
     }
