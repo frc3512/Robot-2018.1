@@ -42,13 +42,13 @@ jobs:
 
     container: wpilib/roborio-cross-ubuntu:2021-18.04
 
+    steps:
+    - uses: actions/checkout@v2
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-
-    steps:
-    - uses: actions/checkout@v2
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -84,8 +84,5 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Install roboRIO toolchain
-      run: ./gradlew installRoboRioToolchain
-
     - name: Compile and run x86-64 unit tests
-      run: ./gradlew test ${{ matrix.build-options }}
+      run: ./gradlew test -Ptoolchain-optional-roboRio ${{ matrix.build-options }}
