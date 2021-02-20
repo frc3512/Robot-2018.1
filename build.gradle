@@ -7,11 +7,6 @@ plugins {
     id "org.ysb33r.doxygen" version "0.5"
 }
 
-task pythonTask(type: Exec) {
-    workingDir 'python'
-    commandLine 'python3', 'generate_src.py'
-}
-
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project EmbeddedTools.
 deploy {
@@ -107,20 +102,13 @@ model {
               }
             }
 
-            binaries.all {
-                binary ->
-                binary.getTasks().withType(AbstractNativeSourceCompileTask) {
-                    it.dependsOn pythonTask
-                }
-            }
-
             sources.cpp {
                 source {
-                    srcDirs = ['src/main/cpp', 'thirdparty/cpp']
+                    srcDir 'src/main/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
-                    srcDirs = ['src/main/include', 'thirdparty/include']
+                    srcDir 'src/main/include'
                 }
             }
 
@@ -139,13 +127,6 @@ model {
                   it.buildable = false
                 }
               }
-            }
-
-            binaries.all {
-                binary ->
-                binary.getTasks().withType(AbstractNativeSourceCompileTask) {
-                    it.dependsOn pythonTask
-                }
             }
 
             sources.cpp {

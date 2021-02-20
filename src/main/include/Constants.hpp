@@ -1,8 +1,11 @@
-// Copyright (c) 2016-2019 FRC Team 3512. All Rights Reserved.
+// Copyright (c) 2016-2021 FRC Team 3512. All Rights Reserved.
 
 #pragma once
 
-#include <units.h>
+#include <units/acceleration.h>
+#include <units/velocity.h>
+
+#include <wpi/math>
 
 // Includes definition for Talons and etc that connect to the RoboRIO
 
@@ -19,18 +22,7 @@
  * Math and Conversions
  */
 
-constexpr double kPi = 3.1415926535897932;
 constexpr double kGravity = 9.80665;
-
-template <class T>
-constexpr T deg2rad(const T& value) {
-    return value * kPi / 180;
-}
-
-template <class T>
-constexpr T rad2deg(const T& value) {
-    return value * 180 / kPi;
-}
 
 /*
  * Joystick and buttons
@@ -80,7 +72,8 @@ constexpr double kWheelRadius = 0.0746125;  // 2.9375;  // 2.947
 constexpr double kDriveGearRatio = 1.0 / 1.0;
 
 // Distance per Pulse
-constexpr double kDpP = (2.0 * kPi * kWheelRadius) * kDriveGearRatio / 2048.0;
+constexpr double kDpP =
+    (2.0 * wpi::math::pi * kWheelRadius) * kDriveGearRatio / 2048.0;
 
 // CheesyDrive constants
 constexpr double kLowGearSensitive = 0.75;
